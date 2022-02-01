@@ -1,21 +1,20 @@
 package com.example.demo.services;
 
+import com.example.demo.Converters.MediaConverter;
+import com.example.demo.Converters.PostConverter;
+import com.example.demo.Converters.TypeConverter;
+import com.example.demo.Converters.UserConverter;
+import com.example.demo.Entities.*;
+import com.example.demo.Models.MediaModel;
+import com.example.demo.Models.PostModel;
+import com.example.demo.Repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import com.example.demo.Entities.GroupEntity;
-import com.example.demo.Entities.MediaEntity;
-import com.example.demo.Entities.PageEntity;
-import com.example.demo.Entities.PostEntity;
-import com.example.demo.Entities.UserEntity;
-import com.example.demo.Models.MediaModel;
-import com.example.demo.Models.PostModel;
-import com.example.demo.Repositories.*;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 @Service
 public class PostService {
@@ -32,19 +31,26 @@ public class PostService {
     PageRepository pageRepository;
     @Autowired
     MediaRepository mediaRepository;
+
     @Autowired
-    FormatFactory formatFactory;
+    UserConverter userConverter;
+    @Autowired
+    PostConverter postConverter;
+    @Autowired
+    TypeConverter typeConverter;
+    @Autowired
+    MediaConverter mediaConverter;
 
     public PostModel addProfilePost(PostModel postModel, Long u_id) {
 
         UserEntity userEntity = userRepository.findById(u_id).get();
 
-        PostEntity postEntity = formatFactory.postModelToEntity(postModel);
+        PostEntity postEntity = postConverter.postModelToEntity(postModel);
         postEntity.setUserEntity(userEntity);
 
         PostModel p = new PostModel();
         List<MediaModel> lista = new ArrayList<>();
-        
+
         PostEntity savedPost = postRepositroy.save(postEntity);
         if (postModel.getMedia() != null && !postModel.getMedia().isEmpty()) {
             for (MediaModel mediaModel : postModel.getMedia()) {
@@ -53,7 +59,7 @@ public class PostService {
                 mediaEntity.setPath(mediaModel.getPath());
                 mediaEntity.setType(mediaModel.getType());
                 mediaEntity.setPostEntity(savedPost);
-                MediaModel m = formatFactory.convertMediaEntityToMediaModel(mediaRepository.save(mediaEntity));
+                MediaModel m = mediaConverter.convertMediaEntityToMediaModel(mediaRepository.save(mediaEntity));
                 lista.add(m);
 
             }
@@ -62,27 +68,27 @@ public class PostService {
         p.setId(savedPost.getId());
         p.setContent(savedPost.getContent());
         p.setCreatedAt(savedPost.getCreatedAt());
-        p.setUserModel(formatFactory.getUserModelWithBasicInformation(savedPost.getUserEntity()));
-        p.setType(formatFactory.typeEntityToModel(savedPost.getType()));
+        p.setUserModel(userConverter.getUserModelWithBasicInformation(savedPost.getUserEntity()));
+        p.setType(typeConverter.typeEntityToModel(savedPost.getType()));
         p.setMedia(lista);
 
-        return p ;
+        return p;
 
     }
 
     public PostModel findById(Long id) {
         Optional<PostEntity> postEntity = postRepositroy.findById(id);
-        return formatFactory.postEntityToModel(postEntity.get(), true, true, false, false, true);
+        return postConverter.postEntityToModel(postEntity.get(), true, true, false, false, true);
     }
 
     public PostModel addGroupPost(PostModel postModel, Long u_id, Long g_id) {
 
         UserEntity userEntity = userRepository.findById(u_id).get();
         GroupEntity groupEntity = groupRepository.findById(g_id).get();
-        PostEntity postEntity = formatFactory.postModelToEntity(postModel);
+        PostEntity postEntity = postConverter.postModelToEntity(postModel);
         postEntity.setUserEntity(userEntity);
         postEntity.setGroupEntity(groupEntity);
-        return formatFactory.postEntityToModel(postRepositroy.save(postEntity), false, false, true, true, true);
+        return postConverter.postEntityToModel(postRepositroy.save(postEntity), false, false, true, true, true);
 
     }
 
@@ -90,10 +96,10 @@ public class PostService {
 
         UserEntity userEntity = userRepository.findById(u_id).get();
         PageEntity pageEntity = pageRepository.findById(p_id).get();
-        PostEntity postEntity = formatFactory.postModelToEntity(postModel);
+        PostEntity postEntity = postConverter.postModelToEntity(postModel);
         postEntity.setUserEntity(userEntity);
         postEntity.setPageEntity(pageEntity);
-        return formatFactory.postEntityToModel(postRepositroy.save(postEntity), false, false, false, false, false);
+        return postConverter.postEntityToModel(postRepositroy.save(postEntity), false, false, false, false, false);
 
     }
 
@@ -108,19 +114,19 @@ public class PostService {
             }
         }
         postRepositroy.deleteById(id);
-        return formatFactory.postEntityToModel(postEntity, false, false, false, false, false);
+        return postConverter.postEntityToModel(postEntity, false, false, false, false, false);
     }
 
     public PostModel update(PostModel postModel) {
         PostEntity postEntity = postRepositroy.findById(postModel.getId()).get();
         postEntity.setContent(postModel.getContent());
         postEntity.setCreatedAt(new Date());
-        postEntity.setType(formatFactory.typeModleToEntity(postModel.getType()));
-        return formatFactory.postEntityToModel(postRepositroy.save(postEntity), true, true, true, true, true);
+        postEntity.setType(typeConverter.typeModelToEntity(postModel.getType()));
+        return postConverter.postEntityToModel(postRepositroy.save(postEntity), true, true, true, true, true);
     }
 
     public List<PostModel> fetch() {
-        return formatFactory.postEntityIterableToModelList(postRepositroy.findAll(), true, true);
+        return postConverter.postEntityIterableToModelList(postRepositroy.findAll(), true, true);
     }
 
 }

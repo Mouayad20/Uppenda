@@ -1,20 +1,29 @@
 package com.example.demo.Models;
 
 import org.springframework.security.core.GrantedAuthority;
-
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-public class MyUserDetails implements UserDetails {
-    private String password, email;
+public class SignInModel implements UserDetails {
 
-    public MyUserDetails(String email) {
-        this.email = email;
+    private String email;
+    private String password;
+
+    public SignInModel(){
+
     }
 
-    public MyUserDetails(String email, String password) {
+    public SignInModel(String email, String password) {
+        this.email = email;
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -25,7 +34,7 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.password;
+        return password;
     }
 
     @Override
@@ -35,21 +44,23 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return false;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return false;
     }
+
+
 }

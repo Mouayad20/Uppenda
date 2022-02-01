@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import java.util.List;
 
+import com.example.demo.Converters.LikeConverter;
 import com.example.demo.Entities.LikeEntity;
 import com.example.demo.Entities.PostEntity;
 import com.example.demo.Entities.ReactionEntity;
@@ -27,9 +28,9 @@ public class LikeService {
     @Autowired
     InterestService interestService;
     @Autowired
-    ReactionsRepository reactionsRepository; 
+    ReactionsRepository reactionsRepository;
     @Autowired
-    FormatFactory formatFactory ;
+    LikeConverter likeConverter ;
 
     public LikeModel addLike(Long post_id , Long u_id, Long reaction_id){
 
@@ -47,7 +48,7 @@ public class LikeService {
 
         interestService.addInterst(postEntity,userEntity);
 
-        return formatFactory.likeEntityToModel(likeRepository.save(likeEntity),false,true);
+        return likeConverter.likeEntityToModel(likeRepository.save(likeEntity),false,true);
 
     }
 
@@ -62,7 +63,7 @@ public class LikeService {
     }
 
     public List<LikeModel> fetchAllLikeByPostId(Long post_id ){
-        return formatFactory.likeEntityListToModelList( likeRepository.getAllLikeByPostId(post_id));
+        return likeConverter.likeEntityListToModelList( likeRepository.getAllLikeByPostId(post_id));
     }
     
 }

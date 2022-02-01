@@ -3,10 +3,10 @@ package com.example.demo.Controllers;
 
 import java.util.List;
 
+import com.example.demo.Converters.PostConverter;
 import com.example.demo.Models.PostModel;
 import com.example.demo.Repositories.PostRepositroy;
 import com.example.demo.Repositories.UserRepository;
-import com.example.demo.services.FormatFactory;
 import com.example.demo.services.PostService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +26,11 @@ public class PostController {
     PostService postService;
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    FormatFactory formatFactory;
+
     @Autowired
     PostRepositroy postRepositroy ;
-
+    @Autowired
+    PostConverter postConverter;
 
     @PostMapping("/addProfilePost/{u_id}")
     public PostModel addPostOnProfile(@RequestBody PostModel postModel,@PathVariable(name = "u_id") Long u_id) {
@@ -82,22 +82,22 @@ public class PostController {
 
     @GetMapping(path = "/getAllPostsForUserByUID/user_id={id}")
     public List<PostModel> getUserPosts(@PathVariable(name = "id",required = true)long id){
-        return formatFactory.postEntityListToModelList(postRepositroy.getAllPostByUserId(id),true,true,true,true,true);
+        return postConverter.postEntityListToModelList(postRepositroy.getAllPostByUserId(id),true,true,true,true,true);
     }
 
     @GetMapping(path = "/getAllPostsForGroupByGID/group_id={id}")
     public List<PostModel> getGroupsPosts(@PathVariable(name = "id",required = true)long id){
-        return formatFactory.postEntityListToModelList(postRepositroy.getAllPostByGroupId(id),true,true,true,true,true);
+        return postConverter.postEntityListToModelList(postRepositroy.getAllPostByGroupId(id),true,true,true,true,true);
     }
 
     @GetMapping(path = "/getAllPostsForPageByPID/page_id={id}")
     public List<PostModel> getPagesPosts(@PathVariable(name = "id",required = true)long id){
-        return formatFactory.postEntityListToModelList(postRepositroy.getAllPostByPageId(id),true,true,true,true,true);
+        return postConverter.postEntityListToModelList(postRepositroy.getAllPostByPageId(id),true,true,true,true,true);
     }
 
     @GetMapping(path = "/getSummery/user_id={id}")
     public List<PostModel> getSummery(@PathVariable(name = "id",required = true)long id){
-        return formatFactory.postEntityListToModelList(postRepositroy.getSummery(id),true,true,true,true,true);
+        return postConverter.postEntityListToModelList(postRepositroy.getSummery(id),true,true,true,true,true);
     }
     
 }

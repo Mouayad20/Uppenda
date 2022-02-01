@@ -2,6 +2,7 @@ package com.example.demo.Controllers;
 
 import java.util.List;
 
+import com.example.demo.Converters.GroupConverter;
 import com.example.demo.Entities.GroupEntity;
 import com.example.demo.Entities.UserEntity;
 import com.example.demo.Models.GroupModel;
@@ -9,7 +10,6 @@ import com.example.demo.Models.PostModel;
 import com.example.demo.Models.UserModel;
 import com.example.demo.Repositories.GroupRepository;
 import com.example.demo.Repositories.UserRepository;
-import com.example.demo.services.FormatFactory;
 import com.example.demo.services.GroupService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class GroupController {
     UserRepository userRepository;
 
     @Autowired
-    FormatFactory formatFactory;
+    GroupConverter groupConverter;
 
 
     @PostMapping(path = "/addGroup/adminId={admin_id}")
@@ -105,7 +105,7 @@ public class GroupController {
         UserEntity userEntity = userRepository.findById((long)1).get();
         groupEntity.getMembers().remove(userEntity);
         groupEntity = groupRepository.save(groupEntity);
-        return formatFactory.convertGroupEntityToGroupModel(groupEntity);
+        return groupConverter.convertGroupEntityToGroupModel(groupEntity);
     }
 
     @GetMapping(path = "/getFormat")
@@ -115,7 +115,7 @@ public class GroupController {
 
     @GetMapping(path = "/search/word={word}")
     public List<GroupModel> search(@PathVariable String word){
-        return formatFactory.convertGroupEntityListToGroupModelList(groupRepository.searchGroup(word));
+        return groupConverter.convertGroupEntityListToGroupModelList(groupRepository.searchGroup(word));
     }
 
 

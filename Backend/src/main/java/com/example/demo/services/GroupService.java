@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.demo.Converters.GroupConverter;
+import com.example.demo.Converters.PostConverter;
 import com.example.demo.Entities.GroupEntity;
 import com.example.demo.Entities.UserEntity;
 import com.example.demo.Models.GroupModel;
@@ -27,41 +29,43 @@ public class GroupService {
     UserRepository userRepository;
     @Autowired
     PostRepositroy postRepositroy;
-    @Autowired
-    FormatFactory formatFactory;
+
     @Autowired
     UserService userService;
-
+    @Autowired
+    GroupConverter groupConverter;
+    @Autowired
+    PostConverter postConverter;
 
     public GroupModel addGroup(long adminId, GroupModel groupModel) {
         UserEntity userEntity = userRepository.findById(adminId).get();
         GroupEntity groupEntity = new GroupEntity();
-        groupEntity = formatFactory.convertGroupModelToGroupEntity(groupModel, userEntity, false);
+        groupEntity = groupConverter.convertGroupModelToGroupEntity(groupModel, userEntity, false);
         // groupEntity.setCreatedAt(new Date());
         groupEntity = groupRepository.save(groupEntity);
         addMembersToGroup(groupEntity.getId(),adminId);
         for (int i = 0; i < groupModel.getMembers().size(); i++) {
             addMembersToGroup(groupEntity.getId(), groupModel.getMembers().get(i).getId());
         }
-        return formatFactory.convertGroupEntityToGroupModel(groupEntity);
+        return groupConverter.convertGroupEntityToGroupModel(groupEntity);
     }
 
     public List<GroupModel> getAllPages() {
         List<GroupModel> groups = new ArrayList<>();
 
         for (GroupEntity groupEntity : groupRepository.getAllGroup()) {
-            groups.add(formatFactory.convertGroupEntityToGroupModel(groupEntity));
+            groups.add(groupConverter.convertGroupEntityToGroupModel(groupEntity));
         }
         return groups;
     }
 
     public GroupModel findById(long id) {
-        GroupModel groupModel = formatFactory.convertGroupEntityToGroupModel(groupRepository.findById(id).get());
+        GroupModel groupModel = groupConverter.convertGroupEntityToGroupModel(groupRepository.findById(id).get());
         return groupModel;
     }
 
     public GroupModel findByName(String name) {
-        return formatFactory.convertGroupEntityToGroupModel(groupRepository.findByName(name));
+        return groupConverter.convertGroupEntityToGroupModel(groupRepository.findByName(name));
     }
 
    
@@ -76,7 +80,7 @@ public class GroupService {
         GroupEntity groupEntity = groupRepository.findById(groupId).get();
         userService.exitFromGroup(memberId, groupEntity);
         groupEntity = groupRepository.findById(groupId).get();
-        return formatFactory.convertGroupEntityToGroupModel(groupEntity);
+        return groupConverter.convertGroupEntityToGroupModel(groupEntity);
 
     }
 
@@ -86,7 +90,7 @@ public class GroupService {
         groupEntity.setImagePath(groupModel.getImgPath());
         groupEntity.setName(groupModel.getName());
         groupEntity = groupRepository.save(groupEntity);
-        return formatFactory.convertGroupEntityToGroupModel(groupEntity);
+        return groupConverter.convertGroupEntityToGroupModel(groupEntity);
 
     }
 
@@ -113,14 +117,14 @@ public class GroupService {
                     savedEntity = groupRepository.save(groupEntity.get());
                 }
         }
-        return formatFactory.convertGroupEntityToGroupModel(savedEntity);
+        return groupConverter.convertGroupEntityToGroupModel(savedEntity);
     }
 
 
 
     
     public List<PostModel> fetchAllPostFromGroupById(Long g_id){
-        return formatFactory.postEntityListToModelList(postRepositroy.getAllPostByGroupId(g_id),true,true,false,false,true);
+        return postConverter.postEntityListToModelList(postRepositroy.getAllPostByGroupId(g_id),true,true,false,false,true);
     }
 
     public List<UserModel> fetchAllUserFromGroupByGId(Long g_id){

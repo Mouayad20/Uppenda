@@ -2,13 +2,13 @@ package com.example.demo.Controllers;
 
 import java.util.List;
 
+import com.example.demo.Converters.ChatConverter;
 import com.example.demo.Entities.ChatEntity;
 import com.example.demo.Models.ChatModel;
 import com.example.demo.Repositories.ChatRepository;
 import com.example.demo.Repositories.UserRepository;
 import com.example.demo.services.ChatService;
 
-import com.example.demo.services.FormatFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,7 +67,7 @@ public class ChatController {
 
     @GetMapping("/getChatById/chat_id={c_id}")
     public ChatModel getChatById(@PathVariable(name = "c_id")Long c_id){
-        return new FormatFactory().chatEntityToModel( chatRepository.findById(c_id).get(),true,true);
+        return new ChatConverter().chatEntityToModel( chatRepository.findById(c_id).get(),true,true);
     }
 
 //    @DeleteMapping("/deleteById/chat_id={chat_id}")

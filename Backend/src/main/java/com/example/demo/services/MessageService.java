@@ -3,6 +3,7 @@ package com.example.demo.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.demo.Converters.MessageConverter;
 import com.example.demo.Entities.MessageEntity;
 import com.example.demo.Models.MessageModel;
 import com.example.demo.Repositories.ChatRepository;
@@ -22,11 +23,11 @@ public class MessageService{
     @Autowired
     ChatRepository chatRepository ;
     @Autowired
-    FormatFactory formatFactory;
+    MessageConverter messageConverter;
 
     public MessageModel saveMessage(MessageModel messageModel ){
 
-        return formatFactory.messageEntityToModle( messageRepository.save(formatFactory.messageModleToEntity(messageModel)),false);
+        return messageConverter.messageEntityToModel( messageRepository.save(messageConverter.messageModelToEntity(messageModel)),false);
 
 
 /*
@@ -46,7 +47,7 @@ public class MessageService{
         messageEntityForMe.setContent   (messageModel  .getContent   ());
         messageEntityForMe.setDateOfSent(messageModel  .getDateOfSent());
 
-        MessageModel savedMessage = formatFactory.messageEntityToModle(messageRepository.save(messageEntityForMe));
+        MessageModel savedMessage = messageConverter.messageEntityToModle(messageRepository.save(messageEntityForMe));
 
         MessageEntity messageEntityForHe = new MessageEntity();
         messageEntityForHe.setChatEntity(chatRepository.getChat( reciver_id,sender_id));
@@ -68,7 +69,7 @@ public class MessageService{
      */
     public List<MessageModel> getAllMessageForSpecifacUser(Long c_id ,Long s_id ){
 
-        return formatFactory.messageEntityListToModleList(messageRepository.getAllMessagesByUserId(c_id,s_id),false);
+        return messageConverter.messageEntityListToModelList(messageRepository.getAllMessagesByUserId(c_id,s_id),false);
     }
 
     public List<MessageModel> getAllMessageInSpecificeChat(Long chat_id){
@@ -76,19 +77,19 @@ public class MessageService{
             return new ArrayList<MessageModel>();
         }
         else{
-            return formatFactory.messageEntityListToModleList(messageRepository.getAllMessageInSpecificChat(chat_id),false);
+            return messageConverter.messageEntityListToModelList(messageRepository.getAllMessageInSpecificChat(chat_id),false);
         }
     }
 
     public List<MessageModel> getAllMessages(){
-        return formatFactory.messageEntityIterableToModleList(messageRepository.findAll());
+        return messageConverter.messageEntityIterableToModelList(messageRepository.findAll());
     }
 
     public MessageModel update(MessageModel messageModel) {
         MessageEntity messageEntity = messageRepository.findById(messageModel.getId()).get();
         messageEntity.setContent(messageModel.getContent());
         messageEntity.setDateOfSent(messageModel.getDateOfSent());
-        return formatFactory.messageEntityToModle(messageRepository.save(messageEntity),false);
+        return messageConverter.messageEntityToModel(messageRepository.save(messageEntity),false);
     }
 
     public String delete(Long id) {

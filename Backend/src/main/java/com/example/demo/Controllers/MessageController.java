@@ -3,9 +3,9 @@ package com.example.demo.Controllers;
 
 import java.util.List;
 
+import com.example.demo.Converters.MessageConverter;
 import com.example.demo.Models.MessageModel;
 
-import com.example.demo.services.FormatFactory;
 import com.example.demo.services.MessageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MessageController {
     @Autowired
     MessageService messageService;
-    @Autowired
-    FormatFactory formatFactory ;
 
     @GetMapping("/test")
     public MessageModel test(){

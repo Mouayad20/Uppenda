@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.example.demo.Converters.MediaConverter;
+import com.example.demo.Converters.MessageConverter;
 import com.example.demo.Entities.MessageEntity;
 import com.example.demo.Models.MessageModel;
 import com.example.demo.Repositories.ChatRepository;
 import com.example.demo.Repositories.MessageRepository;
 import com.example.demo.Repositories.UserRepository;
-import com.example.demo.services.FormatFactory;
 import com.example.demo.services.MessageService;
 import com.example.demo.services.UserService;
 
@@ -31,9 +32,7 @@ public class webSocketMessageHundler extends TextWebSocketHandler {
     @Autowired
     MessageRepository messageRepository;
     @Autowired
-    MessageService messageService;
-    @Autowired
-    FormatFactory formatFactory;
+    MessageConverter messageConverter;
 
     final Map<String, WebSocketSession> sessions = new HashMap<>();
 
@@ -74,7 +73,7 @@ public class webSocketMessageHundler extends TextWebSocketHandler {
         System.out.println(list);
         System.out.println("\n\n######################\n\n");
 
-        MessageModel savedMessage = formatFactory.messageEntityToModle(messageRepository.save(messageEntity), false);
+        MessageModel savedMessage = messageConverter.messageEntityToModel(messageRepository.save(messageEntity), false);
 
         
 

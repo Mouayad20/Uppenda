@@ -1,28 +1,11 @@
 package com.example.demo.FilesMangment.controllers;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-
-import com.example.demo.Entities.CommentEntity;
-import com.example.demo.Entities.GroupEntity;
-import com.example.demo.Entities.MediaEntity;
-import com.example.demo.Entities.PageEntity;
-import com.example.demo.Entities.UserEntity;
+import com.example.demo.Entities.*;
 import com.example.demo.FilesMangment.commons.FileResponse;
 import com.example.demo.FilesMangment.storage.StorageException;
 import com.example.demo.FilesMangment.storage.StorageService;
-import com.example.demo.Repositories.CommentRepository;
-import com.example.demo.Repositories.GroupRepository;
-import com.example.demo.Repositories.MediaRepository;
-import com.example.demo.Repositories.PageRepository;
-import com.example.demo.Repositories.UserRepository;
-import com.example.demo.services.FormatFactory;
+import com.example.demo.Repositories.*;
 import com.example.demo.services.UserService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -30,11 +13,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
 @Controller
 @RequestMapping("/upload")
 public class FileController {
-
-    private StorageService storageService;
 
     @Autowired
     UserRepository userRepository;
@@ -48,16 +36,17 @@ public class FileController {
     MediaRepository mediaRepository;
     @Autowired
     UserService userService;
-    @Autowired
-    FormatFactory formatFactory;
+
+    private StorageService storageService;
+
 
     public FileController(StorageService storageService) {
         this.storageService = storageService;
     }
 
-    @PostMapping(path = "/employee", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    @PostMapping(path = "/employee", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public String saveEmployee(@RequestPart(name = "type") String type, @RequestPart(name = "id") String id,
-            @RequestPart(name = "name") String nameFile, @RequestPart(name = "file") MultipartFile file) {
+                               @RequestPart(name = "name") String nameFile, @RequestPart(name = "file") MultipartFile file) {
 
         // String superPath = "C:\\xampp\\htdocs";
         String superPath = ".\\src\\main\\resources\\static";

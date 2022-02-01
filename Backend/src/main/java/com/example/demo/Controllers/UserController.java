@@ -1,32 +1,24 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.Converters.UserConverter;
+import com.example.demo.DemoApplication;
+import com.example.demo.Entities.UserEntity;
+import com.example.demo.Models.PostModel;
+import com.example.demo.Models.SignInModel;
+import com.example.demo.Models.UserModel;
+import com.example.demo.Repositories.UserRepository;
+import com.example.demo.Security.TokenUtil;
+import com.example.demo.services.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.example.demo.Configurations.AuthRequest;
-import com.example.demo.Configurations.TokenUtil;
-import com.example.demo.DemoApplication;
-import com.example.demo.Entities.UserEntity;
-import com.example.demo.Models.MyUserDetails;
-import com.example.demo.Models.PostModel;
-import com.example.demo.Models.UserModel;
-import com.example.demo.Repositories.UserRepository;
-import com.example.demo.services.FormatFactory;
-import com.example.demo.services.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetails;
 
 @RestController
 @RequestMapping(path = "/users")
@@ -37,27 +29,27 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    FormatFactory formatFactory;
-    @Autowired
     AuthenticationManager authenticationManager;
     @Autowired
     TokenUtil tokenUtil;
+    @Autowired
+    UserConverter userConverter;
 
     @PostMapping(path = "/signIn")
-    public Map<String, Object> signIn(@RequestBody AuthRequest authRequest) throws Exception {
+    public Map<String, Object> signIn(@RequestBody SignInModel signInModel) throws Exception {
 
-        System.out.println("\n\t email  : " + authRequest.getEmail());
-        System.out.println("\n\t pass   : " + authRequest.getPassword());
+        System.out.println("\n\t email  : " + signInModel.getEmail());
+        System.out.println("\n\t pass   : " + signInModel.getPassword());
 
         ///////////////////////////////////////////////////////////////////////////
 
         userService = new UserService();
 
-        UserEntity uouo = userRepository.findByEmail(authRequest.getEmail()).get();
+        UserEntity uouo = userRepository.findByEmail(signInModel.getEmail()).get();
 
-        UserDetails userDetails = new MyUserDetails(uouo.getEmail(), uouo.getPassword());
+        UserDetails userDetails = new SignInModel(uouo.getEmail(), uouo.getPassword());
 
-        String token = tokenUtil.generateTokenByEmail(userDetails.getUsername());
+        String token = tokenUtil.generateToken(userDetails.getUsername());
 
         Map<String, Object> tokenWithUser = new HashMap<>();
 
@@ -66,8 +58,8 @@ public class UserController {
         tokenWithUser.put("token", String.valueOf(token));
 
         // final Authentication authentication = authenticationManager.authenticate(
-        // new UsernamePasswordAuthenticationToken(authRequest.getEmail(),
-        // authRequest.getPassword()));
+        // new UsernamePasswordAuthenticationToken(signInModel.getEmail(),
+        // signInModel.getPassword()));
         // SecurityContextHolder.getContext().setAuthentication(authentication);
         return tokenWithUser;
     }
@@ -76,8 +68,8 @@ public class UserController {
     public Map<String, Object> updateUserInforamtion(@RequestBody(required = true) UserModel userModel) {
         userModel = userService.updateUserInformation(userModel);
         Map<String, Object> tokenWithUser = new HashMap<>();
-        final MyUserDetails user = (MyUserDetails) userService.loadUserByUsername(userModel.getEmail());
-        final String token = tokenUtil.generateTokenByEmail(user.getUsername());
+        final SignInModel user = (SignInModel) userService.loadUserByUsername(userModel.getEmail());
+        final String token = tokenUtil.generateToken(user.getUsername());
         tokenWithUser.put("token", token);
         tokenWithUser.put("userModel", userModel);
         return tokenWithUser;
@@ -87,8 +79,8 @@ public class UserController {
     public Map<String, Object> addUser(@RequestBody UserModel userModel) {
         userModel = userService.addUser(userModel);
         Map<String, Object> tokenWithUser = new HashMap<>();
-        final MyUserDetails user = new MyUserDetails(userModel.getEmail(), userModel.getPassword());
-        final String token = tokenUtil.generateTokenByEmail(user.getUsername());
+        final SignInModel user = new SignInModel(userModel.getEmail(), userModel.getPassword());
+        final String token = tokenUtil.generateToken(user.getUsername());
         tokenWithUser.put("token", token);
         tokenWithUser.put("userModel", userModel);
         return tokenWithUser;
@@ -108,20 +100,6 @@ public class UserController {
         }
         return "not existed";
     }
-
-    // @PostMapping(path = "/addUser")
-    // public UserModel addUser(@RequestBody(required = true)UserModel userModel){
-    // ResponseEntity response = userService.emailValidation(userModel.getEmail());
-    // if (response.getBody() == "This email is not valid")
-    // {
-    // UserModel userModel1 = new UserModel();
-    // userModel1.setEmail("This email is not valid");
-    // return userModel1;
-    // }
-    // else
-    // return userService.addUser(userModel);
-
-    // }
 
     @GetMapping(path = "/getUser/Id={id}")
     public UserModel findById(@PathVariable(name = "id", required = true) long id) {
@@ -146,30 +124,30 @@ public class UserController {
 
     @GetMapping(path = "/addFriend/userId={id},friendId={friend_id}")
     public UserModel addFriend(@PathVariable(name = "id", required = true) long id,
-            @PathVariable(name = "friend_id", required = true) long friendId) {
+                               @PathVariable(name = "friend_id", required = true) long friendId) {
         return userService.addFriend(id, friendId);
     }
 
     @GetMapping(path = "/unFriend/userId={u_id},friendId={f_id}")
     public UserModel unFriend(@PathVariable(name = "u_id", required = true) long u_id,
-            @PathVariable(name = "f_id", required = true) long f_id) {
+                              @PathVariable(name = "f_id", required = true) long f_id) {
         return userService.unFriend(u_id, f_id);
     }
 
     @GetMapping(path = "/test")
     public UserModel test() {
-        return formatFactory.convertUserEntityToUserModel(new UserEntity());
+        return userConverter.convertUserEntityToUserModel(new UserEntity());
     }
 
     @GetMapping(path = "/savePost/userId={u_id},postId={post_id}")
     public String savePost(@PathVariable(name = "u_id", required = true) long u_id,
-            @PathVariable(name = "post_id", required = true) long post_id) {
+                           @PathVariable(name = "post_id", required = true) long post_id) {
         return userService.savedPost(u_id, post_id);
     }
 
     @GetMapping(path = "/unSavePost/userId={u_id},postId={post_id}")
     public boolean unSavePost(@PathVariable(name = "u_id", required = true) long u_id,
-            @PathVariable(name = "post_id", required = true) long post_id) {
+                              @PathVariable(name = "post_id", required = true) long post_id) {
         return userService.unSavedPost(u_id, post_id);
     }
 
@@ -180,13 +158,15 @@ public class UserController {
 
     @GetMapping(path = "/sharePost/userId={u_id},postId={post_id}")
     public String sharePost(@PathVariable(name = "u_id", required = true) long u_id,
-            @PathVariable(name = "post_id", required = true) long post_id) {
+                            @PathVariable(name = "post_id", required = true) long post_id) {
         return userService.sharedPost(u_id, post_id);
     }
 
     @GetMapping(path = "/unSharePost/userId={u_id},postId={post_id}")
+
+
     public boolean unSharePost(@PathVariable(name = "u_id", required = true) long u_id,
-            @PathVariable(name = "post_id", required = true) long post_id) {
+                               @PathVariable(name = "post_id", required = true) long post_id) {
         return userService.unSharedPost(u_id, post_id);
     }
 
@@ -200,18 +180,9 @@ public class UserController {
         return userService.emailValidation(email);
     }
 
-    // @PostMapping(path = "/signIn/{email}/{password}")
-    // public UserModel signIn(@PathVariable String email,@PathVariable String
-    // password){
-    // System.out.println(email);
-    // System.out.println(password);
-
-    // return userService.signIn(email,password);
-    // }
-
     @GetMapping(path = "/search/word={word}")
     public List<UserModel> search(@PathVariable String word) {
-        return formatFactory.convertUserListEntityToListModel(userRepository.searchUser(word));
+        return userConverter.convertUserListEntityToListModel(userRepository.searchUser(word));
     }
 
 }

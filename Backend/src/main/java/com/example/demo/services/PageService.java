@@ -1,9 +1,8 @@
 package com.example.demo.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.example.demo.Converters.PageConverter;
+import com.example.demo.Converters.PostConverter;
+import com.example.demo.Converters.UserConverter;
 import com.example.demo.Entities.PageEntity;
 import com.example.demo.Entities.UserEntity;
 import com.example.demo.Models.PageModel;
@@ -12,10 +11,13 @@ import com.example.demo.Models.UserModel;
 import com.example.demo.Repositories.PageRepository;
 import com.example.demo.Repositories.PostRepositroy;
 import com.example.demo.Repositories.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PageService {
@@ -23,25 +25,29 @@ public class PageService {
     @Autowired
     PageRepository pageRepository;
     @Autowired
-    FormatFactory formatFactory;
-    @Autowired
     UserRepository userRepository;
     @Autowired
     PostRepositroy postRepositroy;
     @Autowired
     UserService userService;
+    @Autowired
+    PageConverter pageConverter;
+    @Autowired
+    PostConverter postConverter;
+    @Autowired
+    UserConverter userConverter;
 
     public PageModel addPage(PageModel pageModel, long adminId) {
         UserEntity userEntity = userRepository.findById(adminId).get();
         PageEntity pageEntity = new PageEntity();
-        pageEntity = formatFactory.convertPageModelToPageEntity(pageModel, userEntity, false);
+        pageEntity = pageConverter.convertPageModelToPageEntity(pageModel, userEntity, false);
         // pageEntity.setCreatedAt(new Date());
         pageEntity = pageRepository.save(pageEntity);
         addMemberToPage(pageEntity.getId(), adminId);
         for (int i = 0; i < pageModel.getMembers().size(); i++) {
             addMemberToPage(pageEntity.getId(), pageModel.getMembers().get(i).getId());
         }
-        return formatFactory.convertPageEntityToPageModel(pageEntity);
+        return pageConverter.convertPageEntityToPageModel(pageEntity);
     }
 
     public PageModel addMemberToPage(long id, long userId) {
@@ -60,13 +66,13 @@ public class PageService {
                 savedEntity = pageRepository.save(pageEntity.get());
             }
         }
-        return formatFactory.convertPageEntityToPageModel(savedEntity);
+        return pageConverter.convertPageEntityToPageModel(savedEntity);
     }
 
     public PageModel deleteMemberFromPage(long id, long memberId) {
         PageEntity pageEntity = pageRepository.findById(id).get();
         userService.exitFromPage(memberId, pageEntity);
-        return formatFactory.convertPageEntityToPageModel(pageEntity);
+        return pageConverter.convertPageEntityToPageModel(pageEntity);
     }
 
     public ResponseEntity<Object> deleteById(long id) {
@@ -87,7 +93,7 @@ public class PageService {
     public List<PageModel> getAllPages() {
         List<PageModel> pages = new ArrayList<>();
         for (PageEntity pageEntity : pageRepository.getAllPages()) {
-            pages.add(formatFactory.convertPageEntityToPageModel(pageEntity));
+            pages.add(pageConverter.convertPageEntityToPageModel(pageEntity));
         }
         return pages;
     }
@@ -100,15 +106,15 @@ public class PageService {
         pageEntity.setName(pageModel.getName());
         pageEntity = pageRepository.save(pageEntity);
 
-        return formatFactory.convertPageEntityToPageModel(pageEntity);
+        return pageConverter.convertPageEntityToPageModel(pageEntity);
     }
 
     public List<PostModel> fetchAllPostFromPageById(Long p_id) {
-        return formatFactory.postEntityListToModelList(postRepositroy.getAllPostByPageId(p_id),true,true,false,false,true);
+        return postConverter.postEntityListToModelList(postRepositroy.getAllPostByPageId(p_id), true, true, false, false, true);
     }
 
     public List<UserModel> fetchAllUserFromPageByPId(Long p_id) {
-        return formatFactory.convertUserListEntityToListModel(pageRepository.findById(p_id).get().getMembers());
+        return userConverter.convertUserListEntityToListModel(pageRepository.findById(p_id).get().getMembers());
     }
 
 }

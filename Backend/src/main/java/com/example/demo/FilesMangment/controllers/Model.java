@@ -19,8 +19,6 @@ public class Model {
         this.doc = doc;
     }
 
-
-
     public Model() {
     }
 

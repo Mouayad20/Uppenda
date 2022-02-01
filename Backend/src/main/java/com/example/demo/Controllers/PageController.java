@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.demo.Converters.PageConverter;
 import com.example.demo.Entities.PageEntity;
 import com.example.demo.Models.PageModel;
 import com.example.demo.Models.PostModel;
 import com.example.demo.Models.UserModel;
 import com.example.demo.Repositories.PageRepository;
-import com.example.demo.services.FormatFactory;
 import com.example.demo.services.PageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class PageController {
     @Autowired
     PageRepository pageRepository;
     @Autowired
-    FormatFactory formatFactory;
+    PageConverter pageConverter;
 
     @PostMapping(path = "/addPage/adminId={User_id}")
     public PageModel addPage(@RequestBody(required = true) PageModel pageModel,
@@ -56,7 +56,7 @@ public class PageController {
         Optional<List<PageEntity>> pages = pageRepository.getAllPagesThatUserIsAdimnIn(id);
         List<PageModel> pageModels = new ArrayList<>();
         for (PageEntity pageEntity : pages.get()) {
-            pageModels.add(formatFactory.convertPageEntityToPageModel(pageEntity));
+            pageModels.add(pageConverter.convertPageEntityToPageModel(pageEntity));
         }
         return pageModels;
     }
@@ -100,12 +100,12 @@ public class PageController {
 
     @GetMapping(path = "/search/word={word}")
     public List<PageModel> search(@PathVariable String word){
-        return formatFactory.convertPageEntityListToPageModelList(pageRepository.searchPage(word));
+        return pageConverter.convertPageEntityListToPageModelList(pageRepository.searchPage(word));
     }
 
     @GetMapping(path = "/getPageById/id={id}")
     public PageModel getPageById(@PathVariable Long id){
-        return formatFactory.convertPageEntityToPageModel(pageRepository.findById(id).get());
+        return pageConverter.convertPageEntityToPageModel(pageRepository.findById(id).get());
     }
 
 

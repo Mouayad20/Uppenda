@@ -1,29 +1,28 @@
 package com.example.demo.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+import com.example.demo.Converters.GroupConverter;
+import com.example.demo.Converters.PageConverter;
+import com.example.demo.Converters.PostConverter;
+import com.example.demo.Converters.UserConverter;
 import com.example.demo.Entities.GroupEntity;
 import com.example.demo.Entities.PageEntity;
 import com.example.demo.Entities.PostEntity;
 import com.example.demo.Entities.UserEntity;
-import com.example.demo.Models.GroupModel;
-import com.example.demo.Models.PageModel;
-import com.example.demo.Models.PostModel;
-import com.example.demo.Models.UserModel;
-import com.example.demo.Models.MyUserDetails;
+import com.example.demo.Models.*;
 import com.example.demo.Repositories.GroupRepository;
 import com.example.demo.Repositories.PageRepository;
 import com.example.demo.Repositories.PostRepositroy;
 import com.example.demo.Repositories.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -42,15 +41,21 @@ public class UserService implements UserDetailsService {
     PageService pageService;
     @Autowired
     PostService postService;
+
     @Autowired
-    FormatFactory formatFactory;
+    UserConverter userConverter;
+    @Autowired
+    PageConverter pageConverter;
+    @Autowired
+    PostConverter postConverter;
+    @Autowired
+    GroupConverter groupConverter;
 
     ////////// user methods
 
     public UserModel addUser(UserModel userModel) {
-        formatFactory = new FormatFactory();
-        UserEntity userEntity = userRepository.save(formatFactory.convertUserModelToUserEntity(userModel, false));
-        return formatFactory.convertUserEntityToUserModel(userEntity);
+        UserEntity userEntity = userRepository.save(userConverter.convertUserModelToUserEntity(userModel, false));
+        return userConverter.convertUserEntityToUserModel(userEntity);
     }
 
     public ResponseEntity<Object> deleteUserUsingId(long id) {
@@ -103,7 +108,7 @@ public class UserService implements UserDetailsService {
         if (foundUser.isEmpty())
             return null;
         else {
-            return formatFactory.convertUserEntityToUserModel(foundUser.get());
+            return userConverter.convertUserEntityToUserModel(foundUser.get());
         }
 
     }
@@ -122,12 +127,12 @@ public class UserService implements UserDetailsService {
             UserModel userModel = new UserModel();
             return userModel;
         } else
-            return formatFactory.convertUserEntityToUserModel(userEntity.get());
+            return userConverter.convertUserEntityToUserModel(userEntity.get());
 
     }
 
-    public UserModel findByEmail(String email){
-        return formatFactory.convertUserEntityToUserModel(userRepository.getByEmail(email));
+    public UserModel findByEmail(String email) {
+        return userConverter.convertUserEntityToUserModel(userRepository.getByEmail(email));
     }
 
     public List<UserModel> findByFirstName(String firstName) {
@@ -137,7 +142,7 @@ public class UserService implements UserDetailsService {
             return null;
         else {
             for (UserEntity userEntity : foundUser) {
-                founModels.add(formatFactory.convertUserEntityToUserModel(userEntity));
+                founModels.add(userConverter.convertUserEntityToUserModel(userEntity));
             }
             return founModels;
         }
@@ -158,7 +163,7 @@ public class UserService implements UserDetailsService {
         userEntity.setIp(userModel.getIp());
         userEntity.setImagePath(userModel.getImagePath());
         userEntity = userRepository.save(userEntity);
-        return formatFactory.convertUserEntityToUserModel(userEntity);
+        return userConverter.convertUserEntityToUserModel(userEntity);
 
     }
 
@@ -174,7 +179,7 @@ public class UserService implements UserDetailsService {
         user = userRepository.save(user);
         /*--------------error--------------------*/
         userRepository.save(friendEntity);
-        return formatFactory.convertUserEntityToUserModel(user);
+        return userConverter.convertUserEntityToUserModel(user);
 
     }
 
@@ -186,7 +191,7 @@ public class UserService implements UserDetailsService {
         friendEntity.getFriends().remove(user);
         friendEntity = userRepository.save(friendEntity);
         user = userRepository.save(user);
-        return formatFactory.convertUserEntityToUserModel(user);
+        return userConverter.convertUserEntityToUserModel(user);
 
     }
 
@@ -197,7 +202,7 @@ public class UserService implements UserDetailsService {
         friendEntity.getFriends().remove(userEntity);
         userEntity = userRepository.save(userEntity);
         friendEntity = userRepository.save(friendEntity);
-        return formatFactory.convertUserEntityToUserModel(userEntity);
+        return userConverter.convertUserEntityToUserModel(userEntity);
 
     }
 
@@ -209,7 +214,7 @@ public class UserService implements UserDetailsService {
             userEntity.getPages().add(pageEntity);
             userRepository.save(userEntity);
         }
-        PageModel pageModel = formatFactory
+        PageModel pageModel = pageConverter
                 .convertPageEntityToPageModel(pageRepository.findById(pageEntity.getId()).get());
         return pageModel;
     }
@@ -233,7 +238,7 @@ public class UserService implements UserDetailsService {
             userEntity.getGroups().add(groupEntity);
             userRepository.save(userEntity);
         }
-        GroupModel groupModel = formatFactory
+        GroupModel groupModel = groupConverter
                 .convertGroupEntityToGroupModel(groupRepository.findById(groupEntity.getId()).get());
         return groupModel;
     }
@@ -269,8 +274,8 @@ public class UserService implements UserDetailsService {
 
         }
 
-         savedUser.getSavedPost();
-        
+        savedUser.getSavedPost();
+
 
         return "This post is save...";
 
@@ -302,7 +307,7 @@ public class UserService implements UserDetailsService {
         List<Long> list = userRepository.getALlSavedPost(u_id);
         List<PostModel> postModelList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            postModelList.add(formatFactory.postEntityToModel(postRepositroy.findById(list.get(i)).get(),true, true, true,
+            postModelList.add(postConverter.postEntityToModel(postRepositroy.findById(list.get(i)).get(), true, true, true,
                     true, true));
         }
         return postModelList;
@@ -312,7 +317,7 @@ public class UserService implements UserDetailsService {
 
     public String sharedPost(Long u_id, Long p_id) {
 
-        
+
         UserEntity userEntity = userRepository.findById(u_id).get();
 
         userEntity.getSharedPost().add(postRepositroy.findById(p_id).get());
@@ -333,13 +338,11 @@ public class UserService implements UserDetailsService {
     }
 
 
-
     public boolean unSharedPost(Long u_id, Long p_id) {
 
         boolean isUnShared = true;
         UserEntity userEntity = userRepository.findById(u_id).get();
 
-       
 
         userEntity.getSharedPost().remove(postRepositroy.findById(p_id).get());
 
@@ -360,7 +363,7 @@ public class UserService implements UserDetailsService {
         List<Long> list = userRepository.getALlSharedPost(u_id);
         List<PostModel> postModelList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            postModelList.add(formatFactory.postEntityToModel(postRepositroy.findById(list.get(i)).get(),true, true, true,
+            postModelList.add(postConverter.postEntityToModel(postRepositroy.findById(list.get(i)).get(), true, true, true,
                     true, true));
         }
         return postModelList;
@@ -370,7 +373,7 @@ public class UserService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         System.out.println(">>>>>>>  \t\t " + email);
         UserModel userEntity = findByEmail(email);
-        return new MyUserDetails(userEntity.getEmail(),userEntity.getPassword());
+        return new SignInModel(userEntity.getEmail(), userEntity.getPassword());
         // return new MyUserDetails("asa","90");
     }
 

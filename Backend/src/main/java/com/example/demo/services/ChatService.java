@@ -3,6 +3,7 @@ package com.example.demo.services;
 import java.util.Date;
 import java.util.List;
 
+import com.example.demo.Converters.ChatConverter;
 import com.example.demo.Entities.ChatEntity;
 import com.example.demo.Entities.UserEntity;
 import com.example.demo.Models.ChatModel;
@@ -22,7 +23,7 @@ public class ChatService {
     @Autowired
     MessageService messageService;
     @Autowired
-    FormatFactory formatFactory;
+    ChatConverter chatConverter;
 
     public ChatModel addChat(ChatModel chatModel) {
 
@@ -31,7 +32,7 @@ public class ChatService {
         ChatEntity chatEntity = new ChatEntity();
         ChatEntity savedChat;
 
-        chatEntity = formatFactory.chatModelToEntity(chatModel);
+        chatEntity = chatConverter.chatModelToEntity(chatModel);
 
         for (ChatEntity chatEntity2 : chatRepository.findAll()) {
             for (int i = 0; i < chatEntity2.getUsers().size(); i++) {
@@ -53,7 +54,7 @@ public class ChatService {
         }
 
         if (chatRepository.findById(savedChat.getId()).isPresent())
-            return formatFactory.chatEntityToModel(savedChat, true, true);
+            return chatConverter.chatEntityToModel(savedChat, true, true);
         else
             return new ChatModel();
 
@@ -96,7 +97,7 @@ public class ChatService {
     }
 
     public List<ChatModel> getALlChatByUserId(Long user_id) {
-        List<ChatModel> list = formatFactory
+        List<ChatModel> list = chatConverter
                 .chatListEntityToListModel(userRepository.findById(user_id).get().getChats(), true);
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getMessages().size() == 0) {
@@ -125,7 +126,7 @@ public class ChatService {
     // List<ChatModel> list = new ArrayList<>();
     // for (ChatEntity chatEntity : chatRepository.getChatByUserId(me_id)) {
     // ChatModel chatModel = new ChatModel();
-    //// chatModel.setReceiver(formatFactory.userEntityToModel(chatEntity.getHeEntity()));
+    //// chatModel.setReceiver(chatConverter.userEntityToModel(chatEntity.getHeEntity()));
     // chatModel.setLastMessage(messageService.getLastMessage(chatEntity.getId())==null?"there
     // is no messgaes
     // yet":messageService.getLastMessage(chatEntity.getId()).getContent());

@@ -2,9 +2,9 @@ package com.example.demo.Controllers;
 
 import java.util.List;
 
+import com.example.demo.Converters.ReactionConverter;
 import com.example.demo.Models.ReactionModel;
 import com.example.demo.Repositories.ReactionsRepository;
-import com.example.demo.services.FormatFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,12 +17,13 @@ public class ReationController {
 
     @Autowired
     ReactionsRepository reactionsRepository;
+
     @Autowired
-    FormatFactory formatFactory;
+    ReactionConverter reactionConverter;
 
     @GetMapping("/getAllTypes") 
     public List<ReactionModel> getAllTypes(){
-        return formatFactory.reactionListEntityToModel(reactionsRepository.findAll());
+        return reactionConverter.reactionListEntityToModel(reactionsRepository.findAll());
     }
     
 }
