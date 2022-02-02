@@ -148,12 +148,12 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public UserModel updateUserInformation(UserModel userModel) {
+    public UserModel update(UserModel userModel) {
         UserEntity userEntity = userRepository.findById(userModel.getId()).get();
         userEntity.setId(userModel.getId());
         userEntity.setPassword(userModel.getPassword());
         userEntity.setAge(userModel.getAge());
-        userEntity.setCreatedAt(userModel.getCreated_at());
+        userEntity.setCreatedAt(userModel.getCreatedAt());
         userEntity.setEmail(userModel.getEmail());
         userEntity.setFirstName(userModel.getFirstName());
         userEntity.setGender(userModel.getGender());

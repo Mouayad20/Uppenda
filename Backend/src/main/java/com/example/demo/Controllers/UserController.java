@@ -16,12 +16,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(path = "/users")
+@RequestMapping(path = "/user")
 public class UserController {
 
     @Autowired
@@ -64,9 +65,9 @@ public class UserController {
         return tokenWithUser;
     }
 
-    @PostMapping(path = "/updateUser")
-    public Map<String, Object> updateUserInforamtion(@RequestBody(required = true) UserModel userModel) {
-        userModel = userService.updateUserInformation(userModel);
+    @PostMapping(path = "/update")
+    public Map<String, Object> update(@RequestBody(required = true) UserModel userModel) {
+        userModel = userService.update(userModel);
         Map<String, Object> tokenWithUser = new HashMap<>();
         final SignInModel user = (SignInModel) userService.loadUserByUsername(userModel.getEmail());
         final String token = tokenUtil.generateToken(user.getUsername());
@@ -75,8 +76,8 @@ public class UserController {
         return tokenWithUser;
     }
 
-    @PostMapping("/addUser")
-    public Map<String, Object> addUser(@RequestBody UserModel userModel) {
+    @PostMapping("/signUp")
+    public Map<String, Object> signUp(@RequestBody UserModel userModel) {
         userModel = userService.addUser(userModel);
         Map<String, Object> tokenWithUser = new HashMap<>();
         final SignInModel user = new SignInModel(userModel.getEmail(), userModel.getPassword());
@@ -90,15 +91,11 @@ public class UserController {
     //////////////////////////////////////////////////
 
     @GetMapping(path = "/getFormat")
-    public String getFormat() {
-        System.out.println("\n\n\n\t\t\tGetFormat\n\n");
+    public UserModel getFormat() {
+        Date date = new Date();
         UserModel userModel = new UserModel();
-        try {
-            return DemoApplication.objectMapper.writeValueAsString(userModel);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return "not existed";
+        userModel.setCreatedAt(date);
+        return userModel;
     }
 
     @GetMapping(path = "/getUser/Id={id}")

@@ -35,7 +35,7 @@ public class UserConverter {
             userModel.setAge(userEntity.getAge());
             userModel.setEmail(userEntity.getEmail());
             userModel.setMobile(userEntity.getMobile());
-            userModel.setCreated_at(userEntity.getCreatedAt());
+            userModel.setCreatedAt(userEntity.getCreatedAt());
             userModel.setOnLine(userEntity.isOnLine());
             userModel.setPassword(userEntity.getPassword());
             userModel.setStudyLevel(userEntity.getStudyLevel());
@@ -67,7 +67,7 @@ public class UserConverter {
         userModel.setEmail(userEntity.getEmail());
         userModel.setMobile(userEntity.getMobile());
         userModel.setIp(userEntity.getIp());
-        userModel.setCreated_at(userEntity.getCreatedAt());
+        userModel.setCreatedAt(userEntity.getCreatedAt());
         userModel.setOnLine(userEntity.isOnLine());
         userModel.setPassword(userEntity.getPassword());
         userModel.setIp(userEntity.getIp());
@@ -112,7 +112,7 @@ public class UserConverter {
         userEntity.setAge(userModel.getAge());
         userEntity.setImagePath(userModel.getImagePath());
         userEntity.setLocation(userModel.getLocation());
-        userEntity.setCreatedAt(userModel.getCreated_at());
+        userEntity.setCreatedAt(userModel.getCreatedAt());
         userEntity.setEmail(userModel.getEmail());
         userEntity.setGender(userModel.getGender());
         userEntity.setMobile(userModel.getMobile());
@@ -144,7 +144,7 @@ public class UserConverter {
             userModel.setEmail(friendEntity.getEmail());
             userModel.setIp(friendEntity.getIp());
             userModel.setMobile(friendEntity.getMobile());
-            userModel.setCreated_at(friendEntity.getCreatedAt());
+            userModel.setCreatedAt(friendEntity.getCreatedAt());
             userModel.setOnLine(friendEntity.isOnLine());
             userModel.setFriends(new ArrayList<>());
             userModel.setImagePath(friendEntity.getImagePath());

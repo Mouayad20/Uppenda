@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class UserModel {
 
+
     private Long   id   ;
     private String firstName;
     private String lastName;
@@ -158,11 +159,11 @@ public class UserModel {
         this.age = age;
     }
 
-    public Date getCreated_at() {
-        return this.createdAt;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Date createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
 
