@@ -1,23 +1,16 @@
 package com.example.demo.FilesMangment.controllers;
 
-import java.util.List;
-
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public class Model {
+
     private String name;
     private String ip;
     private String image;
     private String image_enc;
     private List<MultipartFile> doc;
-
-    public List<MultipartFile> getDoc() {
-        return this.doc;
-    }
-
-    public void setDoc(List<MultipartFile> doc) {
-        this.doc = doc;
-    }
 
     public Model() {
     }
@@ -27,6 +20,14 @@ public class Model {
         this.ip = ip;
         this.image = image;
         this.image_enc = image_enc;
+    }
+
+    public List<MultipartFile> getDoc() {
+        return this.doc;
+    }
+
+    public void setDoc(List<MultipartFile> doc) {
+        this.doc = doc;
     }
 
     public String getName() {
@@ -64,14 +65,12 @@ public class Model {
     @Override
     public String toString() {
         return "{" +
-            " name='" + getName() + "'" +
-            ", ip='" + getIp() + "'" +
-            ", image='" + getImage() + "'" +
-            ", image_enc='" + getImage_enc() + "'" +
-            "}";
+                " name='" + getName() + "'" +
+                ", ip='" + getIp() + "'" +
+                ", image='" + getImage() + "'" +
+                ", image_enc='" + getImage_enc() + "'" +
+                "}";
     }
 
-    
 
-    
 }

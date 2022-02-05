@@ -5,7 +5,7 @@ import com.example.demo.FilesMangment.commons.FileResponse;
 import com.example.demo.FilesMangment.storage.StorageException;
 import com.example.demo.FilesMangment.storage.StorageService;
 import com.example.demo.Repositories.*;
-import com.example.demo.services.UserService;
+import com.example.demo.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -25,17 +25,17 @@ import java.nio.file.StandardCopyOption;
 public class FileController {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    CommentRepository commentRepository;
+    private CommentRepository commentRepository;
     @Autowired
-    GroupRepository groupRepository;
+    private GroupRepository groupRepository;
     @Autowired
-    PageRepository pageRepository;
+    private PageRepository pageRepository;
     @Autowired
-    MediaRepository mediaRepository;
+    private MediaRepository mediaRepository;
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     private StorageService storageService;
 

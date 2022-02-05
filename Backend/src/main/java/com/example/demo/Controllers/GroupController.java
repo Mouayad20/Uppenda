@@ -1,40 +1,30 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Converters.GroupConverter;
-import com.example.demo.Entities.GroupEntity;
-import com.example.demo.Entities.UserEntity;
 import com.example.demo.Models.GroupModel;
 import com.example.demo.Models.PostModel;
 import com.example.demo.Models.UserModel;
 import com.example.demo.Repositories.GroupRepository;
-import com.example.demo.Repositories.UserRepository;
-import com.example.demo.services.GroupService;
+import com.example.demo.Services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @RestController
 @RequestMapping(path = "/groups")
 public class GroupController {
 
     @Autowired
-    GroupService groupService;
-    @Autowired
-    GroupRepository groupRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    GroupConverter groupConverter;
+    private GroupService groupService;
 
     /* Post Request */
 
-    @PostMapping(path = "/addGroup/adminId={admin_id}")
-    public GroupModel addGroup(@PathVariable(name = "admin_id", required = true) long adminId,
-                               @RequestBody(required = true) GroupModel groupModel) {
-        return groupService.addGroup(adminId, groupModel);
+    @PostMapping(path = "/add/adminId={admin_id}")
+    public GroupModel add(@PathVariable(name = "admin_id", required = true) long adminId,
+                          @RequestBody(required = true) GroupModel groupModel) {
+        return groupService.add(adminId, groupModel);
     }
 
     @PostMapping(path = "/addMember/group_id={g_id},user_id={u_id}")
@@ -43,10 +33,10 @@ public class GroupController {
         return groupService.addMembersToGroup(g_id, memberId);
     }
 
-    @PostMapping(path = "/leaveMember/group_id={g_id},user_id={u_id}")
-    public GroupModel leaveMemberFromGroup(@PathVariable(name = "g_id", required = true) long g_id,
-                                           @PathVariable(name = "u_id", required = true) long memberId) {
-        return groupService.deleateMemberFromGroup(g_id, memberId);
+    @PostMapping(path = "/deleteMember/group_id={g_id},user_id={u_id}")
+    public GroupModel deleteMemberFromGroup(@PathVariable(name = "g_id", required = true) long g_id,
+                                            @PathVariable(name = "u_id", required = true) long memberId) {
+        return groupService.deleteMemberFromGroup(g_id, memberId);
     }
 
     /* Put Request */
@@ -59,8 +49,8 @@ public class GroupController {
     /* Delete Request */
 
     @DeleteMapping(path = "/delete/Id={id}")
-    public ResponseEntity<Object> deleteById(@PathVariable(required = true, name = "id") long id) {
-        return groupService.deleteById(id);
+    public ResponseEntity<Object> delete(@PathVariable(required = true, name = "id") long id) {
+        return groupService.delete(id);
     }
 
     /* Get Request */
@@ -70,19 +60,9 @@ public class GroupController {
         return new GroupModel();
     }
 
-    @GetMapping(path = "/test")
-    public GroupModel test() {
-        GroupEntity groupEntity = new GroupEntity();
-        groupEntity = groupRepository.findById((long) 1).get();
-        UserEntity userEntity = userRepository.findById((long) 1).get();
-        groupEntity.getMembers().remove(userEntity);
-        groupEntity = groupRepository.save(groupEntity);
-        return groupConverter.convertGroupEntityToGroupModel(groupEntity);
-    }
-
     @GetMapping(path = "/getAll")
     public List<GroupModel> getAllGroups() {
-        return groupService.getAllPages();
+        return groupService.getAllGroups();
     }
 
     @GetMapping(path = "/getGroup/Id={id}")
@@ -103,17 +83,16 @@ public class GroupController {
 
     @GetMapping("/getAllPostsInGroupByGId/{g_id}")
     public List<PostModel> getAllPostsInGroupByGId(@PathVariable(name = "g_id", required = true) Long g_id) {
-        return groupService.fetchAllPostFromGroupById(g_id);
+        return groupService.getAllPostsInGroupByGId(g_id);
     }
 
     @GetMapping("/getAllUsersInGroupByGId/{g_id}")
     public List<UserModel> getAllUsersInGroupByGId(@PathVariable(name = "g_id", required = true) Long g_id) {
-        return groupService.fetchAllUserFromGroupByGId(g_id);
+        return groupService.getAllUsersInGroupByGId(g_id);
     }
 
     @GetMapping(path = "/search/word={word}")
     public List<GroupModel> search(@PathVariable String word) {
-        return groupConverter.convertGroupEntityListToGroupModelList(groupRepository.searchGroup(word));
+        return groupService.search(word);
     }
-
 }

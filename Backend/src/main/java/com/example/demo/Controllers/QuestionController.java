@@ -17,10 +17,10 @@ import java.util.List;
 public class QuestionController {
 
     @Autowired
-    QuestionRepository questionRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
-    QuestionConverter questionConverter;
+    private QuestionConverter questionConverter;
 
     /* Get Request */
 

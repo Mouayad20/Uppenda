@@ -1,8 +1,7 @@
 package com.example.demo.Controllers;
 
-
 import com.example.demo.Models.MessageModel;
-import com.example.demo.services.MessageService;
+import com.example.demo.Services.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +12,7 @@ import java.util.List;
 public class MessageController {
 
     @Autowired
-    MessageService messageService;
+    private MessageService messageService;
 
     /* Put Request */
 
@@ -32,19 +31,13 @@ public class MessageController {
     /* Get Request */
 
     @GetMapping("/getFormat")
-    public MessageModel test() {
+    public MessageModel getFormat() {
         return new MessageModel();
     }
 
     @GetMapping("/getALl")
     public List<MessageModel> getAll() {
         return messageService.getAllMessages();
-    }
-
-    @GetMapping("/getAllMessageBy/CID={c_id},SID={s_id}")
-    ///// الاندكس صفر فيو اجدد رسالة انبعتت (اخر رسالة يعني ) وبرد الليست من الجديد للقديم
-    public List<MessageModel> getAllMessages(@PathVariable(name = "c_id") Long c_id, @PathVariable(name = "s_id") Long s_id) {
-        return messageService.getAllMessageForSpecifacUser(c_id, s_id);
     }
 
     @GetMapping("/getLastMessage/chatId={c_id}")
@@ -54,7 +47,13 @@ public class MessageController {
 
     @GetMapping("/getAllMessageFromChat/chat_id={c_id}")
     public List<MessageModel> getAllMessageFromChat(@PathVariable(name = "c_id") Long c_id) {
-        return messageService.getAllMessageInSpecificeChat(c_id);
+        return messageService.getAllMessageInSpecificChat(c_id);
+    }
+
+    @GetMapping("/getAllMessageBy/CID={c_id},SID={s_id}")
+    ///// الاندكس صفر فيو اجدد رسالة انبعتت (اخر رسالة يعني ) وبرد الليست من الجديد للقديم
+    public List<MessageModel> getAllMessages(@PathVariable(name = "c_id") Long c_id, @PathVariable(name = "s_id") Long s_id) {
+        return messageService.getAllMessageForSpecificUser(c_id, s_id);
     }
 }
 //    @PostMapping("/sendMessage/senderId={s_id},reciverId={r_id}")

@@ -2,7 +2,7 @@ package com.example.demo.Controllers;
 
 
 import com.example.demo.Models.PostModel;
-import com.example.demo.services.PostService;
+import com.example.demo.Services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +13,7 @@ import java.util.List;
 public class PostController {
 
     @Autowired
-    PostService postService;
+    private PostService postService;
 
     /* Post Request */
 

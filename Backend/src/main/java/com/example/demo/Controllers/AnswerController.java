@@ -17,14 +17,13 @@ import java.util.List;
 public class AnswerController {
 
     @Autowired
-    AnswerRepository answerRepository;
+    private AnswerRepository answerRepository;
     @Autowired
-    UserRepository userRepository;
-
+    private UserRepository userRepository;
     @Autowired
-    UserConverter userConverter;
+    private UserConverter userConverter;
     @Autowired
-    AnswerConverter answerConverter;
+    private AnswerConverter answerConverter;
 
     /* Post Request */
 

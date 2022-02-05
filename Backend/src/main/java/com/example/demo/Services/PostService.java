@@ -1,4 +1,4 @@
-package com.example.demo.services;
+package com.example.demo.Services;
 
 import com.example.demo.Converters.MediaConverter;
 import com.example.demo.Converters.PostConverter;
@@ -20,25 +20,25 @@ import java.util.Optional;
 public class PostService {
 
     @Autowired
-    PostRepositroy postRepositroy;
+    private PostRepositroy postRepositroy;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    GroupRepository groupRepository;
+    private GroupRepository groupRepository;
     @Autowired
-    PageRepository pageRepository;
+    private PageRepository pageRepository;
     @Autowired
-    MediaRepository mediaRepository;
+    private MediaRepository mediaRepository;
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    UserConverter userConverter;
+    private UserConverter userConverter;
     @Autowired
-    PostConverter postConverter;
+    private PostConverter postConverter;
     @Autowired
-    TypeConverter typeConverter;
+    private TypeConverter typeConverter;
     @Autowired
-    MediaConverter mediaConverter;
+    private MediaConverter mediaConverter;
 
     public PostModel addProfilePost(PostModel postModel, Long u_id) {
 

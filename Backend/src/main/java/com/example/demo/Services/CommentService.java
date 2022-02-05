@@ -1,4 +1,4 @@
-package com.example.demo.services;
+package com.example.demo.Services;
 
 import com.example.demo.Converters.CommentConverter;
 import com.example.demo.Converters.PostConverter;
@@ -20,24 +20,23 @@ import java.util.List;
 public class CommentService {
 
     @Autowired
-    CommentRepository commentRepository;
+    private CommentRepository commentRepository;
     @Autowired
-    PostRepositroy postRepositroy;
+    private PostRepositroy postRepositroy;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    InterestService interestService;
+    private InterestService interestService;
     @Autowired
-    CommentConverter commentConverter;
+    private CommentConverter commentConverter;
     @Autowired
-    PostConverter postConverter;
+    private PostConverter postConverter;
     @Autowired
-    UserConverter userConverter;
+    private UserConverter userConverter;
 
     public CommentModel add(CommentModel commentModel, Long post_id, Long u_id) {
 
         UserEntity userEntity = userRepository.findById(u_id).get();
-
         PostEntity postEntity = postRepositroy.findById(post_id).get();
 
         interestService.addInterest(postEntity, userEntity);

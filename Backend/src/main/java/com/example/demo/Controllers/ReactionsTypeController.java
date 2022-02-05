@@ -15,9 +15,9 @@ import java.util.List;
 public class ReactionsTypeController {
 
     @Autowired
-    ReactionsTypeRepository reactionsTypeRepository;
+    private ReactionsTypeRepository reactionsTypeRepository;
     @Autowired
-    ReactionTypeConverter reactionTypeConverter;
+    private ReactionTypeConverter reactionTypeConverter;
 
     /* Get Request */
 

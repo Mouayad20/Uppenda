@@ -4,11 +4,10 @@ import com.example.demo.Converters.UserConverter;
 import com.example.demo.Models.SignInModel;
 import com.example.demo.Models.UserModel;
 import com.example.demo.Repositories.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -24,13 +23,13 @@ import java.io.IOException;
 public class TokenFilter extends OncePerRequestFilter {
 
     @Autowired
-    TokenUtil tokenUtil;
+    private TokenUtil tokenUtil;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    UserConverter userConverter;
+    private UserConverter userConverter;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -47,7 +46,7 @@ public class TokenFilter extends OncePerRequestFilter {
 
             String token = header.substring("Bearer ".length());
 
-            String email = tokenUtil.getEmailToken(token);
+            String email = tokenUtil.getEmailFromToken(token);
 
             if (email != null) {
 

@@ -1,4 +1,4 @@
-package com.example.demo.services;
+package com.example.demo.Services;
 
 import com.example.demo.Converters.GroupConverter;
 import com.example.demo.Converters.PageConverter;
@@ -28,27 +28,27 @@ import java.util.Optional;
 public class UserService implements UserDetailsService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    GroupRepository groupRepository;
+    private GroupRepository groupRepository;
     @Autowired
-    PageRepository pageRepository;
+    private PageRepository pageRepository;
     @Autowired
-    PostRepositroy postRepositroy;
+    private PostRepositroy postRepositroy;
     @Autowired
-    GroupService groupService;
+    private GroupService groupService;
     @Autowired
-    PageService pageService;
+    private PageService pageService;
     @Autowired
-    PostService postService;
+    private PostService postService;
     @Autowired
-    UserConverter userConverter;
+    private UserConverter userConverter;
     @Autowired
-    PageConverter pageConverter;
+    private PageConverter pageConverter;
     @Autowired
-    PostConverter postConverter;
+    private PostConverter postConverter;
     @Autowired
-    GroupConverter groupConverter;
+    private GroupConverter groupConverter;
 
     public UserModel addUser(UserModel userModel) {
         UserEntity userEntity = userRepository.save(userConverter.convertUserModelToUserEntity(userModel, false));
@@ -59,13 +59,13 @@ public class UserService implements UserDetailsService {
         Optional<List<PageEntity>> pages = pageRepository.getAllPagesThatUserIsAdimnIn(id);
         if (!pages.isEmpty()) {
             for (PageEntity pageEntity : pages.get()) {
-                pageService.deleteById(pageEntity.getId());
+                pageService.delete(pageEntity.getId());
             }
         }
         Optional<List<GroupEntity>> groups = groupRepository.getAllGroupsThatUserIsAdiminIn(id);
         if (!groups.isEmpty()) {
             for (GroupEntity groupEntity : groups.get()) {
-                groupService.deleteById(groupEntity.getId());
+                groupService.delete(groupEntity.getId());
 
             }
         }

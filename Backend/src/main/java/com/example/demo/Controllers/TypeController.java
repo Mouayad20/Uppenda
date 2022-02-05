@@ -16,9 +16,9 @@ import java.util.List;
 public class TypeController {
 
     @Autowired
-    TypeRepository typeRepository;
+    private TypeRepository typeRepository;
     @Autowired
-    TypeConverter typeConverter;
+    private TypeConverter typeConverter;
 
     /* Get Request */
 

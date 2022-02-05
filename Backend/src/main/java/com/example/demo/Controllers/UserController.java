@@ -7,7 +7,7 @@ import com.example.demo.Models.SignInModel;
 import com.example.demo.Models.UserModel;
 import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Security.TokenUtil;
-import com.example.demo.services.UserService;
+import com.example.demo.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,15 +24,15 @@ import java.util.Map;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
     @Autowired
-    TokenUtil tokenUtil;
+    private TokenUtil tokenUtil;
     @Autowired
-    UserConverter userConverter;
+    private UserConverter userConverter;
 
     /* Post Request */
 

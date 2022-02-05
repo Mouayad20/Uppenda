@@ -1,19 +1,17 @@
-package com.example.demo.web;
+package com.example.demo.WebSocket;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.demo.Converters.MediaConverter;
 import com.example.demo.Converters.MessageConverter;
 import com.example.demo.Entities.MessageEntity;
 import com.example.demo.Models.MessageModel;
 import com.example.demo.Repositories.ChatRepository;
 import com.example.demo.Repositories.MessageRepository;
 import com.example.demo.Repositories.UserRepository;
-import com.example.demo.services.MessageService;
-import com.example.demo.services.UserService;
+import com.example.demo.Services.UserService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +19,18 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-public class webSocketMessageHundler extends TextWebSocketHandler {
+public class webSocketMessageHandler extends TextWebSocketHandler {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    ChatRepository chatRepository;
+    private ChatRepository chatRepository;
     @Autowired
-    MessageRepository messageRepository;
+    private MessageRepository messageRepository;
     @Autowired
-    MessageConverter messageConverter;
+    private MessageConverter messageConverter;
 
     final Map<String, WebSocketSession> sessions = new HashMap<>();
 

@@ -1,7 +1,7 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Models.ReactionModel;
-import com.example.demo.services.ReactionService;
+import com.example.demo.Services.ReactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public class ReactionController {
 
     @Autowired
-    ReactionService reactionService;
+    private ReactionService reactionService;
 
     @PostMapping("/add/p={post_id}/u={u_id}/r={reaction_id}")
     public ReactionModel add(@PathVariable(name = "post_id", required = true) Long post_id,

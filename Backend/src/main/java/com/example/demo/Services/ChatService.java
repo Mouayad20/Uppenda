@@ -1,7 +1,4 @@
-package com.example.demo.services;
-
-import java.util.Date;
-import java.util.List;
+package com.example.demo.Services;
 
 import com.example.demo.Converters.ChatConverter;
 import com.example.demo.Entities.ChatEntity;
@@ -13,19 +10,22 @@ import com.example.demo.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
+
 @Service
 public class ChatService {
 
     @Autowired
-    ChatRepository chatRepository;
+    private ChatRepository chatRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    MessageService messageService;
+    private MessageService messageService;
     @Autowired
-    ChatConverter chatConverter;
+    private ChatConverter chatConverter;
 
-    public ChatModel addChat(ChatModel chatModel) {
+    public ChatModel add(ChatModel chatModel) {
 
         boolean isSoso = false;
 
@@ -60,7 +60,7 @@ public class ChatService {
 
     }
 
-    public boolean addMemberToChat(Long user_id, Long chat_id) {
+    public boolean addMember(Long user_id, Long chat_id) {
         UserEntity userEntity = userRepository.findById(user_id).get();
         ChatEntity chatEntity = chatRepository.findById(chat_id).get();
 
@@ -116,68 +116,73 @@ public class ChatService {
         return list;
     }
 
-    // delete this code when you finish
-
-    // public List<ChatModel> getAllChatByUserId(Long user_id){
-    //
-    // }
-
-    // public List<ChatModel> getAllByUID(Long me_id){
-    // List<ChatModel> list = new ArrayList<>();
-    // for (ChatEntity chatEntity : chatRepository.getChatByUserId(me_id)) {
-    // ChatModel chatModel = new ChatModel();
-    //// chatModel.setReceiver(chatConverter.userEntityToModel(chatEntity.getHeEntity()));
-    // chatModel.setLastMessage(messageService.getLastMessage(chatEntity.getId())==null?"there
-    // is no messgaes
-    // yet":messageService.getLastMessage(chatEntity.getId()).getContent());
-    // chatModel.setDateOfLastMessage(messageService.getLastMessage(chatEntity.getId())==null?"there
-    // is no messgaes
-    // yet":messageService.getLastMessage(chatEntity.getId()).getDateOfSent().toString());
-    //
-    // list.add(chatModel);
-    // }
-    //
-    // return list;
-    // }
-
-    // public String deleteById(Long c_id,Long u_id){
-    //
-    // String isPresent = "deleted";
-    //
-    // UserEntity userEntity = userRepository.findById(u_id).get();
-    //
-    // System.out.println("\n\n\n---------1---------\n\n\t\t\t\t"+userEntity.getChats()+"\n\n\n*****************\n\n");
-    // System.out.println("\n\n\n---------2---------\n\n\t\t\t\t"+chatRepository.findById(c_id).get()+"\n\n\n*****************\n\n");
-    //
-    // userEntity.getChats().remove(chatRepository.findById(c_id).get());
-    //
-    // System.out.println("\n\n\n\n\n\t\t\t\t"+userEntity.getChats()+"\n\n\n*****************\n\n");
-    // UserEntity savedUser = userRepository.save(userEntity);
-    //
-    // System.out.println("\n\n\n\n\n\t\t\t\t"+savedUser.getName()+"\n\n\n");
-    // System.out.println("\n\n\n\n\n\t\t\t\t"+savedUser.getChats()+"\n\n\n");
-    // for (ChatEntity chatEntity : savedUser.getChats()) {
-    // if (chatEntity.getId() == c_id)
-    // isPresent = "not deleted" ;
-    // }
-    // return isPresent;
-    // }
-    //
-    // public String deleteChat(Long s_id, Long r_id) {
-    // Long chat_id = chatRepository.getChat(s_id, r_id).getId();
-    // chatRepository.delete(chatRepository.getChat(s_id, r_id));
-    // if (chatRepository.findById(chat_id).isPresent()) return "deleted chat falied
-    // ";
-    // else return "deleted chat sucsfuly";
-    // }
-    //
-    // public ChatEntity findById(Long id){
-    // return chatRepository.findById(id).get();
-    // }
-    //
-    // public ChatEntity getChat(Long s_id,Long r_id) {
-    // return chatRepository.getChat(s_id,r_id);
-    // }
-    //
+    public ChatModel getChatById(Long c_id) {
+        return chatConverter.chatEntityToModel(chatRepository.findById(c_id).get(), true, true);
+    }
 
 }
+/*
+
+     delete this code when you finish
+
+     public List<ChatModel> getAllChatByUserId(Long user_id){
+
+     }
+
+     public List<ChatModel> getAllByUID(Long me_id){
+     List<ChatModel> list = new ArrayList<>();
+     for (ChatEntity chatEntity : chatRepository.getChatByUserId(me_id)) {
+     ChatModel chatModel = new ChatModel();
+    // chatModel.setReceiver(chatConverter.userEntityToModel(chatEntity.getHeEntity()));
+     chatModel.setLastMessage(messageService.getLastMessage(chatEntity.getId())==null?"there
+     is no messgaes
+     yet":messageService.getLastMessage(chatEntity.getId()).getContent());
+     chatModel.setDateOfLastMessage(messageService.getLastMessage(chatEntity.getId())==null?"there
+     is no messgaes
+     yet":messageService.getLastMessage(chatEntity.getId()).getDateOfSent().toString());
+
+     list.add(chatModel);
+     }
+
+     return list;
+     }
+
+     public String deleteById(Long c_id,Long u_id){
+
+     String isPresent = "deleted";
+
+     UserEntity userEntity = userRepository.findById(u_id).get();
+
+     System.out.println("\n\n\n---------1---------\n\n\t\t\t\t"+userEntity.getChats()+"\n\n\n*****************\n\n");
+     System.out.println("\n\n\n---------2---------\n\n\t\t\t\t"+chatRepository.findById(c_id).get()+"\n\n\n*****************\n\n");
+
+     userEntity.getChats().remove(chatRepository.findById(c_id).get());
+
+     System.out.println("\n\n\n\n\n\t\t\t\t"+userEntity.getChats()+"\n\n\n*****************\n\n");
+     UserEntity savedUser = userRepository.save(userEntity);
+
+     System.out.println("\n\n\n\n\n\t\t\t\t"+savedUser.getName()+"\n\n\n");
+     System.out.println("\n\n\n\n\n\t\t\t\t"+savedUser.getChats()+"\n\n\n");
+     for (ChatEntity chatEntity : savedUser.getChats()) {
+     if (chatEntity.getId() == c_id)
+     isPresent = "not deleted" ;
+     }
+     return isPresent;
+     }
+
+     public String deleteChat(Long s_id, Long r_id) {
+     Long chat_id = chatRepository.getChat(s_id, r_id).getId();
+     chatRepository.delete(chatRepository.getChat(s_id, r_id));
+     if (chatRepository.findById(chat_id).isPresent()) return "deleted chat falied
+     ";
+     else return "deleted chat sucsfuly";
+     }
+
+     public ChatEntity findById(Long id){
+     return chatRepository.findById(id).get();
+     }
+
+     public ChatEntity getChat(Long s_id,Long r_id) {
+     return chatRepository.getChat(s_id,r_id);
+     }
+*/

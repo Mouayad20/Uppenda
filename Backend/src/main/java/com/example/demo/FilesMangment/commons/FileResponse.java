@@ -1,6 +1,7 @@
 package com.example.demo.FilesMangment.commons;
 
 public class FileResponse {
+
     private String name;
     private String uri;
     private String type;

@@ -1,7 +1,7 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Models.CommentModel;
-import com.example.demo.services.CommentService;
+import com.example.demo.Services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public class CommentController {
 
     @Autowired
-    CommentService commentService;
+    private CommentService commentService;
 
     /* Post Request */
 

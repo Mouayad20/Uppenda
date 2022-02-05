@@ -1,4 +1,4 @@
-package com.example.demo.services;
+package com.example.demo.Services;
 
 import com.example.demo.Converters.ReactionConverter;
 import com.example.demo.Entities.PostEntity;
@@ -6,8 +6,8 @@ import com.example.demo.Entities.ReactionEntity;
 import com.example.demo.Entities.ReactionTypeEntity;
 import com.example.demo.Entities.UserEntity;
 import com.example.demo.Models.ReactionModel;
-import com.example.demo.Repositories.ReactionRepository;
 import com.example.demo.Repositories.PostRepositroy;
+import com.example.demo.Repositories.ReactionRepository;
 import com.example.demo.Repositories.ReactionsTypeRepository;
 import com.example.demo.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,17 +19,17 @@ import java.util.List;
 public class ReactionService {
 
     @Autowired
-    ReactionRepository reactionRepository;
+    private ReactionRepository reactionRepository;
     @Autowired
-    PostRepositroy postRepositroy;
+    private PostRepositroy postRepositroy;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    InterestService interestService;
+    private InterestService interestService;
     @Autowired
-    ReactionsTypeRepository reactionsTypeRepository;
+    private ReactionsTypeRepository reactionsTypeRepository;
     @Autowired
-    ReactionConverter reactionConverter;
+    private ReactionConverter reactionConverter;
 
     public ReactionModel add(Long post_id, Long u_id, Long reaction_id) {
 

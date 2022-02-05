@@ -1,67 +1,44 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Converters.PageConverter;
-import com.example.demo.Entities.PageEntity;
 import com.example.demo.Models.PageModel;
 import com.example.demo.Models.PostModel;
 import com.example.demo.Models.UserModel;
 import com.example.demo.Repositories.PageRepository;
-import com.example.demo.services.PageService;
+import com.example.demo.Services.PageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "pages")
 public class PageController {
 
     @Autowired
-    PageService pageService;
-    @Autowired
-    PageRepository pageRepository;
-    @Autowired
-    PageConverter pageConverter;
+    private PageService pageService;
 
     /* Post Request */
 
-    @PostMapping(path = "/addPage/adminId={User_id}")
-    public PageModel addPage(@RequestBody(required = true) PageModel pageModel,
-                             @PathVariable(name = "User_id", required = true) long adminId) {
-        return pageService.addPage(pageModel, adminId);
-    }
-
-    @PostMapping(path = "/deleteMember/pageId={id},memberId={m_id}")
-    public PageModel deleteMemberFromPage(@PathVariable(name = "id", required = true) long pageId,
-                                          @PathVariable(name = "m_id", required = true) long memberId) {
-        return pageService.deleteMemberFromPage(pageId, memberId);
-    }
-
-    @PostMapping(path = "/test")
-    public List<PageModel> getAllPageThatUserIsAdminIn(@RequestBody(required = true) long id) {
-        Optional<List<PageEntity>> pages = pageRepository.getAllPagesThatUserIsAdimnIn(id);
-        List<PageModel> pageModels = new ArrayList<>();
-        for (PageEntity pageEntity : pages.get()) {
-            pageModels.add(pageConverter.convertPageEntityToPageModel(pageEntity));
-        }
-        return pageModels;
+    @PostMapping(path = "/add/adminId={User_id}")
+    public PageModel add(@RequestBody(required = true) PageModel pageModel,
+                         @PathVariable(name = "User_id", required = true) long adminId) {
+        return pageService.add(pageModel, adminId);
     }
 
     /* Put Request */
 
-    @PutMapping(path = "/updateInformation")
-    public PageModel updateInformation(@RequestBody(required = true) PageModel pageModel) {
-        return pageService.updatePageInformation(pageModel);
+    @PutMapping(path = "/update")
+    public PageModel update(@RequestBody(required = true) PageModel pageModel) {
+        return pageService.update(pageModel);
     }
 
     /* Delete Request */
 
-    @DeleteMapping(path = "/deleteById/Id={id}")
-    public ResponseEntity<Object> deletePage(@PathVariable(required = true, name = "id") long id) {
-        return pageService.deleteById(id);
+    @DeleteMapping(path = "/delete/Id={id}")
+    public ResponseEntity<Object> delete(@PathVariable(required = true, name = "id") long id) {
+        return pageService.delete(id);
     }
 
     /* Get Request */
@@ -72,9 +49,20 @@ public class PageController {
     }
 
     @GetMapping(path = "/addMember/pageId={id},memberId={m_id}")
-    public PageModel addMemberToPage(@PathVariable(name = "id", required = true) long pageId,
+    public PageModel addMember(@PathVariable(name = "id", required = true) long pageId,
                                      @PathVariable(name = "m_id", required = true) long memberId) {
-        return pageService.addMemberToPage(pageId, memberId);
+        return pageService.addMember(pageId, memberId);
+    }
+
+    @GetMapping(path = "/deleteMember/pageId={id},memberId={m_id}")
+    public PageModel deleteMember(@PathVariable(name = "id", required = true) long pageId,
+                                          @PathVariable(name = "m_id", required = true) long memberId) {
+        return pageService.deleteMember(pageId, memberId);
+    }
+
+    @GetMapping(path = "/getPageById/id={id}")
+    public PageModel getPageById(@PathVariable Long id) {
+        return pageService.getPageById(id);
     }
 
     @GetMapping(path = "/getAll")
@@ -100,12 +88,7 @@ public class PageController {
 
     @GetMapping(path = "/search/word={word}")
     public List<PageModel> search(@PathVariable String word) {
-        return pageConverter.convertPageEntityListToPageModelList(pageRepository.searchPage(word));
-    }
-
-    @GetMapping(path = "/getPageById/id={id}")
-    public PageModel getPageById(@PathVariable Long id) {
-        return pageConverter.convertPageEntityToPageModel(pageRepository.findById(id).get());
+        return pageService.search(word);
     }
 
 }

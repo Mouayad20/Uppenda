@@ -1,4 +1,4 @@
-package com.example.demo.services;
+package com.example.demo.Services;
 
 import com.example.demo.Entities.InterestEntity;
 import com.example.demo.Entities.PostEntity;
@@ -11,8 +11,9 @@ import java.util.Optional;
 
 @Service
 public class InterestService {
+
     @Autowired
-    InterestRepository interestRepository;
+    private InterestRepository interestRepository;
 
     public void addInterest(PostEntity postEntity, UserEntity userEntity){
         Optional<InterestEntity> interest = interestRepository.findByTypeAndUser(postEntity.getType().getType(),userEntity);
