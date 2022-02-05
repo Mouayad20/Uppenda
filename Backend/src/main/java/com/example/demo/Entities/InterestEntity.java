@@ -2,19 +2,20 @@ package com.example.demo.Entities;
 
 import javax.persistence.*;
 
-@Entity(name = "interst")
-public class InterstEntity {
+@Entity(name = "interest")
+public class InterestEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String type;
     private long times;
+
     @ManyToOne()
     UserEntity user;
 
-    public InterstEntity() {
+    public InterestEntity() {
     }
-
 
     public long getId() {
         return id;

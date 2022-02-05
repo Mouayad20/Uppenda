@@ -41,7 +41,6 @@ public class UserService implements UserDetailsService {
     PageService pageService;
     @Autowired
     PostService postService;
-
     @Autowired
     UserConverter userConverter;
     @Autowired
@@ -50,8 +49,6 @@ public class UserService implements UserDetailsService {
     PostConverter postConverter;
     @Autowired
     GroupConverter groupConverter;
-
-    ////////// user methods
 
     public UserModel addUser(UserModel userModel) {
         UserEntity userEntity = userRepository.save(userConverter.convertUserModelToUserEntity(userModel, false));
@@ -82,7 +79,7 @@ public class UserService implements UserDetailsService {
             }
             if (!userEntity.get().getPostEntity().isEmpty()) {
                 for (int i = 0; i < userEntity.get().getPostEntity().size(); i++) {
-                    postService.deleteById(userEntity.get().getPostEntity().get(i).getId());
+                    postService.delete(userEntity.get().getPostEntity().get(i).getId());
                 }
             }
             if (!userEntity.get().getSavedPost().isEmpty()) {
@@ -136,15 +133,15 @@ public class UserService implements UserDetailsService {
     }
 
     public List<UserModel> findByFirstName(String firstName) {
-        List<UserEntity> foundUser = userRepository.findByfirstName(firstName);
-        List<UserModel> founModels = new ArrayList<>();
+        List<UserEntity> foundUser = userRepository.findByFirstName(firstName);
+        List<UserModel> foundModels = new ArrayList<>();
         if (foundUser.isEmpty())
             return null;
         else {
             for (UserEntity userEntity : foundUser) {
-                founModels.add(userConverter.convertUserEntityToUserModel(userEntity));
+                foundModels.add(userConverter.convertUserEntityToUserModel(userEntity));
             }
-            return founModels;
+            return foundModels;
         }
     }
 
@@ -337,7 +334,6 @@ public class UserService implements UserDetailsService {
         return "This post is share...";
     }
 
-
     public boolean unSharedPost(Long u_id, Long p_id) {
 
         boolean isUnShared = true;
@@ -374,7 +370,6 @@ public class UserService implements UserDetailsService {
         System.out.println(">>>>>>>  \t\t " + email);
         UserModel userEntity = findByEmail(email);
         return new SignInModel(userEntity.getEmail(), userEntity.getPassword());
-        // return new MyUserDetails("asa","90");
     }
 
 }

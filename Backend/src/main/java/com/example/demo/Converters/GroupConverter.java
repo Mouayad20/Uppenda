@@ -24,7 +24,7 @@ public class GroupConverter {
         if (userIdFromModel) {
             groupEntity.setId(groupModel.getId());
         }
-        groupEntity.setDescreption(groupModel.getDescription());
+        groupEntity.setDescription(groupModel.getDescription());
         groupEntity.setImagePath(groupModel.getImgPath());
         groupEntity.setName(groupModel.getName());
         groupEntity.setMembers(new ArrayList<>());
@@ -39,7 +39,7 @@ public class GroupConverter {
         if (groupEntity == null)
             return null;
         groupModel.setId(groupEntity.getId());
-        groupModel.setDescription(groupEntity.getDescreption());
+        groupModel.setDescription(groupEntity.getDescription());
         groupModel.setImgPath(groupEntity.getImagePath());
         groupModel.setCreatedAt(groupEntity.getCreatedAt());
         groupModel.setName(groupEntity.getName());

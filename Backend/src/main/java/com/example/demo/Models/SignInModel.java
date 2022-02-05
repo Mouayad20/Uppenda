@@ -10,7 +10,7 @@ public class SignInModel implements UserDetails {
     private String email;
     private String password;
 
-    public SignInModel(){
+    public SignInModel() {
 
     }
 

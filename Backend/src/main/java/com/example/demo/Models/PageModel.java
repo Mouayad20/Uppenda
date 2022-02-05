@@ -1,13 +1,13 @@
 package com.example.demo.Models;
 
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.example.demo.DemoApplication;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 public class PageModel {
@@ -23,14 +23,13 @@ public class PageModel {
     private List<PostModel> postModels;
 
 
-    public PageModel(){
+    public PageModel() {
         id = 0;
         name = description = imgPath = "test";
         createdAt = new Date();
         admin = null;
         members = new ArrayList<>();
     }
-
 
     public List<PostModel> getPostModels() {
         return this.postModels;
@@ -39,8 +38,6 @@ public class PageModel {
     public void setPostModels(List<PostModel> postModels) {
         this.postModels = postModels;
     }
-
-    
 
     public List<UserModel> getMembers() {
         return this.members;
@@ -107,5 +104,5 @@ public class PageModel {
         }
         return "";
     }
-    
+
 }

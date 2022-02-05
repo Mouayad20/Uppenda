@@ -40,7 +40,7 @@ public class CommentService {
 
         PostEntity postEntity = postRepositroy.findById(post_id).get();
 
-        interestService.addInterst(postEntity, userEntity);
+        interestService.addInterest(postEntity, userEntity);
         commentModel.setPostModel(postConverter.postEntityToModel(postEntity, false, false, true, true, false));
         commentModel.setUserModel(userConverter.convertUserEntityToUserModel(userEntity));
         CommentEntity savedEntity = commentConverter.commentModelToEntity(commentModel);

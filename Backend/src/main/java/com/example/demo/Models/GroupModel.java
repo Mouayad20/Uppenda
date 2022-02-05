@@ -1,13 +1,12 @@
 package com.example.demo.Models;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.example.demo.DemoApplication;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class GroupModel {
 
@@ -22,7 +21,7 @@ public class GroupModel {
     private List<UserModel> members;
 
 
-    public GroupModel(){
+    public GroupModel() {
         id = 0;
         name = "alaa";
         imgPath = "c:\\sdfssgjznfSHJVbhbbagxyj";
@@ -118,6 +117,5 @@ public class GroupModel {
         return null;
     }
 
-    
-    
+
 }

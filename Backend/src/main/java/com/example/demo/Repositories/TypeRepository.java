@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface TypeRepository extends CrudRepository<TypeEntity,Long> {
+public interface TypeRepository extends CrudRepository<TypeEntity, Long> {
     Optional<TypeEntity> findByType(String type);
 }

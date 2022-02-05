@@ -1,43 +1,40 @@
 package com.example.demo.Entities;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table( name = "chats")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
-public class ChatEntity   {
+@Table(name = "chats")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class ChatEntity {
 
     @Id
     @GeneratedValue(
-        strategy = GenerationType.IDENTITY
+            strategy = GenerationType.IDENTITY
     )
     private Long id;
-
     private String tittleGroup;
     private String imageGroup;
 
-
     @ManyToMany(mappedBy = "chats")
-    private List<UserEntity>  users ;
+    private List<UserEntity> users;
 
     @ManyToMany(mappedBy = "hiddenChats")
-    private List<UserEntity> usersHiddenChats ;
+    private List<UserEntity> usersHiddenChats;
 
-    @OneToMany(mappedBy = "chatEntity",cascade = CascadeType.ALL)
-    private List<MessageEntity> messages ;
+    @OneToMany(mappedBy = "chatEntity", cascade = CascadeType.ALL)
+    private List<MessageEntity> messages;
 
     public ChatEntity() {
         users = new ArrayList<>();
     }
 
-    public ChatEntity(Long id, String tittleGroup, String imageGroup , List<UserEntity> users, List<UserEntity> usersHiddenChats, List<MessageEntity> messages) {
+    public ChatEntity(Long id, String tittleGroup, String imageGroup, List<UserEntity> users, List<UserEntity> usersHiddenChats, List<MessageEntity> messages) {
         this.id = id;
         this.tittleGroup = tittleGroup;
         this.imageGroup = imageGroup;
@@ -46,7 +43,7 @@ public class ChatEntity   {
         this.messages = messages;
     }
 
-    public  int giveMeLength(){
+    public int giveMeLength() {
         return this.users.size();
     }
 

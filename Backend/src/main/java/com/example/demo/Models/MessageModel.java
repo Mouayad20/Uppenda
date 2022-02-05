@@ -6,19 +6,18 @@ import java.util.Date;
 public class MessageModel {
 
     private Long id;
-    private String content ;
-    private Date   dateOfSent  ;
     private Long s_id;
     private Long c_id;
-    private ChatModel chatModel ;
-    private UserModel sender ;
-
+    private String content;
+    private Date dateOfSent;
+    private ChatModel chatModel;
+    private UserModel sender;
 
     public MessageModel() {
     }
 
-    public MessageModel(String content , Date dateOfSent){
-        this.content = content ;
+    public MessageModel(String content, Date dateOfSent) {
+        this.content = content;
         this.dateOfSent = dateOfSent;
     }
 
@@ -50,8 +49,6 @@ public class MessageModel {
         return chatModel;
     }
 
-
-
     public void setChatModel(ChatModel chatModel) {
         this.chatModel = chatModel;
     }
@@ -82,16 +79,11 @@ public class MessageModel {
 
     @Override
     public String toString() {
-        return "{\"id\":"+getId()+"" +
-                ",\"content\":\""+getContent()+"\"" +
-                ",\"dateOfSent\":\""+getDateOfSent()+"\"" +
-                ",\"s_id\":\""+getS_id()+"\""+
-                ",\"sender\":\""+getSender()+"\""+
-                ",\"c_id\":"+getC_id()+"}";
-
-
+        return "{\"id\":" + getId() + "" +
+                ",\"content\":\"" + getContent() + "\"" +
+                ",\"dateOfSent\":\"" + getDateOfSent() + "\"" +
+                ",\"s_id\":\"" + getS_id() + "\"" +
+                ",\"sender\":\"" + getSender() + "\"" +
+                ",\"c_id\":" + getC_id() + "}";
     }
-
-
-   
 }

@@ -32,6 +32,7 @@ public class TypeModel {
     public void setTypename(String typename) {
         this.typename = typename;
     }
+
     @Override
     public String toString() {
         try {
@@ -39,6 +40,6 @@ public class TypeModel {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return null ;
+        return null;
     }
 }

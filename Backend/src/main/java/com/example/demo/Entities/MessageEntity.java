@@ -1,37 +1,41 @@
 package com.example.demo.Entities;
 
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
-@Table( name = "messages")
+@Table(name = "messages")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class MessageEntity {
-    
+
     @Id
     @GeneratedValue(
-        strategy = GenerationType.IDENTITY
+            strategy = GenerationType.IDENTITY
     )
     private Long id;
-
-    private String content ;
-
+    private String content;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date   dateOfSent  ;
+    private Date dateOfSent;
+
+    //////////////////////////////////////////////
+    /////////////// ManyToOne  ///////////////////
+    //////////////////////////////////////////////
 
     @ManyToOne
     @JoinColumn(name = "chat_id")
-    private ChatEntity chatEntity ;
-
+    private ChatEntity chatEntity;
     @ManyToOne
     @JoinColumn(name = "sender_id")
-    private UserEntity sender ;
+    private UserEntity sender;
 
+
+    //////////////////////////////////////////////
+    /////////////// Constructors  ////////////////
+    //////////////////////////////////////////////
 
     public MessageEntity() {
     }
@@ -43,6 +47,10 @@ public class MessageEntity {
         this.chatEntity = chatEntity;
         this.sender = sender;
     }
+
+    //////////////////////////////////////////////
+    /////////// Getters & Setters  ///////////////
+    //////////////////////////////////////////////
 
     public Long getId() {
         return this.id;
@@ -87,16 +95,13 @@ public class MessageEntity {
     @Override
     public String toString() {
         return "{" +
-            " id='" + getId() + "'" +
-            ", content='" + getContent() + "'" +
-            ", dateOfSent='" + getDateOfSent() + "'" +
-            ", chatEntity='" + getChatEntity() + "'" +
-            ", sender='" + getSender() + "'" +
-            "}";
+                " id='" + getId() + "'" +
+                ", content='" + getContent() + "'" +
+                ", dateOfSent='" + getDateOfSent() + "'" +
+                ", chatEntity='" + getChatEntity() + "'" +
+                ", sender='" + getSender() + "'" +
+                "}";
     }
-
-
-    
 
 
 }

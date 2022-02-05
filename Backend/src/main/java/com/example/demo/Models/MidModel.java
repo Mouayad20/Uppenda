@@ -2,9 +2,10 @@ package com.example.demo.Models;
 
 
 public class MidModel {
-    Long s_id ;
-    Long r_id ;
-    String content ;
+
+    Long s_id;
+    Long r_id;
+    String content;
 
     public Long getS_id() {
         return s_id;

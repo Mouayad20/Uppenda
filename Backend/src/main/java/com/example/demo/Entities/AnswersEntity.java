@@ -1,28 +1,28 @@
 package com.example.demo.Entities;
 
-import javax.persistence.*;
-
 import com.example.demo.DemoApplication;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import javax.persistence.*;
+
 @Entity
-@Table( name = "answers")
+@Table(name = "answers")
 public class AnswersEntity {
+
     @Id
     @GeneratedValue(
-        strategy = GenerationType.IDENTITY
+            strategy = GenerationType.IDENTITY
     )
     private Long id;
     private String answer;
 
-    @ManyToOne  
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @ManyToOne  
+    @ManyToOne
     @JoinColumn(name = "question_id")
     private QuestionEntity question;
-
 
     public AnswersEntity() {
     }
@@ -75,9 +75,4 @@ public class AnswersEntity {
         }
         return null;
     }
-
-
-
-
-    
 }

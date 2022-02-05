@@ -10,9 +10,9 @@ public class MediaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
-    String path;
-    String type;
+    private long id;
+    private String path;
+    private String type;
 
     @ManyToOne
     @JoinColumn(name = "post_id")
@@ -69,6 +69,6 @@ public class MediaEntity {
 
             e.printStackTrace();
         }
-        return null ;
+        return null;
     }
 }

@@ -7,16 +7,13 @@ import javax.persistence.*;
 
 @Entity(name = "type")
 public class TypeEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String type;
 
     public  TypeEntity(){}
-
-    public TypeEntity(String type) {
-        this.type = type;
-    }
 
     public TypeEntity(long id, String type) {
         this.id = id;

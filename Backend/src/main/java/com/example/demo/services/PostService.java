@@ -24,14 +24,13 @@ public class PostService {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    UserService userService;
-    @Autowired
     GroupRepository groupRepository;
     @Autowired
     PageRepository pageRepository;
     @Autowired
     MediaRepository mediaRepository;
-
+    @Autowired
+    UserService userService;
     @Autowired
     UserConverter userConverter;
     @Autowired
@@ -76,11 +75,6 @@ public class PostService {
 
     }
 
-    public PostModel findById(Long id) {
-        Optional<PostEntity> postEntity = postRepositroy.findById(id);
-        return postConverter.postEntityToModel(postEntity.get(), true, true, false, false, true);
-    }
-
     public PostModel addGroupPost(PostModel postModel, Long u_id, Long g_id) {
 
         UserEntity userEntity = userRepository.findById(u_id).get();
@@ -103,7 +97,15 @@ public class PostService {
 
     }
 
-    public PostModel deleteById(Long id) {
+    public PostModel update(PostModel postModel) {
+        PostEntity postEntity = postRepositroy.findById(postModel.getId()).get();
+        postEntity.setContent(postModel.getContent());
+        postEntity.setCreatedAt(new Date());
+        postEntity.setType(typeConverter.typeModelToEntity(postModel.getType()));
+        return postConverter.postEntityToModel(postRepositroy.save(postEntity), true, true, true, true, true);
+    }
+
+    public PostModel delete(Long id) {
         PostEntity postEntity = postRepositroy.findById(id).get();
         if (!postEntity.getParticipants().isEmpty()) {
             for (int i = 0; i < postEntity.getParticipants().size(); i++) {
@@ -117,16 +119,28 @@ public class PostService {
         return postConverter.postEntityToModel(postEntity, false, false, false, false, false);
     }
 
-    public PostModel update(PostModel postModel) {
-        PostEntity postEntity = postRepositroy.findById(postModel.getId()).get();
-        postEntity.setContent(postModel.getContent());
-        postEntity.setCreatedAt(new Date());
-        postEntity.setType(typeConverter.typeModelToEntity(postModel.getType()));
-        return postConverter.postEntityToModel(postRepositroy.save(postEntity), true, true, true, true, true);
+    public PostModel getByID(Long id) {
+        Optional<PostEntity> postEntity = postRepositroy.findById(id);
+        return postConverter.postEntityToModel(postEntity.get(), true, true, false, false, true);
     }
 
     public List<PostModel> fetch() {
         return postConverter.postEntityIterableToModelList(postRepositroy.findAll(), true, true);
     }
 
+    public List<PostModel> getAllPostByUserId(Long id) {
+        return postConverter.postEntityListToModelList(postRepositroy.getAllPostByUserId(id), true, true, true, true, true);
+    }
+
+    public List<PostModel> getAllPostByGroupId(Long id) {
+        return postConverter.postEntityListToModelList(postRepositroy.getAllPostByGroupId(id), true, true, true, true, true);
+    }
+
+    public List<PostModel> getAllPostByPageId(Long id) {
+        return postConverter.postEntityListToModelList(postRepositroy.getAllPostByPageId(id), true, true, true, true, true);
+    }
+
+    public List<PostModel> getSummery(Long id) {
+        return postConverter.postEntityListToModelList(postRepositroy.getSummery(id), true, true, true, true, true);
+    }
 }

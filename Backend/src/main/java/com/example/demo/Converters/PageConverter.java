@@ -22,7 +22,7 @@ public class PageConverter {
         if (pageEntity == null)
             return null;
         pageModel.setCreatedAt(pageEntity.getCreatedAt());
-        pageModel.setDescription(pageEntity.getDescreption());
+        pageModel.setDescription(pageEntity.getDescription());
         pageModel.setId(pageEntity.getId());
         pageModel.setImgPath(pageEntity.getImgPath());
         pageModel.setName(pageEntity.getName());
@@ -46,7 +46,7 @@ public class PageConverter {
         if (useIdFromModel) {
             pageEntity.setId(pageModel.getId());
         }
-        pageEntity.setDescreption(pageModel.getDescription());
+        pageEntity.setDescription(pageModel.getDescription());
         pageEntity.setImgPath(pageModel.getImgPath());
         return pageEntity;
     }

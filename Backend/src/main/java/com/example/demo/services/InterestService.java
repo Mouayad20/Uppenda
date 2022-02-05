@@ -1,9 +1,9 @@
 package com.example.demo.services;
 
-import com.example.demo.Entities.InterstEntity;
+import com.example.demo.Entities.InterestEntity;
 import com.example.demo.Entities.PostEntity;
 import com.example.demo.Entities.UserEntity;
-import com.example.demo.Repositories.InterstRepository;
+import com.example.demo.Repositories.InterestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,20 +12,20 @@ import java.util.Optional;
 @Service
 public class InterestService {
     @Autowired
-    InterstRepository interstRepository;
+    InterestRepository interestRepository;
 
-    public void addInterst(PostEntity postEntity, UserEntity userEntity){
-        Optional<InterstEntity> interst = interstRepository.findByTypeAndUser(postEntity.getType().getType(),userEntity);
-        if(interst.isEmpty()){
-            InterstEntity interstEntity = new InterstEntity();
-            interstEntity.setType(postEntity.getType().getType());
-            interstEntity.setTimes(1);
-            interstEntity.setUser(userEntity);
-            interstRepository.save(interstEntity);
+    public void addInterest(PostEntity postEntity, UserEntity userEntity){
+        Optional<InterestEntity> interest = interestRepository.findByTypeAndUser(postEntity.getType().getType(),userEntity);
+        if(interest.isEmpty()){
+            InterestEntity interestEntity = new InterestEntity();
+            interestEntity.setType(postEntity.getType().getType());
+            interestEntity.setTimes(1);
+            interestEntity.setUser(userEntity);
+            interestRepository.save(interestEntity);
         }
         else{
-            interst.get().setTimes(interst.get().getTimes()+1);
-            interstRepository.save(interst.get());
+            interest.get().setTimes(interest.get().getTimes()+1);
+            interestRepository.save(interest.get());
         }
     }
 }

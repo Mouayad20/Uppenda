@@ -14,7 +14,7 @@ import java.util.List;
 public class PostConverter {
 
     @Autowired
-    TypeRepository typeRepository;
+    private TypeRepository typeRepository;
     @Autowired
     private UserConverter userConverter;
     @Autowired
@@ -24,7 +24,7 @@ public class PostConverter {
     @Autowired
     private CommentConverter commentConverter;
     @Autowired
-    private LikeConverter likeConverter;
+    private ReactionConverter reactionConverter;
     @Autowired
     private MediaConverter mediaConverter;
     @Autowired
@@ -32,7 +32,6 @@ public class PostConverter {
 
     public PostEntity postModelToEntity(PostModel postModel) {
 
-        // System.out.println("\n\n\n\n\n POST MODEL TO ENTITY \n\n\n\n\n");
         PostEntity postEntity = new PostEntity();
         if (postModel == null)
             return null;
@@ -40,7 +39,7 @@ public class PostConverter {
         postEntity.setContent(postModel.getContent());
         postEntity.setCreatedAt(postModel.getCreatedAt());
         postEntity.setCommentEntities(commentConverter.commentModelListToEntityList(postModel.getCommentModels()));
-        postEntity.setLikeEntities(likeConverter.likeModelListToEntityList(postModel.getLikeModels()));
+        postEntity.setReactionEntities(reactionConverter.reactionModelListToEntityList(postModel.getReactionModels()));
         // postEntity.setMedia(me);
         postEntity.setParticipants(userConverter.convertUserListModelToListEntity(postModel.getParticipants())); /// for count of
         /// shares operation
@@ -57,7 +56,7 @@ public class PostConverter {
     }
 
     public PostModel postEntityToModel(PostEntity postEntity, boolean withParticipants, boolean withSavers,
-                                       boolean withGroups, boolean withPages, boolean withLikes) {
+                                       boolean withGroups, boolean withPages, boolean withReactions) {
         PostModel postModel = new PostModel();
         postModel.setId(postEntity.getId());
         postModel.setContent(postEntity.getContent());
@@ -72,8 +71,8 @@ public class PostConverter {
                 postModel.getMedia().add(mediaConverter.convertMediaEntityToMediaModel(media));
             }
         }
-        if (withLikes)
-            postModel.setLikeModels(likeConverter.likeEntityListToModelList(postEntity.getLikeEntities()));
+        if (withReactions)
+            postModel.setReactionModels(reactionConverter.reactionEntityListToModelList(postEntity.getReactionEntities()));
         if (withGroups)
             postModel.setGroupModel(groupConverter.convertGroupEntityToGroupModel(postEntity.getGroupEntity()));
         if (withPages)
@@ -86,13 +85,13 @@ public class PostConverter {
     }
 
     public List<PostModel> postEntityListToModelList(List<PostEntity> findAll, boolean withParticipants,
-                                                     boolean withSavers, boolean withGroups, boolean withPages, boolean withLikes) {
+                                                     boolean withSavers, boolean withGroups, boolean withPages, boolean withReactions) {
 
         List<PostModel> list = new ArrayList<>();
         if (findAll == null)
             return null;
         for (PostEntity postEntity : findAll) {
-            list.add(postEntityToModel(postEntity, withParticipants, withSavers, withGroups, withPages, withLikes));
+            list.add(postEntityToModel(postEntity, withParticipants, withSavers, withGroups, withPages, withReactions));
         }
 
         return list;

@@ -10,10 +10,8 @@ public class AnswerModel {
     private UserModel user;
     private QuestionModel question;
 
-
     public AnswerModel() {
     }
-
 
     public AnswerModel(Long id, String answer, UserModel user, QuestionModel question) {
         this.id = id;
@@ -53,8 +51,6 @@ public class AnswerModel {
     public void setQuestion(QuestionModel question) {
         this.question = question;
     }
-
-
 
     @Override
     public String toString() {

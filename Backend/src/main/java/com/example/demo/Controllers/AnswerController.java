@@ -26,6 +26,8 @@ public class AnswerController {
     @Autowired
     AnswerConverter answerConverter;
 
+    /* Post Request */
+
     @PostMapping("/addAnswers/user_id={u_id}")
     public List<AnswerModel> addAnswers(@RequestBody List<AnswerModel> answerModels,
                                         @PathVariable(name = "u_id") Long u_id) {
@@ -58,6 +60,8 @@ public class AnswerController {
         }
         return result;
     }
+
+    /* Get Request */
 
     @GetMapping("/getFormat")
     public AnswerModel getFormat() {

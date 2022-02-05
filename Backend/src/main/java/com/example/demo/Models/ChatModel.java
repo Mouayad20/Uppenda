@@ -12,7 +12,6 @@ public class ChatModel {
     private UserModel receiver;
     private List<UserModel> users;
     private List<MessageModel> messages;
-
     private List<UserModel> usersHiddenChats;
 
     public ChatModel() {
@@ -25,7 +24,7 @@ public class ChatModel {
     }
 
     public ChatModel(Long id, String tittleGroup, String imageGroup, List<UserModel> users,
-            List<UserModel> usersHiddenChats, List<MessageModel> messages) {
+                     List<UserModel> usersHiddenChats, List<MessageModel> messages) {
         this.id = id;
         this.tittleGroup = tittleGroup;
         this.imageGroup = imageGroup;

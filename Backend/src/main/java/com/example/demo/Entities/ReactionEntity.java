@@ -1,29 +1,43 @@
 package com.example.demo.Entities;
 
-import javax.persistence.*;
-
 import com.example.demo.DemoApplication;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import javax.persistence.*;
+
 @Entity
-@Table(name = "reactionType")
+@Table(name = "reactions")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class ReactionEntity {
 
     @Id
     @GeneratedValue(
-        strategy = GenerationType.IDENTITY
+            strategy = GenerationType.IDENTITY
     )
-    private Long id ;
-    private String reactionType ;
-    private String colorName ;
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private PostEntity postEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "u_id")
+    private UserEntity userEntity;
+
+    @OneToOne
+    @JoinColumn(name = "reaction_id")
+    private ReactionTypeEntity reaction;
 
     public ReactionEntity() {
     }
 
-    public ReactionEntity(Long id, String reactionType, String colorName) {
+    public ReactionEntity(Long id, PostEntity postEntity, UserEntity userEntity, ReactionTypeEntity reaction) {
         this.id = id;
-        this.reactionType = reactionType;
-        this.colorName = colorName;
+        this.postEntity = postEntity;
+        this.userEntity = userEntity;
+        this.reaction = reaction;
     }
 
     public Long getId() {
@@ -34,20 +48,28 @@ public class ReactionEntity {
         this.id = id;
     }
 
-    public String getReactionType() {
-        return this.reactionType;
+    public PostEntity getPostEntity() {
+        return this.postEntity;
     }
 
-    public void setReactionType(String reactionType) {
-        this.reactionType = reactionType;
+    public void setPostEntity(PostEntity postEntity) {
+        this.postEntity = postEntity;
     }
 
-    public String getColorName() {
-        return this.colorName;
+    public UserEntity getUserEntity() {
+        return this.userEntity;
     }
 
-    public void setColorName(String colorName) {
-        this.colorName = colorName;
+    public void setUserEntity(UserEntity userEntity) {
+        this.userEntity = userEntity;
+    }
+
+    public ReactionTypeEntity getReaction() {
+        return this.reaction;
+    }
+
+    public void setReaction(ReactionTypeEntity reaction) {
+        this.reaction = reaction;
     }
 
     @Override
@@ -55,14 +77,10 @@ public class ReactionEntity {
         try {
             return DemoApplication.objectMapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
-            
+
             e.printStackTrace();
         }
-        return null ;
+        return null;
     }
 
-    
-
-
-    
 }

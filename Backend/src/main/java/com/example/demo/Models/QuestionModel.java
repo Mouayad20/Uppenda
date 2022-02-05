@@ -8,7 +8,6 @@ public class QuestionModel {
     private Long id;
     private String question;
 
-
     public QuestionModel() {
     }
 
@@ -42,6 +41,4 @@ public class QuestionModel {
         }
         return null;
     }
-
-    
 }

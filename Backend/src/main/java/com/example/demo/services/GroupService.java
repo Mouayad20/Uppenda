@@ -84,9 +84,9 @@ public class GroupService {
 
     }
 
-    public GroupModel updateGroupInformation(GroupModel groupModel) {
+    public GroupModel update(GroupModel groupModel) {
         GroupEntity groupEntity = groupRepository.findById(groupModel.getId()).get();
-        groupEntity.setDescreption(groupModel.getDescription());
+        groupEntity.setDescription(groupModel.getDescription());
         groupEntity.setImagePath(groupModel.getImgPath());
         groupEntity.setName(groupModel.getName());
         groupEntity = groupRepository.save(groupEntity);

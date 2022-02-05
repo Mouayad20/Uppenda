@@ -5,13 +5,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class MediaModel {
 
-    long id;
+    private long id;
+    private String path;
+    private String type;
+    private PostModel postModel;
 
-    
-    String path;
-    String type;
-    PostModel postModel;
+    public MediaModel() {
 
+    }
+
+    public MediaModel(String path, String type) {
+        this.path = path;
+        this.type = type;
+    }
 
     public long getId() {
         return this.id;
@@ -29,17 +35,6 @@ public class MediaModel {
         this.postModel = postModel;
     }
 
-    public MediaModel() {
-
-    }
-
-    public MediaModel(String path, String type) {
-        this.path = path;
-        this.type = type;
-    }
-
-
-
     public String getPath() {
         return path;
     }
@@ -47,7 +42,6 @@ public class MediaModel {
     public void setPath(String path) {
         this.path = path;
     }
-
 
     public String getType() {
         return type;

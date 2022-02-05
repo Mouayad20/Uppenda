@@ -1,97 +1,109 @@
 package com.example.demo.Entities;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.*;
-
 import com.example.demo.DemoApplication;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+
 @Entity
-@Table( name = "users")
+@Table(name = "users")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class UserEntity {
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    List<InterestEntity> interest;
     @Id
     @GeneratedValue(
-        strategy = GenerationType.IDENTITY
+            strategy = GenerationType.IDENTITY
     )
     private Long id;
-    private String firstName;
-    private String lastName;
     @Column(unique = true)
     private String email;
+    private String password;
+    private String firstName;
+    private String lastName;
     private String mobile;
     private String studyLevel;
     private String location;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date age;
     private String gender;
-    boolean onLine;
-    private String password;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createdAt;
     private String imagePath;
     private String ip;
+    private boolean onLine;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date age;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createdAt;
 
     //////////////////////////////////////////////
+    ////////////////// OneToMany /////////////////
+    //////////////////////////////////////////////
 
-    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL )
+
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
     private List<PostEntity> PostEntity;
-
-    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL )
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
     private List<CommentEntity> commentEntities;
-
-    @OneToMany(mappedBy = "userEntity",cascade = CascadeType.ALL )
-    private List<LikeEntity> likeEntities;
-
-    @ManyToMany()
-    private List<PostEntity> savedPost ;
-
-    @ManyToMany()
-    private List<PostEntity> sharedPost ;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<ChatEntity> chats ;
-
-    @ManyToMany(cascade = CascadeType.ALL )
-    private List<ChatEntity> hiddenChats ;
-
-    @OneToMany(mappedBy = "sender",cascade = CascadeType.ALL)
-    private List<MessageEntity> messages ;
-
-    ////////
-
-    @ManyToMany()
-    private List<UserEntity> friends;
-
-    @ManyToMany(/*  mappedBy = "members" */cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-    private List<GroupEntity> groups;
-
-    @ManyToMany(/* mappedBy = "members" */cascade = {CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
-    private List<PageEntity> pages;
-
-    /////////////////////////////////////////////////////
-
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    List<InterstEntity> interst;
-
-    /////////////////////////////////////////////////////
-
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
+    private List<ReactionEntity> reactionEntities;
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private List<MessageEntity> messages;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<AnswersEntity> answersEntities;
 
-    /////////////////////////////////////////////////////
+    //////////////////////////////////////////////
+    //////////////// ManyToMany //////////////////
+    //////////////////////////////////////////////
 
+    @ManyToMany()
+    private List<PostEntity> savedPost;
+    @ManyToMany()
+    private List<PostEntity> sharedPost;
+    @ManyToMany()
+    private List<UserEntity> friends;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<ChatEntity> chats;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<ChatEntity> hiddenChats;
+    @ManyToMany(/*  mappedBy = "members" */cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<GroupEntity> groups;
+    @ManyToMany(/* mappedBy = "members" */cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<PageEntity> pages;
+
+    //////////////////////////////////////////////
+    //////////////// Constructors ////////////////
+    //////////////////////////////////////////////
 
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String firstName, String lastName, String email, String mobile, String studyLevel, String location, Date age, String gender, boolean onLine, String password, Date createdAt, String imagePath, List<PostEntity> PostEntity, List<CommentEntity> commentEntities, List<LikeEntity> likeEntities, List<PostEntity> savedPost, List<PostEntity> sharedPost, List<UserEntity> friends, List<GroupEntity> groups, List<PageEntity> pages, List<InterstEntity> interst, List<AnswersEntity> answersEntities) {
+    public UserEntity(Long id,
+                      String firstName,
+                      String lastName,
+                      String email,
+                      String mobile,
+                      String studyLevel,
+                      String location,
+                      Date age,
+                      String gender,
+                      boolean onLine,
+                      String password,
+                      Date createdAt,
+                      String imagePath,
+                      List<PostEntity> PostEntity,
+                      List<CommentEntity> commentEntities,
+                      List<ReactionEntity> reactionEntities,
+                      List<PostEntity> savedPost,
+                      List<PostEntity> sharedPost,
+                      List<UserEntity> friends,
+                      List<GroupEntity> groups,
+                      List<PageEntity> pages,
+                      List<InterestEntity> interest,
+                      List<AnswersEntity> answersEntities) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -107,15 +119,19 @@ public class UserEntity {
         this.imagePath = imagePath;
         this.PostEntity = PostEntity;
         this.commentEntities = commentEntities;
-        this.likeEntities = likeEntities;
+        this.reactionEntities = reactionEntities;
         this.savedPost = savedPost;
         this.sharedPost = sharedPost;
         this.friends = friends;
         this.groups = groups;
         this.pages = pages;
-        this.interst = interst;
+        this.interest = interest;
         this.answersEntities = answersEntities;
     }
+
+    //////////////////////////////////////////////
+    ////////////// Getter & Setter ///////////////
+    //////////////////////////////////////////////
 
     public Long getId() {
         return this.id;
@@ -241,12 +257,12 @@ public class UserEntity {
         this.commentEntities = commentEntities;
     }
 
-    public List<LikeEntity> getLikeEntities() {
-        return this.likeEntities;
+    public List<ReactionEntity> getReactionEntities() {
+        return reactionEntities;
     }
 
-    public void setLikeEntities(List<LikeEntity> likeEntities) {
-        this.likeEntities = likeEntities;
+    public void setReactionEntities(List<ReactionEntity> reactionEntities) {
+        this.reactionEntities = reactionEntities;
     }
 
     public List<PostEntity> getSavedPost() {
@@ -289,12 +305,12 @@ public class UserEntity {
         this.pages = pages;
     }
 
-    public List<InterstEntity> getInterst() {
-        return this.interst;
+    public List<InterestEntity> getInterest() {
+        return this.interest;
     }
 
-    public void setInterst(List<InterstEntity> interst) {
-        this.interst = interst;
+    public void setInterest(List<InterestEntity> interest) {
+        this.interest = interest;
     }
 
     public List<AnswersEntity> getAnswersEntities() {
@@ -342,12 +358,11 @@ public class UserEntity {
         try {
             return DemoApplication.objectMapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
-            
+
             e.printStackTrace();
         }
-        return null ;
+        return null;
     }
 
 
-    
 }

@@ -1,21 +1,21 @@
 package com.example.demo.Models;
 
-import java.util.Date;
-import java.util.List;
-
 import com.example.demo.DemoApplication;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import java.util.Date;
+import java.util.List;
+
 public class PostModel {
 
-    private Long id ;
-    private String content ;
-    private Date createdAt ;
+    private Long id;
+    private String content;
+    private Date createdAt;
     private UserModel userModel;
-    private GroupModel groupModel ;
-    private PageModel pageModel ;
+    private GroupModel groupModel;
+    private PageModel pageModel;
     private TypeModel type;
-    private List<LikeModel> likeModels;
+    private List<ReactionModel> reactionModels;
     private List<CommentModel> commentModels;
     private List<MediaModel> media;
     private List<UserModel> savers;
@@ -25,13 +25,22 @@ public class PostModel {
 
     }
 
-    public PostModel(Long id,String content, Date createdAt, UserModel userModel, List<CommentModel> commentModels, List<LikeModel> likeModels, GroupModel groupModel, PageModel pageModel, List<UserModel> savers, List<UserModel> participants) {
+    public PostModel(Long id,
+                     String content,
+                     Date createdAt,
+                     UserModel userModel,
+                     List<CommentModel> commentModels,
+                     List<ReactionModel> reactionModels,
+                     GroupModel groupModel,
+                     PageModel pageModel,
+                     List<UserModel> savers,
+                     List<UserModel> participants) {
         this.id = id;
         this.content = content;
         this.createdAt = createdAt;
         this.userModel = userModel;
         this.commentModels = commentModels;
-        this.likeModels = likeModels;
+        this.reactionModels = reactionModels;
         this.groupModel = groupModel;
         this.pageModel = pageModel;
         this.savers = savers;
@@ -78,12 +87,12 @@ public class PostModel {
         this.commentModels = commentModels;
     }
 
-    public List<LikeModel> getLikeModels() {
-        return likeModels;
+    public List<ReactionModel> getReactionModels() {
+        return reactionModels;
     }
 
-    public void setLikeModels(List<LikeModel> likeModels) {
-        this.likeModels = likeModels;
+    public void setReactionModels(List<ReactionModel> reactionModels) {
+        this.reactionModels = reactionModels;
     }
 
     public GroupModel getGroupModel() {
@@ -141,9 +150,6 @@ public class PostModel {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-        return null ;
+        return null;
     }
-
-
-    
 }

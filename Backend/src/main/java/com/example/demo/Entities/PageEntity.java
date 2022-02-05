@@ -1,21 +1,12 @@
 package com.example.demo.Entities;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import com.example.demo.DemoApplication;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "pages")
@@ -25,26 +16,35 @@ public class PageEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
-    private String descreption;
+    private String description;
     private String imgPath;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
 
-    ///////////////////////
-    
-    @OneToMany(mappedBy = "pageEntity",cascade = CascadeType.ALL)
+    //////////////////////////////////////////////
+    //////////////// OneToMany  //////////////////
+    //////////////////////////////////////////////
+
+    @OneToMany(mappedBy = "pageEntity", cascade = CascadeType.ALL)
     private List<PostEntity> postEntities;
 
-    ////////////////
+    //////////////////////////////////////////////
+    //////////////// ManyToOne  //////////////////
+    //////////////////////////////////////////////
 
     @ManyToOne()
     private UserEntity admin;
 
+    //////////////////////////////////////////////
+    //////////////// ManyToMany  /////////////////
+    //////////////////////////////////////////////
+
     @ManyToMany(mappedBy = "pages")
     private List<UserEntity> members;
 
-    /////////////////////////
-
+    //////////////////////////////////////////////
+    /////////// Getters & Setters  ///////////////
+    //////////////////////////////////////////////
 
     public List<PostEntity> getPostEntities() {
         return this.postEntities;
@@ -53,7 +53,6 @@ public class PageEntity {
     public void setPostEntities(List<PostEntity> postEntities) {
         this.postEntities = postEntities;
     }
-    
 
     public List<UserEntity> getMembers() {
         return this.members;
@@ -87,12 +86,12 @@ public class PageEntity {
         this.createdAt = createdAt;
     }
 
-    public String getDescreption() {
-        return this.descreption;
+    public String getDescription() {
+        return this.description;
     }
 
-    public void setDescreption(String descreption) {
-        this.descreption = descreption;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getImgPath() {
@@ -110,6 +109,7 @@ public class PageEntity {
     public void setAdmin(UserEntity admin) {
         this.admin = admin;
     }
+
     @Override
     public String toString() {
         try {
@@ -119,5 +119,5 @@ public class PageEntity {
         }
         return "";
     }
-    
+
 }

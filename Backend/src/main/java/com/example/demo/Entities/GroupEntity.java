@@ -1,12 +1,11 @@
 package com.example.demo.Entities;
 
 
-import java.util.Date;
-import java.util.List;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -17,18 +16,15 @@ public class GroupEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
-    private String descreption;
+    private String description;
     private String imagePath;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createdAt;
 
     ///////////////////
 
-    @OneToMany(mappedBy = "groupEntity",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "groupEntity", cascade = CascadeType.ALL)
     private List<PostEntity> postEntities;
-
-    ///////
-
 
     @ManyToOne()
     private UserEntity admin;
@@ -36,11 +32,16 @@ public class GroupEntity {
     @ManyToMany(mappedBy = "groups")
     private List<UserEntity> members;
 
+    public GroupEntity() {
+    }
 
-
-
-    ////////////////////
-
+    public GroupEntity(long id, String name, String description, Date createdAt, String imagePath) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.createdAt = createdAt;
+        this.imagePath = imagePath;
+    }
 
     public List<PostEntity> getPostEntities() {
         return this.postEntities;
@@ -50,8 +51,6 @@ public class GroupEntity {
         this.postEntities = postEntities;
     }
 
-
-    
     public UserEntity getAdmin() {
         return this.admin;
     }
@@ -67,18 +66,6 @@ public class GroupEntity {
     public void setMembers(List<UserEntity> members) {
         this.members = members;
     }
-
-    public GroupEntity(){}
-
-    public GroupEntity(long id, String name, String descreption, Date createdAt, String imagePath) {
-        this.id = id;
-        this.name = name;
-        this.descreption = descreption;
-        this.createdAt = createdAt;
-        this.imagePath = imagePath;
-    }
-
-
 
     public long getId() {
         return this.id;
@@ -96,12 +83,12 @@ public class GroupEntity {
         this.name = name;
     }
 
-    public String getDescreption() {
-        return this.descreption;
+    public String getDescription() {
+        return this.description;
     }
 
-    public void setDescreption(String descreption) {
-        this.descreption = descreption;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Date getCreatedAt() {
@@ -120,5 +107,5 @@ public class GroupEntity {
         this.imagePath = imagePath;
     }
 
-    
+
 }

@@ -1,16 +1,15 @@
 package com.example.demo.Models;
 
-import java.util.Date;
-import java.util.List;
-
 import com.example.demo.DemoApplication;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import java.util.Date;
+import java.util.List;
+
 public class UserModel {
 
-
-    private Long   id   ;
+    private Long id;
     private String firstName;
     private String lastName;
     private String mobile;
@@ -20,30 +19,23 @@ public class UserModel {
     private String email;
     private String studyLevel;
     private String location;
-    private String ip ;
+    private String ip;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date   age;
+    private Date age;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date    createdAt;
+    private Date createdAt;
     private boolean onLine;
-
-    /////////////////////////////////////////////////////////////////
-
-    private List<PostModel>     postModels;
-    private List<PostModel>     savedPost ;
-    private List<PostModel>     sharedPost ;
-    private List<ChatModel>     chats ;
-    private List<MessageModel>  messages ;
-    private List<AnswerModel>   answerModels;
-    private List<GroupModel>    groups;
-    private List<PageModel>     pages;
-    private List<UserModel>     friends;
-
-    private List<CommentModel>  commentModels;
-    private List<LikeModel>     likeModels;
-
-    /////////////////////////////////////////////////////////////////
-
+    private List<PostModel> postModels;
+    private List<PostModel> savedPost;
+    private List<PostModel> sharedPost;
+    private List<ChatModel> chats;
+    private List<MessageModel> messages;
+    private List<AnswerModel> answerModels;
+    private List<GroupModel> groups;
+    private List<PageModel> pages;
+    private List<UserModel> friends;
+    private List<CommentModel> commentModels;
+    private List<ReactionModel> reactionModels;
 
 
     public UserModel() {
@@ -61,7 +53,7 @@ public class UserModel {
 //        pages = new ArrayList<>();
 //        postModels = new ArrayList<>();
 //        commentModels = new ArrayList<>();
-//        likeModels = new ArrayList<>();
+//        reactionModels = new ArrayList<>();
 //        location = "Damascus";
 
     }
@@ -191,12 +183,12 @@ public class UserModel {
         this.commentModels = commentModels;
     }
 
-    public List<LikeModel> getLikeModels() {
-        return this.likeModels;
+    public List<ReactionModel> getReactionModels() {
+        return this.reactionModels;
     }
 
-    public void setLikeModels(List<LikeModel> likeModels) {
-        this.likeModels = likeModels;
+    public void setReactionModels(List<ReactionModel> reactionModels) {
+        this.reactionModels = reactionModels;
     }
 
     public List<PostModel> getSavedPost() {
@@ -271,7 +263,7 @@ public class UserModel {
         this.messages = messages;
     }
 
-      @Override
+    @Override
     public String toString() {
         try {
             return DemoApplication.objectMapper.writeValueAsString(this);

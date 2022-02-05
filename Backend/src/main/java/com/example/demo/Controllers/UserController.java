@@ -1,7 +1,6 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Converters.UserConverter;
-import com.example.demo.DemoApplication;
 import com.example.demo.Entities.UserEntity;
 import com.example.demo.Models.PostModel;
 import com.example.demo.Models.SignInModel;
@@ -9,7 +8,6 @@ import com.example.demo.Models.UserModel;
 import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Security.TokenUtil;
 import com.example.demo.services.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +33,8 @@ public class UserController {
     TokenUtil tokenUtil;
     @Autowired
     UserConverter userConverter;
+
+    /* Post Request */
 
     @PostMapping(path = "/signIn")
     public Map<String, Object> signIn(@RequestBody SignInModel signInModel) throws Exception {
@@ -65,17 +65,6 @@ public class UserController {
         return tokenWithUser;
     }
 
-    @PostMapping(path = "/update")
-    public Map<String, Object> update(@RequestBody(required = true) UserModel userModel) {
-        userModel = userService.update(userModel);
-        Map<String, Object> tokenWithUser = new HashMap<>();
-        final SignInModel user = (SignInModel) userService.loadUserByUsername(userModel.getEmail());
-        final String token = tokenUtil.generateToken(user.getUsername());
-        tokenWithUser.put("token", token);
-        tokenWithUser.put("userModel", userModel);
-        return tokenWithUser;
-    }
-
     @PostMapping("/signUp")
     public Map<String, Object> signUp(@RequestBody UserModel userModel) {
         userModel = userService.addUser(userModel);
@@ -88,7 +77,37 @@ public class UserController {
 
     }
 
-    //////////////////////////////////////////////////
+    @PostMapping(path = "/checkValidations/Email")
+    public ResponseEntity<String> emailValidation(@RequestBody String email) {
+        return userService.emailValidation(email);
+    }
+
+    /* Put Request */
+
+    @PutMapping(path = "/update")
+    public Map<String, Object> update(@RequestBody(required = true) UserModel userModel) {
+        userModel = userService.update(userModel);
+        Map<String, Object> tokenWithUser = new HashMap<>();
+        final SignInModel user = (SignInModel) userService.loadUserByUsername(userModel.getEmail());
+        final String token = tokenUtil.generateToken(user.getUsername());
+        tokenWithUser.put("token", token);
+        tokenWithUser.put("userModel", userModel);
+        return tokenWithUser;
+    }
+
+    /* Delete Request */
+
+    @DeleteMapping(path = "/deleteById")
+    public ResponseEntity<Object> deleteById(@RequestBody(required = false) long id) {
+        return userService.deleteUserUsingId(id);
+    }
+
+    /* Get Request */
+
+    @GetMapping(path = "/search/word={word}")
+    public List<UserModel> search(@PathVariable String word) {
+        return userConverter.convertUserListEntityToListModel(userRepository.searchUser(word));
+    }
 
     @GetMapping(path = "/getFormat")
     public UserModel getFormat() {
@@ -106,17 +125,6 @@ public class UserController {
     @GetMapping(path = "/getUser/Name={name}")
     public List<UserModel> findByFirstName(@PathVariable(name = "name", required = true) String firstName) {
         return userService.findByFirstName(firstName);
-    }
-
-    // @PostMapping(path = "/updateUser")
-    // public UserModel updateUserInforamtion(@RequestBody(required = true)UserModel
-    // userModel){
-    // return userService.updateUserInformation(userModel);
-    // }
-
-    @PostMapping(path = "/deleatById")
-    public ResponseEntity<Object> deleatById(@RequestBody(required = false) long id) {
-        return userService.deleteUserUsingId(id);
     }
 
     @GetMapping(path = "/addFriend/userId={id},friendId={friend_id}")
@@ -160,8 +168,6 @@ public class UserController {
     }
 
     @GetMapping(path = "/unSharePost/userId={u_id},postId={post_id}")
-
-
     public boolean unSharePost(@PathVariable(name = "u_id", required = true) long u_id,
                                @PathVariable(name = "post_id", required = true) long post_id) {
         return userService.unSharedPost(u_id, post_id);
@@ -170,16 +176,6 @@ public class UserController {
     @GetMapping(path = "/getAllSharedPostByUserId/userId={u_id}")
     public List<PostModel> getAllSharedPosts(@PathVariable(name = "u_id", required = true) Long u_id) {
         return userService.getAllSharedPostsByUserId(u_id);
-    }
-
-    @PostMapping(path = "/checkValidations/Email")
-    public ResponseEntity<String> emailValidation(@RequestBody String email) {
-        return userService.emailValidation(email);
-    }
-
-    @GetMapping(path = "/search/word={word}")
-    public List<UserModel> search(@PathVariable String word) {
-        return userConverter.convertUserListEntityToListModel(userRepository.searchUser(word));
     }
 
 }
