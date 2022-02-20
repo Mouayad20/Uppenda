@@ -24,10 +24,8 @@ public class TokenFilter extends OncePerRequestFilter {
 
     @Autowired
     private TokenUtil tokenUtil;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private UserConverter userConverter;
 

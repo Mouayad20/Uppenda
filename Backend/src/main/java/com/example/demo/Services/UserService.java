@@ -143,51 +143,6 @@ public class UserService implements UserDetailsService {
         else return true;
     }
 
-    public ResponseEntity<Object> deleteUserUsingId(long id) {
-        Optional<List<PageEntity>> pages = pageRepository.getAllPagesThatUserIsAdimnIn(id);
-        if (!pages.isEmpty()) {
-            for (PageEntity pageEntity : pages.get()) {
-                pageService.delete(pageEntity.getId());
-            }
-        }
-        Optional<List<GroupEntity>> groups = groupRepository.getAllGroupsThatUserIsAdiminIn(id);
-        if (!groups.isEmpty()) {
-            for (GroupEntity groupEntity : groups.get()) {
-                groupService.delete(groupEntity.getId());
-
-            }
-        }
-        Optional<UserEntity> userEntity = userRepository.findById(id);
-        if (!userEntity.isEmpty()) {
-            if (!userEntity.get().getFriends().isEmpty()) {
-                for (int i = 0; i < userEntity.get().getFriends().size(); i++) {
-                    deleteFriendFromUser(id, userEntity.get().getFriends().get(i).getId());
-                    i -= 1;
-                }
-            }
-            if (!userEntity.get().getPostEntity().isEmpty()) {
-                for (int i = 0; i < userEntity.get().getPostEntity().size(); i++) {
-                    postService.delete(userEntity.get().getPostEntity().get(i).getId());
-                }
-            }
-            if (!userEntity.get().getSavedPost().isEmpty()) {
-                for (int i = 0; i < userEntity.get().getSavedPost().size(); i++) {
-                    unSavedPost(userEntity.get().getId(), userEntity.get().getSavedPost().get(i).getId());
-                }
-            }
-            if (!userEntity.get().getSharedPost().isEmpty()) {
-                for (int i = 0; i < userEntity.get().getSharedPost().size(); i++) {
-                    unSharedPost(userEntity.get().getId(), userEntity.get().getSharedPost().get(i).getId());
-                }
-            }
-
-            userRepository.deleteById(id);
-            return ResponseEntity.ok("user deleated Sucsessfuly");
-
-        } else
-            return ResponseEntity.badRequest().body("user is not found");
-    }
-
     public UserModel findById(long id) {
         Optional<UserEntity> foundUser = userRepository.findById(id);
         if (foundUser.isEmpty())
