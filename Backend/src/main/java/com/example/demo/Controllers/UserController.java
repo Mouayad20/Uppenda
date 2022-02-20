@@ -36,78 +36,31 @@ public class UserController {
 
     /* Post Request */
 
-    @PostMapping(path = "/signIn")
-    public Map<String, Object> signIn(@RequestBody SignInModel signInModel) throws Exception {
-
-        System.out.println("\n\t email  : " + signInModel.getEmail());
-        System.out.println("\n\t pass   : " + signInModel.getPassword());
-
-        ///////////////////////////////////////////////////////////////////////////
-
-        userService = new UserService();
-
-        UserEntity uouo = userRepository.findByEmail(signInModel.getEmail()).get();
-
-        UserDetails userDetails = new SignInModel(uouo.getEmail(), uouo.getPassword());
-
-        String token = tokenUtil.generateToken(userDetails.getUsername());
-
-        Map<String, Object> tokenWithUser = new HashMap<>();
-
-        tokenWithUser.put("userModel", uouo);
-
-        tokenWithUser.put("token", String.valueOf(token));
-
-        // final Authentication authentication = authenticationManager.authenticate(
-        // new UsernamePasswordAuthenticationToken(signInModel.getEmail(),
-        // signInModel.getPassword()));
-        // SecurityContextHolder.getContext().setAuthentication(authentication);
-        return tokenWithUser;
-    }
-
     @PostMapping("/signUp")
-    public Map<String, Object> signUp(@RequestBody UserModel userModel) {
-        userModel = userService.addUser(userModel);
-        Map<String, Object> tokenWithUser = new HashMap<>();
-        final SignInModel user = new SignInModel(userModel.getEmail(), userModel.getPassword());
-        final String token = tokenUtil.generateToken(user.getUsername());
-        tokenWithUser.put("token", token);
-        tokenWithUser.put("userModel", userModel);
-        return tokenWithUser;
-
+    public ResponseEntity<Object> signUp(@RequestBody UserModel userModel) {
+        return userService.signUp(userModel);
     }
 
-    @PostMapping(path = "/checkValidations/Email")
-    public ResponseEntity<String> emailValidation(@RequestBody String email) {
-        return userService.emailValidation(email);
+    @PostMapping(path = "/signIn")
+    public ResponseEntity<Object> signIn(@RequestBody SignInModel signInModel)  {
+        return userService.signIn(signInModel);
     }
 
     /* Put Request */
 
     @PutMapping(path = "/update")
-    public Map<String, Object> update(@RequestBody(required = true) UserModel userModel) {
-        userModel = userService.update(userModel);
-        Map<String, Object> tokenWithUser = new HashMap<>();
-        final SignInModel user = (SignInModel) userService.loadUserByUsername(userModel.getEmail());
-        final String token = tokenUtil.generateToken(user.getUsername());
-        tokenWithUser.put("token", token);
-        tokenWithUser.put("userModel", userModel);
-        return tokenWithUser;
+    public ResponseEntity<Object> update(@RequestBody(required = true) UserModel userModel) {
+        return userService.update(userModel);
     }
 
     /* Delete Request */
 
-    @DeleteMapping(path = "/deleteById")
-    public ResponseEntity<Object> deleteById(@RequestBody(required = false) long id) {
-        return userService.deleteUserUsingId(id);
+    @DeleteMapping("/delete")
+    public boolean delete(@RequestHeader("Authorization") String token) {
+        return userService.delete(token.substring("Bearer ".length()));
     }
 
     /* Get Request */
-
-    @GetMapping(path = "/search/word={word}")
-    public List<UserModel> search(@PathVariable String word) {
-        return userConverter.convertUserListEntityToListModel(userRepository.searchUser(word));
-    }
 
     @GetMapping(path = "/getFormat")
     public UserModel getFormat() {
@@ -115,6 +68,11 @@ public class UserController {
         UserModel userModel = new UserModel();
         userModel.setCreatedAt(date);
         return userModel;
+    }
+
+    @GetMapping(path = "/search/word={word}")
+    public List<UserModel> search(@PathVariable String word) {
+        return userConverter.convertUserListEntityToListModel(userRepository.searchUser(word));
     }
 
     @GetMapping(path = "/getUser/Id={id}")

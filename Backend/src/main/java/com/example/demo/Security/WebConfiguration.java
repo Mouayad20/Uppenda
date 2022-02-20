@@ -41,7 +41,6 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/signUp").permitAll()
                 .antMatchers("/user/signIn").permitAll()
                 .antMatchers("/user/update").permitAll()
-                .antMatchers("/user/getFormat").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);

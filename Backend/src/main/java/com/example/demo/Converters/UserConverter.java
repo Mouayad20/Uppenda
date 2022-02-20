@@ -71,9 +71,10 @@ public class UserConverter {
         userModel.setOnLine(userEntity.isOnLine());
         userModel.setPassword(userEntity.getPassword());
         userModel.setIp(userEntity.getIp());
-        if (!userEntity.getFriends().isEmpty())
+        if (userEntity.getFriends() != null)
             userModel.setFriends(fetchFriendsFromUserEntity(userEntity.getFriends()));
-        userModel.setAnswerModels(answerConverter.answerListEntityToListModel(userEntity.getAnswersEntities()));// <<<<<<<<
+        if (userEntity.getAnswersEntities() != null)
+            userModel.setAnswerModels(answerConverter.answerListEntityToListModel(userEntity.getAnswersEntities()));// <<<<<<<<
         List<GroupModel> groups = new ArrayList<>();
         if (userEntity.getGroups() != null && !userEntity.getGroups().isEmpty()) {
             for (GroupEntity groupEntity : userEntity.getGroups()) {
@@ -83,20 +84,18 @@ public class UserConverter {
         userModel.setGroups(groups);
         List<PageModel> pages = new ArrayList<>();
         if (userEntity.getPages() != null && !userEntity.getPages().isEmpty()) {
-
             for (PageEntity pageEntity : userEntity.getPages()) {
                 pages.add(pageConverter.convertPageEntityToPageModel(pageEntity));
             }
         }
         userModel.setPages(pages);
-        userModel.setPostModels(
-                postConverter.postEntityListToModelList(userEntity.getPostEntity(), false, false, false, false, false)); ////////////////////////////////////////////////////////////////
-        userModel.setSavedPost(
-                new ArrayList<>()/* postEntityListToModelList(userEntity.getSavedPost(), false, false, false) */); ////////////////////////////////////////////////////////////////
-        userModel.setSharedPost(
-                new ArrayList<>()/* postEntityListToModelList(userEntity.getSharedPost(), false, false, false) */); ////////////////////////////////////////////////////////////////
-        userModel.setChats(new ArrayList<>()/* chatListEntityToListModel(userEntity.getChats(), false) */);
-        userModel.setMessages(new ArrayList<>()/* messageEntityListToModleList(userEntity.getMessages(), false) */);
+        userModel.setPostModels(postConverter.postEntityListToModelList(userEntity.getPostEntity(), false, false, false, false, false)); ////////////////////////////////////////////////////////////////
+        userModel.setSavedPost(new ArrayList<>());
+        userModel.setSharedPost(new ArrayList<>());
+        userModel.setChats(new ArrayList<>());
+        userModel.setMessages(new ArrayList<>());
+        userModel.setCommentModels(new ArrayList<>());
+        userModel.setReactionModels(new ArrayList<>());
         return userModel;
     }
 
@@ -118,9 +117,8 @@ public class UserConverter {
         userEntity.setMobile(userModel.getMobile());
         userEntity.setOnLine(userModel.isOnLine());
         userEntity.setPassword(userModel.getPassword());
-        userEntity.setFriends(new ArrayList<>());
-        userEntity.setPassword(userModel.getPassword());
         userEntity.setIp(userModel.getIp());
+        userEntity.setFriends(new ArrayList<>());
         userEntity.setPostEntity(postConverter.postModelListToEntityList(userModel.getPostModels())); /////////////////////////////////////////////////
         userEntity.setSavedPost(postConverter.postModelListToEntityList(userModel.getSavedPost())); /////////////////////////////////////////////////
         userEntity.setSharedPost(postConverter.postModelListToEntityList(userModel.getSharedPost())); /////////////////////////////////////////////////

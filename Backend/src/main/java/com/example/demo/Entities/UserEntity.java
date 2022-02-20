@@ -65,13 +65,13 @@ public class UserEntity {
     private List<PostEntity> sharedPost;
     @ManyToMany()
     private List<UserEntity> friends;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<ChatEntity> chats;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<ChatEntity> hiddenChats;
-    @ManyToMany(/*  mappedBy = "members" */cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<GroupEntity> groups;
-    @ManyToMany(/* mappedBy = "members" */cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<PageEntity> pages;
 
     //////////////////////////////////////////////

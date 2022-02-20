@@ -50,11 +50,12 @@ public class TokenFilter extends OncePerRequestFilter {
 
             if (email != null) {
 
-                System.out.println("\n\t This mobile is true  \n");
+                System.out.println("\n\t This email is true  \n");
+                System.out.println(email);
 
                 UserModel user = userConverter.getUserModelWithBasicInformation(userRepository.findByEmail(email).get());
 
-                UserDetails userDetails = new SignInModel(user.getMobile(), user.getPassword());
+                UserDetails userDetails = new SignInModel(user.getEmail(), user.getPassword());
 
                 if (tokenUtil.isValid(token, userDetails)) {
 
@@ -67,11 +68,11 @@ public class TokenFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticatedToken);
 
                 } else
-                    System.out.println("\n\t\t  this token is expired \n");
+                    System.out.println("\n\t\t  this token is not valid \n");
             } else
                 System.out.println("\n\t\t  this mobile is false \n");
         } else
-            System.out.println("\n\t\t  This token is authenticated \n");
+            System.out.println("\n\t\t  This token is not allowed \n");
 
         filterChain.doFilter(request, response);
 

@@ -13,7 +13,9 @@ import com.example.demo.Repositories.GroupRepository;
 import com.example.demo.Repositories.PageRepository;
 import com.example.demo.Repositories.PostRepositroy;
 import com.example.demo.Repositories.UserRepository;
+import com.example.demo.Security.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -49,10 +51,96 @@ public class UserService implements UserDetailsService {
     private PostConverter postConverter;
     @Autowired
     private GroupConverter groupConverter;
+    @Autowired
+    private TokenUtil tokenUtil;
 
-    public UserModel addUser(UserModel userModel) {
-        UserEntity userEntity = userRepository.save(userConverter.convertUserModelToUserEntity(userModel, false));
-        return userConverter.convertUserEntityToUserModel(userEntity);
+    public ResponseEntity<Object> signUp(UserModel userModel) {
+
+        if (userRepository.findByEmail(userModel.getEmail()) != null && userRepository.findByEmail(userModel.getEmail()).isPresent()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("This email is used");
+        } else if (userRepository.findByPassword(userModel.getPassword()) != null && userRepository.findByPassword(userModel.getPassword()).isPresent()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Enter another password!!");
+        } else {
+            UserEntity userEntity =
+                    userRepository.save(userConverter.convertUserModelToUserEntity(userModel, false));
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .header("Authorization", "Bearer " + tokenUtil.generateToken(userEntity.getEmail()))
+                    .body(userConverter.convertUserEntityToUserModel(userEntity));
+        }
+
+    }
+
+    public ResponseEntity<Object> signIn(SignInModel signInModel) {
+        UserEntity userEntity;
+        if (userRepository.findByEmail(signInModel.getEmail()).isPresent()) {
+            userEntity = userRepository.findByEmail(signInModel.getEmail()).get();
+            if (userRepository.findByPassword(signInModel.getPassword()).isPresent() &&
+                    userEntity.getId() == userRepository.findByPassword(signInModel.getPassword()).get().getId()) {
+                return ResponseEntity
+                        .status(HttpStatus.OK)
+                        .header("Authorization", "Bearer " + tokenUtil.generateToken(userEntity.getEmail()))
+                        .body(userConverter.convertUserEntityToUserModel(userEntity));
+            } else return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("this password is wrong");
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Email is not exist");
+        }
+    }
+
+    public ResponseEntity<Object> update(UserModel userModel) {
+        if (userRepository.findById(userModel.getId()).isPresent()) {
+            UserEntity userEntity = userRepository.findById(userModel.getId()).get();
+            if (userRepository.findByEmail(userModel.getEmail()).isPresent() && userRepository.findByEmail(userModel.getEmail()).get().getId() != userModel.getId()) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_ACCEPTABLE)
+                        .body("This email is used from another user");
+            } else if (userRepository.findByPassword(userModel.getPassword()).isPresent() && userRepository.findByPassword(userModel.getPassword()).get().getId() != userModel.getId()) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_ACCEPTABLE)
+                        .body("Enter another password this is used before");
+            } else {
+
+                userEntity.setId(userModel.getId());
+                userEntity.setEmail(userModel.getEmail());
+                userEntity.setPassword(userModel.getPassword());
+                userEntity.setFirstName(userModel.getFirstName());
+                userEntity.setLastName(userModel.getLastName());
+                userEntity.setMobile(userModel.getMobile());
+                userEntity.setStudyLevel(userModel.getStudyLevel());
+                userEntity.setLocation(userModel.getLocation());
+                userEntity.setGender(userModel.getGender());
+                userEntity.setImagePath(userModel.getImagePath());
+                userEntity.setIp(userModel.getIp());
+                userEntity.setAge(userModel.getAge());
+
+                UserEntity savedEntity = userRepository.save(userEntity);
+
+                return ResponseEntity
+                        .status(HttpStatus.OK)
+                        .header("Authorization", "Bearer " + tokenUtil.generateToken(userEntity.getEmail()))
+                        .body(userConverter.convertUserEntityToUserModel(savedEntity));
+            }
+        } else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("this user is not found");
+
+    }
+
+    public boolean delete(String token) {
+        UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
+        userRepository.delete(userEntity);
+        if (userRepository.findById(userEntity.getId()).isPresent()) return false;
+        else return true;
     }
 
     public ResponseEntity<Object> deleteUserUsingId(long id) {
@@ -73,7 +161,7 @@ public class UserService implements UserDetailsService {
         if (!userEntity.isEmpty()) {
             if (!userEntity.get().getFriends().isEmpty()) {
                 for (int i = 0; i < userEntity.get().getFriends().size(); i++) {
-                    deleateFriendFromUser(id, userEntity.get().getFriends().get(i).getId());
+                    deleteFriendFromUser(id, userEntity.get().getFriends().get(i).getId());
                     i -= 1;
                 }
             }
@@ -110,24 +198,6 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public ResponseEntity<String> emailValidation(String email) {
-        UserEntity userEntity = userRepository.getByEmail(email);
-        if (userEntity != null)
-            return ResponseEntity.ok().body("This email is valid");
-        else
-            return ResponseEntity.ok().body("This email is not valid");
-    }
-
-    public UserModel signIn(String email, String password) {
-        Optional<UserEntity> userEntity = userRepository.findByEmailAndPassword(email, password);
-        if (userEntity.isEmpty()) {
-            UserModel userModel = new UserModel();
-            return userModel;
-        } else
-            return userConverter.convertUserEntityToUserModel(userEntity.get());
-
-    }
-
     public UserModel findByEmail(String email) {
         return userConverter.convertUserEntityToUserModel(userRepository.getByEmail(email));
     }
@@ -143,25 +213,6 @@ public class UserService implements UserDetailsService {
             }
             return foundModels;
         }
-    }
-
-    public UserModel update(UserModel userModel) {
-        UserEntity userEntity = userRepository.findById(userModel.getId()).get();
-        userEntity.setId(userModel.getId());
-        userEntity.setPassword(userModel.getPassword());
-        userEntity.setAge(userModel.getAge());
-        userEntity.setCreatedAt(userModel.getCreatedAt());
-        userEntity.setEmail(userModel.getEmail());
-        userEntity.setFirstName(userModel.getFirstName());
-        userEntity.setGender(userModel.getGender());
-        userEntity.setLastName(userModel.getLastName());
-        userEntity.setMobile(userModel.getMobile());
-        userEntity.setOnLine(userModel.isOnLine());
-        userEntity.setIp(userModel.getIp());
-        userEntity.setImagePath(userModel.getImagePath());
-        userEntity = userRepository.save(userEntity);
-        return userConverter.convertUserEntityToUserModel(userEntity);
-
     }
 
     ////////// friends methods
@@ -192,7 +243,7 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public UserModel deleateFriendFromUser(long id, long friendId) {
+    public UserModel deleteFriendFromUser(long id, long friendId) {
         UserEntity userEntity = userRepository.findById(id).get();
         UserEntity friendEntity = userRepository.findById(friendId).get();
         userEntity.getFriends().remove(friendEntity);
