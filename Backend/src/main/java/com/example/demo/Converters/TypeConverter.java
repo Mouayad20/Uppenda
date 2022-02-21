@@ -12,14 +12,14 @@ public class TypeConverter {
     public TypeModel typeEntityToModel(TypeEntity type) {
         TypeModel typeModel = new TypeModel();
         typeModel.setId(type.getId());
-        typeModel.setTypename(type.getType());
+        typeModel.setType(type.getType());
         return typeModel;
     }
 
     public TypeEntity typeModelToEntity(TypeModel typeModel) {
         TypeEntity typeEntity = new TypeEntity();
         typeEntity.setId(typeModel.getId());
-        typeEntity.setType(typeModel.getTypename());
+        typeEntity.setType(typeModel.getType());
         return typeEntity;
     }
 

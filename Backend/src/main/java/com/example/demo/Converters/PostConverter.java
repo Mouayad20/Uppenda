@@ -40,18 +40,8 @@ public class PostConverter {
         postEntity.setCreatedAt(postModel.getCreatedAt());
         postEntity.setCommentEntities(commentConverter.commentModelListToEntityList(postModel.getCommentModels()));
         postEntity.setReactionEntities(reactionConverter.reactionModelListToEntityList(postModel.getReactionModels()));
-        // postEntity.setMedia(me);
-        postEntity.setParticipants(userConverter.convertUserListModelToListEntity(postModel.getParticipants())); /// for count of
-        /// shares operation
-        postEntity.setType(typeRepository.findByType(postModel.getType().getTypename()).get());
-
-        // postEntity.setUserEntity(convertUserModelToUserEntity(
-        // postModel.getUserModel(),true)); ////////// true or false here ???!
-        // postEntity.setGroupEntity(convertGroupModelToGroupEntity(
-        // postModel.getGroupModel(),null,true));
-        // postEntity.setPageEntity(convertPageModelToPageEntity(
-        // postModel.getPageModel(),null,true));
-
+        postEntity.setParticipants(userConverter.convertUserListModelToListEntity(postModel.getParticipants()));
+        postEntity.setType(typeRepository.findByType(postModel.getType().getType()).get());
         return postEntity;
     }
 

@@ -45,7 +45,7 @@ public class UserEntity {
 
 
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
-    private List<PostEntity> PostEntity;
+    private List<PostEntity> postEntities;
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
     private List<CommentEntity> commentEntities;
     @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
@@ -94,7 +94,7 @@ public class UserEntity {
                       String password,
                       Date createdAt,
                       String imagePath,
-                      List<PostEntity> PostEntity,
+                      List<PostEntity> postEntities,
                       List<CommentEntity> commentEntities,
                       List<ReactionEntity> reactionEntities,
                       List<PostEntity> savedPost,
@@ -117,7 +117,7 @@ public class UserEntity {
         this.password = password;
         this.createdAt = createdAt;
         this.imagePath = imagePath;
-        this.PostEntity = PostEntity;
+        this.postEntities = postEntities;
         this.commentEntities = commentEntities;
         this.reactionEntities = reactionEntities;
         this.savedPost = savedPost;
@@ -241,12 +241,12 @@ public class UserEntity {
         this.imagePath = imagePath;
     }
 
-    public List<PostEntity> getPostEntity() {
-        return this.PostEntity;
+    public List<PostEntity> getPostEntities() {
+        return postEntities;
     }
 
-    public void setPostEntity(List<PostEntity> PostEntity) {
-        this.PostEntity = PostEntity;
+    public void setPostEntities(List<PostEntity> postEntities) {
+        this.postEntities = postEntities;
     }
 
     public List<CommentEntity> getCommentEntities() {

@@ -1,6 +1,5 @@
 package com.example.demo.Controllers;
 
-
 import com.example.demo.Models.PostModel;
 import com.example.demo.Services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,10 @@ public class PostController {
 
     /* Post Request */
 
-    @PostMapping("/addProfilePost/{u_id}")
-    public PostModel addProfilePost(@RequestBody PostModel postModel, @PathVariable(name = "u_id") Long u_id) {
-        return postService.addProfilePost(postModel, u_id);
+    @PostMapping("/addProfilePost")
+    public PostModel addProfilePost(@RequestHeader("Authorization") String token,
+                                    @RequestBody PostModel postModel) {
+        return postService.addProfilePost(token.substring("Bearer ".length()),postModel);
     }
 
     @PostMapping("/addGroupPost/{u_id}/{g_id}")

@@ -89,7 +89,7 @@ public class UserConverter {
             }
         }
         userModel.setPages(pages);
-        userModel.setPostModels(postConverter.postEntityListToModelList(userEntity.getPostEntity(), false, false, false, false, false)); ////////////////////////////////////////////////////////////////
+        userModel.setPostModels(postConverter.postEntityListToModelList(userEntity.getPostEntities(), false, false, false, false, false)); ////////////////////////////////////////////////////////////////
         userModel.setSavedPost(new ArrayList<>());
         userModel.setSharedPost(new ArrayList<>());
         userModel.setChats(new ArrayList<>());
@@ -119,7 +119,7 @@ public class UserConverter {
         userEntity.setPassword(userModel.getPassword());
         userEntity.setIp(userModel.getIp());
         userEntity.setFriends(new ArrayList<>());
-        userEntity.setPostEntity(postConverter.postModelListToEntityList(userModel.getPostModels())); /////////////////////////////////////////////////
+        userEntity.setPostEntities(postConverter.postModelListToEntityList(userModel.getPostModels())); /////////////////////////////////////////////////
         userEntity.setSavedPost(postConverter.postModelListToEntityList(userModel.getSavedPost())); /////////////////////////////////////////////////
         userEntity.setSharedPost(postConverter.postModelListToEntityList(userModel.getSharedPost())); /////////////////////////////////////////////////
         userEntity.setAnswersEntities(answerConverter.answerListModelToListEntity(userModel.getAnswerModels()));// <<<<<<<<

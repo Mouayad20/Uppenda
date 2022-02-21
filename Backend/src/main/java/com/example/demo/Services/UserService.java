@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -143,70 +142,232 @@ public class UserService implements UserDetailsService {
         else return true;
     }
 
-    public UserModel findById(long id) {
-        Optional<UserEntity> foundUser = userRepository.findById(id);
-        if (foundUser.isEmpty())
-            return null;
-        else {
-            return userConverter.convertUserEntityToUserModel(foundUser.get());
+    public List<UserModel> search(String word) {
+        return userConverter.convertUserListEntityToListModel(userRepository.searchUser(word));
+    }
+
+    public ResponseEntity<Object> getUserInformation(String token) {
+        if (userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).isPresent()) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(userConverter.convertUserEntityToUserModel(userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get()));
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Problem happened");
         }
-
     }
 
-    public UserModel findByEmail(String email) {
-        return userConverter.convertUserEntityToUserModel(userRepository.getByEmail(email));
+    public ResponseEntity<Object> findById(long id) {
+        if (!userRepository.findById(id).isPresent()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("There is no user have this id ");
+        } else {
+            UserEntity foundUser = userRepository.findById(id).get();
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(userConverter.convertUserEntityToUserModel(foundUser));
+        }
     }
 
-    public List<UserModel> findByFirstName(String firstName) {
-        List<UserEntity> foundUser = userRepository.findByFirstName(firstName);
-        List<UserModel> foundModels = new ArrayList<>();
-        if (foundUser.isEmpty())
-            return null;
-        else {
-            for (UserEntity userEntity : foundUser) {
-                foundModels.add(userConverter.convertUserEntityToUserModel(userEntity));
-            }
-            return foundModels;
+    public ResponseEntity<Object> findByEmail(String email) {
+        if (!userRepository.findByEmail(email).isPresent()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("There is no user have this id ");
+        } else {
+            UserEntity foundUser = userRepository.findByEmail(email).get();
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(userConverter.convertUserEntityToUserModel(foundUser));
         }
     }
 
     ////////// friends methods
 
-    public UserModel addFriend(long id, long friendId) {
-        UserEntity user = userRepository.findById(id).get();
-        UserEntity friendEntity = userRepository.findById(friendId).get();
+    public ResponseEntity<String> addFriend(String token, String fEmail) {
+
+        UserEntity user = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
+        UserEntity friendEntity = userRepository.findByEmail(fEmail).get();
+
         if (!user.getFriends().contains(friendEntity))
             user.getFriends().add(friendEntity);
         if (!friendEntity.getFriends().contains(user))
             friendEntity.getFriends().add(user);
-        user = userRepository.save(user);
-        /*--------------error--------------------*/
-        userRepository.save(friendEntity);
-        return userConverter.convertUserEntityToUserModel(user);
 
+        user = userRepository.save(user);
+        friendEntity = userRepository.save(friendEntity);
+
+        if (user.getFriends().contains(friendEntity) && friendEntity.getFriends().contains(user))
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Friend added");
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Problem happened");
     }
 
-    public UserModel unFriend(Long u_id, Long f_id) {
+    public ResponseEntity<String> unFriend(String token, String fEmail) {
 
-        UserEntity user = userRepository.findById(u_id).get();
-        UserEntity friendEntity = userRepository.findById(f_id).get();
+        UserEntity user = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
+        UserEntity friendEntity = userRepository.findByEmail(fEmail).get();
+
         user.getFriends().remove(friendEntity);
         friendEntity.getFriends().remove(user);
-        friendEntity = userRepository.save(friendEntity);
+
         user = userRepository.save(user);
-        return userConverter.convertUserEntityToUserModel(user);
+        friendEntity = userRepository.save(friendEntity);
+
+        if (!(user.getFriends().contains(friendEntity) && friendEntity.getFriends().contains(user)))
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Friend removed");
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Problem happened");
+    }
+
+    ////////// save post methods
+
+    public ResponseEntity<String> savedPost(String token, Long post_id) {
+
+        UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
+
+        if (!postRepositroy.findById(post_id).isPresent())
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("This post is not exist");
+
+        PostEntity postEntity = postRepositroy.findById(post_id).get();
+
+        userEntity.getSavedPost().add(postEntity);
+        postEntity.getSavers().add(userEntity);
+
+        UserEntity savedUser = userRepository.save(userEntity);
+        PostEntity savedPost = postRepositroy.save(postEntity);
+
+        if (savedUser.getSavedPost().contains(savedPost))
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Post Saved");
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Problem happened");
 
     }
 
-    public UserModel deleteFriendFromUser(long id, long friendId) {
-        UserEntity userEntity = userRepository.findById(id).get();
-        UserEntity friendEntity = userRepository.findById(friendId).get();
-        userEntity.getFriends().remove(friendEntity);
-        friendEntity.getFriends().remove(userEntity);
-        userEntity = userRepository.save(userEntity);
-        friendEntity = userRepository.save(friendEntity);
-        return userConverter.convertUserEntityToUserModel(userEntity);
+    public ResponseEntity<String> unSavedPost(String token, Long post_id) {
 
+        UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
+
+        if (!postRepositroy.findById(post_id).isPresent())
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("This post is not exist");
+
+        PostEntity postEntity = postRepositroy.findById(post_id).get();
+
+        userEntity.getSavedPost().remove(postEntity);
+        postEntity.getSavers().remove(userEntity);
+
+        UserEntity savedUser = userRepository.save(userEntity);
+        PostEntity savedPost = postRepositroy.save(postEntity);
+
+        if (!savedUser.getSavedPost().contains(savedPost))
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Post unSaved");
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Problem happened");
+    }
+
+    public List<PostModel> getAllSavedPosts(String token) {
+
+        UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
+
+        List<Long> list = userRepository.getALlSavedPost(userEntity.getId());
+        List<PostModel> postModelList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            postModelList.add(postConverter.postEntityToModel(postRepositroy.findById(list.get(i)).get(),
+                    true, true, true, true, true));
+        }
+        return postModelList;
+    }
+
+    ////////// share post methods
+
+    public ResponseEntity<String> sharedPost(String token, Long post_id) {
+
+        UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
+
+        if (!postRepositroy.findById(post_id).isPresent())
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("This post is not exist");
+
+        PostEntity postEntity = postRepositroy.findById(post_id).get();
+
+        userEntity.getSharedPost().add(postEntity);
+        postEntity.getParticipants().add(userEntity);
+
+        UserEntity savedUser = userRepository.save(userEntity);
+        PostEntity sharedPost = postRepositroy.save(postEntity);
+
+        if (savedUser.getSharedPost().contains(sharedPost))
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Post shared");
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Problem happened");
+    }
+
+    public ResponseEntity<String> unSharedPost(String token, Long post_id) {
+
+        UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
+
+        if (!postRepositroy.findById(post_id).isPresent())
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("This post is not exist");
+
+        PostEntity postEntity = postRepositroy.findById(post_id).get();
+
+        userEntity.getSharedPost().remove(postEntity);
+        postEntity.getParticipants().remove(userEntity);
+
+        UserEntity savedUser = userRepository.save(userEntity);
+        PostEntity sharedPost = postRepositroy.save(postEntity);
+
+        if (!savedUser.getSharedPost().contains(sharedPost))
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Post unShared");
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Problem happened");
+
+    }
+
+    public List<PostModel> getAllSharedPosts(String token) {
+
+        UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
+
+        List<Long> list = userRepository.getALlSharedPost(userEntity.getId());
+        List<PostModel> postModelList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            postModelList.add(postConverter.postEntityToModel(postRepositroy.findById(list.get(i)).get(),
+                    true, true, true, true, true));
+        }
+        return postModelList;
     }
 
     ////////// page methods
@@ -257,125 +418,11 @@ public class UserService implements UserDetailsService {
 
     }
 
-    ////////// save post methods
-
-    public String savedPost(Long u_id, Long p_id) {
-
-        UserEntity userEntity = userRepository.findById(u_id).get();
-
-        userEntity.getSavedPost().add(postRepositroy.findById(p_id).get());
-
-        UserEntity savedUser = userRepository.save(userEntity);
-
-        PostEntity postEntity = postRepositroy.findById(p_id).get();
-
-        for (int i = 0; i < postEntity.getParticipants().size(); i++) {
-
-            if (postEntity.getParticipants().get(i).getId() == u_id)
-
-                return "This post is saved befor...";
-
-        }
-
-        savedUser.getSavedPost();
-
-
-        return "This post is save...";
-
-    }
-
-    public boolean unSavedPost(Long u_id, Long p_id) {
-
-        boolean isUnSaved = true;
-        UserEntity userEntity = userRepository.findById(u_id).get();
-
-        userEntity.getSavedPost().remove(postRepositroy.findById(p_id).get());
-
-        UserEntity savedUser = userRepository.save(userEntity);
-
-        List<PostEntity> list = savedUser.getSavedPost();
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId() == p_id)
-                isUnSaved = false; // the unSave opration is falied
-
-        }
-
-        return isUnSaved;
-
-    }
-
-    public List<PostModel> getAllSavedPostsByUserId(Long u_id) {
-        System.out.println("\n\n\n\n\t\t" + userRepository.getALlSavedPost(u_id) + "\t\t\t\n\n\n\n");
-
-        List<Long> list = userRepository.getALlSavedPost(u_id);
-        List<PostModel> postModelList = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            postModelList.add(postConverter.postEntityToModel(postRepositroy.findById(list.get(i)).get(), true, true, true,
-                    true, true));
-        }
-        return postModelList;
-    }
-
-    ////////// share post methods
-
-    public String sharedPost(Long u_id, Long p_id) {
-
-
-        UserEntity userEntity = userRepository.findById(u_id).get();
-
-        userEntity.getSharedPost().add(postRepositroy.findById(p_id).get());
-
-        PostEntity postEntity = postRepositroy.findById(p_id).get();
-
-        for (int i = 0; i < postEntity.getParticipants().size(); i++) {
-
-            if (postEntity.getParticipants().get(i).getId() == u_id)
-
-                return "This post is shared befor...";
-
-        }
-
-        userRepository.save(userEntity);
-
-        return "This post is share...";
-    }
-
-    public boolean unSharedPost(Long u_id, Long p_id) {
-
-        boolean isUnShared = true;
-        UserEntity userEntity = userRepository.findById(u_id).get();
-
-
-        userEntity.getSharedPost().remove(postRepositroy.findById(p_id).get());
-
-        UserEntity savedUser = userRepository.save(userEntity);
-
-        List<PostEntity> list = savedUser.getSharedPost();
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId() == p_id)
-                isUnShared = false; // the unShare opration is falied
-
-        }
-        return isUnShared;
-    }
-
-    public List<PostModel> getAllSharedPostsByUserId(Long u_id) {
-        System.out.println("\n\n\n\n\t\t" + userRepository.getALlSharedPost(u_id) + "\t\t\t\n\n\n\n");
-
-        List<Long> list = userRepository.getALlSharedPost(u_id);
-        List<PostModel> postModelList = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            postModelList.add(postConverter.postEntityToModel(postRepositroy.findById(list.get(i)).get(), true, true, true,
-                    true, true));
-        }
-        return postModelList;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         System.out.println(">>>>>>>  \t\t " + email);
-        UserModel userEntity = findByEmail(email);
-        return new SignInModel(userEntity.getEmail(), userEntity.getPassword());
+        UserModel userModel = userConverter.convertUserEntityToUserModel(userRepository.findByEmail(email).get());
+        return new SignInModel(userModel.getEmail(), userModel.getPassword());
     }
-
 }

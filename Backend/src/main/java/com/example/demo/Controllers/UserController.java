@@ -1,7 +1,6 @@
 package com.example.demo.Controllers;
 
 import com.example.demo.Converters.UserConverter;
-import com.example.demo.Entities.UserEntity;
 import com.example.demo.Models.PostModel;
 import com.example.demo.Models.SignInModel;
 import com.example.demo.Models.UserModel;
@@ -39,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/signIn")
-    public ResponseEntity<Object> signIn(@RequestBody SignInModel signInModel)  {
+    public ResponseEntity<Object> signIn(@RequestBody SignInModel signInModel) {
         return userService.signIn(signInModel);
     }
 
@@ -69,69 +68,69 @@ public class UserController {
     }
 
     @GetMapping(path = "/search/word={word}")
-    public List<UserModel> search(@PathVariable String word) {
-        return userConverter.convertUserListEntityToListModel(userRepository.searchUser(word));
+    public List<UserModel> search(@PathVariable(name = "word") String word) {
+        return userService.search(word);
+    }
+
+    @GetMapping(path = "/getUserInformation")
+    public ResponseEntity<Object> getUserInformation(@RequestHeader("Authorization") String token) {
+        return userService.getUserInformation(token.substring("Bearer ".length()));
     }
 
     @GetMapping(path = "/getUser/Id={id}")
-    public UserModel findById(@PathVariable(name = "id", required = true) long id) {
+    public ResponseEntity<Object> findById(@PathVariable(name = "id", required = true) long id) {
         return userService.findById(id);
     }
 
-    @GetMapping(path = "/getUser/Name={name}")
-    public List<UserModel> findByFirstName(@PathVariable(name = "name", required = true) String firstName) {
-        return userService.findByFirstName(firstName);
+    @GetMapping(path = "/getUser/Email={email}")
+    public ResponseEntity<Object> findByEmail(@PathVariable(name = "email", required = true) String email) {
+        return userService.findByEmail(email);
     }
 
-    @GetMapping(path = "/addFriend/userId={id},friendId={friend_id}")
-    public UserModel addFriend(@PathVariable(name = "id", required = true) long id,
-                               @PathVariable(name = "friend_id", required = true) long friendId) {
-        return userService.addFriend(id, friendId);
+    @GetMapping(path = "/addFriend/friendEmail={fEmail}")
+    public ResponseEntity<String> addFriend(@RequestHeader("Authorization") String token,
+                                            @PathVariable(name = "fEmail", required = true) String fEmail) {
+        return userService.addFriend(token.substring("Bearer ".length()), fEmail);
     }
 
-    @GetMapping(path = "/unFriend/userId={u_id},friendId={f_id}")
-    public UserModel unFriend(@PathVariable(name = "u_id", required = true) long u_id,
-                              @PathVariable(name = "f_id", required = true) long f_id) {
-        return userService.unFriend(u_id, f_id);
+    @GetMapping(path = "/unFriend/friendEmail={fEmail}")
+    public ResponseEntity<String> unFriend(@RequestHeader("Authorization") String token,
+                                           @PathVariable(name = "fEmail", required = true) String fEmail) {
+        return userService.unFriend(token.substring("Bearer ".length()), fEmail);
     }
 
-    @GetMapping(path = "/test")
-    public UserModel test() {
-        return userConverter.convertUserEntityToUserModel(new UserEntity());
+    @GetMapping(path = "/savePost/postId={post_id}")
+    public ResponseEntity<String> savePost(@RequestHeader("Authorization") String token,
+                                           @PathVariable(name = "post_id", required = true) Long post_id) {
+        return userService.savedPost(token.substring("Bearer ".length()), post_id);
     }
 
-    @GetMapping(path = "/savePost/userId={u_id},postId={post_id}")
-    public String savePost(@PathVariable(name = "u_id", required = true) long u_id,
-                           @PathVariable(name = "post_id", required = true) long post_id) {
-        return userService.savedPost(u_id, post_id);
+    @GetMapping(path = "/unSavePost/postId={post_id}")
+    public ResponseEntity<String> unSavePost(@RequestHeader("Authorization") String token,
+                                             @PathVariable(name = "post_id", required = true) Long post_id) {
+        return userService.unSavedPost(token.substring("Bearer ".length()), post_id);
     }
 
-    @GetMapping(path = "/unSavePost/userId={u_id},postId={post_id}")
-    public boolean unSavePost(@PathVariable(name = "u_id", required = true) long u_id,
-                              @PathVariable(name = "post_id", required = true) long post_id) {
-        return userService.unSavedPost(u_id, post_id);
+    @GetMapping(path = "/getAllSavedPosts")
+    public List<PostModel> getAllSavedPosts(@RequestHeader("Authorization") String token) {
+        return userService.getAllSavedPosts(token.substring("Bearer ".length()));
     }
 
-    @GetMapping(path = "/getAllSavedPostByUserId/userId={u_id}")
-    public List<PostModel> getAllSavedPosts(@PathVariable(name = "u_id", required = true) Long u_id) {
-        return userService.getAllSavedPostsByUserId(u_id);
+    @GetMapping(path = "/sharePost/postId={post_id}")
+    public ResponseEntity<String> sharePost(@RequestHeader("Authorization") String token,
+                                            @PathVariable(name = "post_id", required = true) Long post_id) {
+        return userService.sharedPost(token.substring("Bearer ".length()), post_id);
     }
 
-    @GetMapping(path = "/sharePost/userId={u_id},postId={post_id}")
-    public String sharePost(@PathVariable(name = "u_id", required = true) long u_id,
-                            @PathVariable(name = "post_id", required = true) long post_id) {
-        return userService.sharedPost(u_id, post_id);
+    @GetMapping(path = "/unSharePost/postId={post_id}")
+    public ResponseEntity<String> unSharePost(@RequestHeader("Authorization") String token,
+                                              @PathVariable(name = "post_id", required = true) Long post_id) {
+        return userService.unSharedPost(token.substring("Bearer ".length()), post_id);
     }
 
-    @GetMapping(path = "/unSharePost/userId={u_id},postId={post_id}")
-    public boolean unSharePost(@PathVariable(name = "u_id", required = true) long u_id,
-                               @PathVariable(name = "post_id", required = true) long post_id) {
-        return userService.unSharedPost(u_id, post_id);
-    }
-
-    @GetMapping(path = "/getAllSharedPostByUserId/userId={u_id}")
-    public List<PostModel> getAllSharedPosts(@PathVariable(name = "u_id", required = true) Long u_id) {
-        return userService.getAllSharedPostsByUserId(u_id);
+    @GetMapping(path = "/getAllSharedPosts")
+    public List<PostModel> getAllSharedPosts(@RequestHeader("Authorization") String token) {
+        return userService.getAllSharedPosts(token.substring("Bearer ".length()));
     }
 
 }

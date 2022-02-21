@@ -6,15 +6,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 public class TypeModel {
 
     private Long id;
-    private String typename;
+    private String type;
 
     public TypeModel() {
 
     }
 
-    public TypeModel(Long id, String typename) {
+    public TypeModel(Long id, String type) {
         this.id = id;
-        this.typename = typename;
+        this.type = type;
     }
 
     public Long getId() {
@@ -25,12 +25,12 @@ public class TypeModel {
         this.id = id;
     }
 
-    public String getTypename() {
-        return typename;
+    public String getType() {
+        return type;
     }
 
-    public void setTypename(String typename) {
-        this.typename = typename;
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

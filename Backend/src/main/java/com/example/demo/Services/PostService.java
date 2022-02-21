@@ -8,6 +8,7 @@ import com.example.demo.Entities.*;
 import com.example.demo.Models.MediaModel;
 import com.example.demo.Models.PostModel;
 import com.example.demo.Repositories.*;
+import com.example.demo.Security.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,40 +40,41 @@ public class PostService {
     private TypeConverter typeConverter;
     @Autowired
     private MediaConverter mediaConverter;
+    @Autowired
+    private TokenUtil tokenUtil;
 
-    public PostModel addProfilePost(PostModel postModel, Long u_id) {
+    public PostModel addProfilePost(String token, PostModel postModel) {
 
-        UserEntity userEntity = userRepository.findById(u_id).get();
+        UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
 
         PostEntity postEntity = postConverter.postModelToEntity(postModel);
-        postEntity.setUserEntity(userEntity);
 
-        PostModel p = new PostModel();
-        List<MediaModel> lista = new ArrayList<>();
+        postEntity.setUserEntity(userEntity);
+        userEntity.getPostEntities().add(postEntity);
 
         PostEntity savedPost = postRepositroy.save(postEntity);
-        if (postModel.getMedia() != null && !postModel.getMedia().isEmpty()) {
-            for (MediaModel mediaModel : postModel.getMedia()) {
+        userRepository.save(userEntity);
 
-                MediaEntity mediaEntity = new MediaEntity();
-                mediaEntity.setPath(mediaModel.getPath());
-                mediaEntity.setType(mediaModel.getType());
-                mediaEntity.setPostEntity(savedPost);
-                MediaModel m = mediaConverter.convertMediaEntityToMediaModel(mediaRepository.save(mediaEntity));
-                lista.add(m);
+        return postConverter.postEntityToModel(savedPost,false,false,false,false,false);
 
-            }
-        }
-
-        p.setId(savedPost.getId());
-        p.setContent(savedPost.getContent());
-        p.setCreatedAt(savedPost.getCreatedAt());
-        p.setUserModel(userConverter.getUserModelWithBasicInformation(savedPost.getUserEntity()));
-        p.setType(typeConverter.typeEntityToModel(savedPost.getType()));
-        p.setMedia(lista);
-
-        return p;
-
+//        List<MediaModel> list = new ArrayList<>();
+//        if (postModel.getMedia() != null && !postModel.getMedia().isEmpty()) {
+//            for (MediaModel mediaModel : postModel.getMedia()) {
+//                MediaEntity mediaEntity = new MediaEntity();
+//                mediaEntity.setPath(mediaModel.getPath());
+//                mediaEntity.setType(mediaModel.getType());
+//                mediaEntity.setPostEntity(savedPost);
+//                MediaModel m = mediaConverter.convertMediaEntityToMediaModel(mediaRepository.save(mediaEntity));
+//                list.add(m);
+//
+//            }
+//        }
+//        p.setId(savedPost.getId());
+//        p.setContent(savedPost.getContent());
+//        p.setCreatedAt(savedPost.getCreatedAt());
+//        p.setUserModel(userConverter.getUserModelWithBasicInformation(savedPost.getUserEntity()));
+//        p.setType(typeConverter.typeEntityToModel(savedPost.getType()));
+//        p.setMedia(list);
     }
 
     public PostModel addGroupPost(PostModel postModel, Long u_id, Long g_id) {
@@ -108,12 +110,12 @@ public class PostService {
     public PostModel delete(Long id) {
         PostEntity postEntity = postRepositroy.findById(id).get();
         if (!postEntity.getParticipants().isEmpty()) {
-            for (int i = 0; i < postEntity.getParticipants().size(); i++) {
-                userService.unSharedPost(postEntity.getParticipants().get(i).getId(), id);
-            }
-            for (int i = 0; i < postEntity.getSavers().size(); i++) {
-                userService.unSavedPost(postEntity.getSavers().get(i).getId(), id);
-            }
+//            for (int i = 0; i < postEntity.getParticipants().size(); i++) {
+//                userService.unSharedPost(postEntity.getParticipants().get(i).getId(), id);
+//            }
+//            for (int i = 0; i < postEntity.getSavers().size(); i++) {
+//                userService.unSavedPost(postEntity.getSavers().get(i).getId(), id);
+//            }
         }
         postRepositroy.deleteById(id);
         return postConverter.postEntityToModel(postEntity, false, false, false, false, false);
