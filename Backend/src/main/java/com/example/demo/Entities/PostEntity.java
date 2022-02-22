@@ -53,9 +53,9 @@ public class PostEntity {
     //////////////// ManyToMany  /////////////////
     //////////////////////////////////////////////
 
-    @ManyToMany(mappedBy = "savedPost")
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<UserEntity> savers;
-    @ManyToMany(mappedBy = "sharedPost")
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<UserEntity> participants;
 
     //////////////////////////////////////////////

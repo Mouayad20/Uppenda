@@ -36,16 +36,12 @@ public class PageConverter {
         return pageModel;
     }
 
-    public PageEntity convertPageModelToPageEntity(PageModel pageModel, UserEntity userEntity, boolean useIdFromModel) {
+    public PageEntity convertPageModelToPageEntity(PageModel pageModel) {
         PageEntity pageEntity = new PageEntity();
-        pageEntity.setAdmin(userEntity);
         pageEntity.setName(pageModel.getName());
         pageEntity.setCreatedAt(pageModel.getCreatedAt());
         pageEntity.setMembers(new ArrayList<>());
         pageEntity.setPostEntities(postConverter.postModelListToEntityList(pageModel.getPostModels()));/////////////////////////////
-        if (useIdFromModel) {
-            pageEntity.setId(pageModel.getId());
-        }
         pageEntity.setDescription(pageModel.getDescription());
         pageEntity.setImgPath(pageModel.getImgPath());
         return pageEntity;

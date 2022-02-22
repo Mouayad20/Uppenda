@@ -3,6 +3,7 @@ package com.example.demo.Controllers;
 import com.example.demo.Models.PostModel;
 import com.example.demo.Services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,24 +18,23 @@ public class PostController {
     /* Post Request */
 
     @PostMapping("/addProfilePost")
-    public PostModel addProfilePost(@RequestHeader("Authorization") String token,
-                                    @RequestBody PostModel postModel) {
-        return postService.addProfilePost(token.substring("Bearer ".length()),postModel);
+    public ResponseEntity<String> addProfilePost(@RequestBody PostModel postModel,
+                                                 @RequestHeader("Authorization") String token) {
+        return postService.addProfilePost(postModel, token.substring("Bearer ".length()));
     }
 
-    @PostMapping("/addGroupPost/{u_id}/{g_id}")
-    public PostModel addGroupPost(@RequestBody PostModel postModel,
-                                  @PathVariable(name = "u_id") Long u_id,
-                                  @PathVariable(name = "g_id") Long g_id) {
-
-        return postService.addGroupPost(postModel, u_id, g_id);
+    @PostMapping("/addGroupPost/{group_id}")
+    public ResponseEntity<String> addGroupPost(@RequestBody PostModel postModel,
+                                               @RequestHeader("Authorization") String token,
+                                               @PathVariable(name = "group_id") Long group_id) {
+        return postService.addGroupPost(postModel, token.substring("Bearer ".length()), group_id);
     }
 
-    @PostMapping("/addPagePost/{u_id}/{p_id}")
-    public PostModel addPagePost(@RequestBody PostModel postModel,
-                                 @PathVariable(name = "u_id") Long u_id,
-                                 @PathVariable(name = "p_id") Long p_id) {
-        return postService.addPagePost(postModel, u_id, p_id);
+    @PostMapping("/addPagePost/{page_id}")
+    public ResponseEntity<String> addPagePost(@RequestBody PostModel postModel,
+                                              @RequestHeader("Authorization") String token,
+                                              @PathVariable(name = "page_id") Long page_id) {
+        return postService.addPagePost(postModel, token.substring("Bearer ".length()), page_id);
     }
 
     /* Put Request */
@@ -47,7 +47,7 @@ public class PostController {
     /* Delete Request */
 
     @DeleteMapping("/delete/{id}")
-    public PostModel delete(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) {
         return postService.delete(id);
     }
 
@@ -65,27 +65,27 @@ public class PostController {
 
     @GetMapping("/getAll")
     public List<PostModel> getAll() {
-        return postService.fetch();
+        return postService.getAll();
     }
 
-    @GetMapping(path = "/getAllPostsForUserByUID/user_id={id}")
-    public List<PostModel> getUserPosts(@PathVariable(name = "id", required = true) long id) {
-        return postService.getAllPostByUserId(id);
+    @GetMapping(path = "/getUserPosts/email={email}")
+    public List<PostModel> getUserPosts(@PathVariable(name = "email", required = true) String email) {
+        return postService.getUserPosts(email);
     }
 
-    @GetMapping(path = "/getAllPostsForGroupByGID/group_id={id}")
+    @GetMapping(path = "/getGroupsPosts/group_id={id}")
     public List<PostModel> getGroupsPosts(@PathVariable(name = "id", required = true) long id) {
-        return postService.getAllPostByGroupId(id);
+        return postService.getGroupsPosts(id);
     }
 
-    @GetMapping(path = "/getAllPostsForPageByPID/page_id={id}")
+    @GetMapping(path = "/getPagesPosts/page_id={id}")
     public List<PostModel> getPagesPosts(@PathVariable(name = "id", required = true) long id) {
-        return postService.getAllPostByPageId(id);
+        return postService.getPagesPosts(id);
     }
 
-    @GetMapping(path = "/getSummery/user_id={id}")
-    public List<PostModel> getSummery(@PathVariable(name = "id", required = true) long id) {
-        return postService.getSummery(id);
+    @GetMapping(path = "/getSummery")
+    public List<PostModel> getSummery(@RequestHeader("Authorization") String token) {
+        return postService.getSummery(token.substring("Bearer ".length()));
     }
 
 }

@@ -11,7 +11,7 @@ import com.example.demo.Entities.UserEntity;
 import com.example.demo.Models.*;
 import com.example.demo.Repositories.GroupRepository;
 import com.example.demo.Repositories.PageRepository;
-import com.example.demo.Repositories.PostRepositroy;
+import com.example.demo.Repositories.PostRepository;
 import com.example.demo.Repositories.UserRepository;
 import com.example.demo.Security.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PageRepository pageRepository;
     @Autowired
-    private PostRepositroy postRepositroy;
+    private PostRepository postRepositroy;
     @Autowired
     private GroupService groupService;
     @Autowired

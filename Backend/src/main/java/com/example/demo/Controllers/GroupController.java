@@ -1,10 +1,8 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.Converters.GroupConverter;
 import com.example.demo.Models.GroupModel;
 import com.example.demo.Models.PostModel;
 import com.example.demo.Models.UserModel;
-import com.example.demo.Repositories.GroupRepository;
 import com.example.demo.Services.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/groups")
+@RequestMapping(path = "/group")
 public class GroupController {
 
     @Autowired
@@ -21,10 +19,10 @@ public class GroupController {
 
     /* Post Request */
 
-    @PostMapping(path = "/add/adminId={admin_id}")
-    public GroupModel add(@PathVariable(name = "admin_id", required = true) long adminId,
-                          @RequestBody(required = true) GroupModel groupModel) {
-        return groupService.add(adminId, groupModel);
+    @PostMapping(path = "/add")
+    public ResponseEntity<String> add(@RequestBody(required = true) GroupModel groupModel,
+                                      @RequestHeader("Authorization") String token) {
+        return groupService.add(groupModel, token.substring("Bearer ".length()));
     }
 
     @PostMapping(path = "/addMember/group_id={g_id},user_id={u_id}")

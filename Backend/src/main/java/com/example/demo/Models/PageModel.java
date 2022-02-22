@@ -95,14 +95,6 @@ public class PageModel {
         this.createdAt = createdAt;
     }
 
-    @Override
-    public String toString() {
-        try {
-            return DemoApplication.objectMapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
+
 
 }

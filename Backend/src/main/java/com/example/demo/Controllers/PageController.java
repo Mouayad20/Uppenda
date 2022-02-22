@@ -1,10 +1,8 @@
 package com.example.demo.Controllers;
 
-import com.example.demo.Converters.PageConverter;
 import com.example.demo.Models.PageModel;
 import com.example.demo.Models.PostModel;
 import com.example.demo.Models.UserModel;
-import com.example.demo.Repositories.PageRepository;
 import com.example.demo.Services.PageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "pages")
+@RequestMapping(path = "page")
 public class PageController {
 
     @Autowired
@@ -21,10 +19,10 @@ public class PageController {
 
     /* Post Request */
 
-    @PostMapping(path = "/add/adminId={User_id}")
-    public PageModel add(@RequestBody(required = true) PageModel pageModel,
-                         @PathVariable(name = "User_id", required = true) long adminId) {
-        return pageService.add(pageModel, adminId);
+    @PostMapping(path = "/add")
+    public ResponseEntity<String> add(@RequestBody(required = true) PageModel pageModel,
+                                      @RequestHeader("Authorization") String token) {
+        return pageService.add(pageModel, token.substring("Bearer ".length()));
     }
 
     /* Put Request */
@@ -44,19 +42,19 @@ public class PageController {
     /* Get Request */
 
     @GetMapping(path = "/getFormat")
-    public String getFormat() {
-        return new PageModel().toString();
+    public PageModel getFormat() {
+        return new PageModel();
     }
 
     @GetMapping(path = "/addMember/pageId={id},memberId={m_id}")
     public PageModel addMember(@PathVariable(name = "id", required = true) long pageId,
-                                     @PathVariable(name = "m_id", required = true) long memberId) {
+                               @PathVariable(name = "m_id", required = true) long memberId) {
         return pageService.addMember(pageId, memberId);
     }
 
     @GetMapping(path = "/deleteMember/pageId={id},memberId={m_id}")
     public PageModel deleteMember(@PathVariable(name = "id", required = true) long pageId,
-                                          @PathVariable(name = "m_id", required = true) long memberId) {
+                                  @PathVariable(name = "m_id", required = true) long memberId) {
         return pageService.deleteMember(pageId, memberId);
     }
 

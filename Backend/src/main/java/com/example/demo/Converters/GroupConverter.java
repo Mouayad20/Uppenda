@@ -17,19 +17,14 @@ public class GroupConverter {
     @Autowired
     private UserConverter userConverter;
 
-    public GroupEntity convertGroupModelToGroupEntity(GroupModel groupModel, UserEntity userEntity,
-                                                      boolean userIdFromModel) {
+    public GroupEntity convertGroupModelToGroupEntity(GroupModel groupModel) {
         GroupEntity groupEntity = new GroupEntity();
         groupEntity.setCreatedAt(groupModel.getCreatedAt());
-        if (userIdFromModel) {
-            groupEntity.setId(groupModel.getId());
-        }
         groupEntity.setDescription(groupModel.getDescription());
         groupEntity.setImagePath(groupModel.getImgPath());
         groupEntity.setName(groupModel.getName());
         groupEntity.setMembers(new ArrayList<>());
-        groupEntity.setAdmin(userEntity);
-        groupEntity.setPostEntities(postConverter.postModelListToEntityList(groupModel.getPostModels()));///////////////////
+        groupEntity.setPostEntities(postConverter.postModelListToEntityList(groupModel.getPostModels()));
         return groupEntity;
 
     }

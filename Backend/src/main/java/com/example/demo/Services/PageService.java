@@ -9,9 +9,11 @@ import com.example.demo.Models.PageModel;
 import com.example.demo.Models.PostModel;
 import com.example.demo.Models.UserModel;
 import com.example.demo.Repositories.PageRepository;
-import com.example.demo.Repositories.PostRepositroy;
+import com.example.demo.Repositories.PostRepository;
 import com.example.demo.Repositories.UserRepository;
+import com.example.demo.Security.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,7 @@ public class PageService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private PostRepositroy postRepositroy;
+    private PostRepository postRepositroy;
     @Autowired
     private UserService userService;
     @Autowired
@@ -36,18 +38,29 @@ public class PageService {
     private PostConverter postConverter;
     @Autowired
     private UserConverter userConverter;
+    @Autowired
+    private TokenUtil tokenUtil;
 
-    public PageModel add(PageModel pageModel, long adminId) {
-        UserEntity userEntity = userRepository.findById(adminId).get();
-        PageEntity pageEntity = new PageEntity();
-        pageEntity = pageConverter.convertPageModelToPageEntity(pageModel, userEntity, false);
-        // pageEntity.setCreatedAt(new Date());
+    public ResponseEntity<String> add(PageModel pageModel, String token) {
+
+        UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
+        PageEntity pageEntity = pageConverter.convertPageModelToPageEntity(pageModel);
+
+        pageEntity.setAdmin(userEntity);
+        pageEntity.getMembers().add(userEntity);
+
         pageEntity = pageRepository.save(pageEntity);
-        addMember(pageEntity.getId(), adminId);
-        for (int i = 0; i < pageModel.getMembers().size(); i++) {
-            addMember(pageEntity.getId(), pageModel.getMembers().get(i).getId());
-        }
-        return pageConverter.convertPageEntityToPageModel(pageEntity);
+        userEntity.getPages().add(pageEntity);
+        userRepository.save(userEntity);
+
+        if (pageRepository.findById(pageEntity.getId()).isPresent())
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Page created successfully");
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Problem happened");
     }
 
     public PageModel update(PageModel pageModel) {
@@ -87,7 +100,7 @@ public class PageService {
         return pageConverter.convertPageEntityToPageModel(pageEntity);
     }
 
-    public PageModel getPageById(Long id ){
+    public PageModel getPageById(Long id) {
         return pageConverter.convertPageEntityToPageModel(pageRepository.findById(id).get());
     }
 
@@ -114,7 +127,7 @@ public class PageService {
     }
 
     public List<PostModel> fetchAllPostFromPageById(Long p_id) {
-        return postConverter.postEntityListToModelList(postRepositroy.getAllPostByPageId(p_id), true, true, false, false, true);
+        return postConverter.postEntityListToModelList(postRepositroy.getPagesPosts(p_id), true, true, false, false, true);
     }
 
     public List<UserModel> fetchAllUserFromPageByPId(Long p_id) {

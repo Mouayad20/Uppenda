@@ -54,17 +54,21 @@ public class UserEntity {
     private List<MessageEntity> messages;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<AnswersEntity> answersEntities;
+    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
+    private List<PageEntity> myPages ;
+    @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
+    private List<GroupEntity> myGroups ;
 
     //////////////////////////////////////////////
     //////////////// ManyToMany //////////////////
     //////////////////////////////////////////////
 
     @ManyToMany()
-    private List<PostEntity> savedPost;
-    @ManyToMany()
-    private List<PostEntity> sharedPost;
-    @ManyToMany()
     private List<UserEntity> friends;
+    @ManyToMany(mappedBy = "savers")
+    private List<PostEntity> savedPost;
+    @ManyToMany(mappedBy = "participants")
+    private List<PostEntity> sharedPost;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<ChatEntity> chats;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -103,7 +107,9 @@ public class UserEntity {
                       List<GroupEntity> groups,
                       List<PageEntity> pages,
                       List<InterestEntity> interest,
-                      List<AnswersEntity> answersEntities) {
+                      List<AnswersEntity> answersEntities,
+                      List<PageEntity> myPages,
+                      List<GroupEntity> myGroups) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -127,6 +133,8 @@ public class UserEntity {
         this.pages = pages;
         this.interest = interest;
         this.answersEntities = answersEntities;
+        this.myPages = myPages;
+        this.myGroups = myGroups;
     }
 
     //////////////////////////////////////////////
@@ -353,16 +361,19 @@ public class UserEntity {
         this.messages = messages;
     }
 
-    @Override
-    public String toString() {
-        try {
-            return DemoApplication.objectMapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-
-            e.printStackTrace();
-        }
-        return null;
+    public List<PageEntity> getMyPages() {
+        return myPages;
     }
 
+    public void setMyPages(List<PageEntity> myPages) {
+        this.myPages = myPages;
+    }
 
+    public List<GroupEntity> getMyGroups() {
+        return myGroups;
+    }
+
+    public void setMyGroups(List<GroupEntity> myGroups) {
+        this.myGroups = myGroups;
+    }
 }

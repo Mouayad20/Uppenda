@@ -8,7 +8,7 @@ import com.example.demo.Entities.PostEntity;
 import com.example.demo.Entities.UserEntity;
 import com.example.demo.Models.CommentModel;
 import com.example.demo.Repositories.CommentRepository;
-import com.example.demo.Repositories.PostRepositroy;
+import com.example.demo.Repositories.PostRepository;
 import com.example.demo.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
     @Autowired
-    private PostRepositroy postRepositroy;
+    private PostRepository postRepositroy;
     @Autowired
     private UserRepository userRepository;
     @Autowired

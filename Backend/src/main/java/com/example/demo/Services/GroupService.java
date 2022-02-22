@@ -8,9 +8,11 @@ import com.example.demo.Models.GroupModel;
 import com.example.demo.Models.PostModel;
 import com.example.demo.Models.UserModel;
 import com.example.demo.Repositories.GroupRepository;
-import com.example.demo.Repositories.PostRepositroy;
+import com.example.demo.Repositories.PostRepository;
 import com.example.demo.Repositories.UserRepository;
+import com.example.demo.Security.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -27,25 +29,37 @@ public class GroupService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private PostRepositroy postRepositroy;
+    private PostRepository postRepositroy;
     @Autowired
     private UserService userService;
     @Autowired
     private GroupConverter groupConverter;
     @Autowired
     private PostConverter postConverter;
+    @Autowired
+    private TokenUtil tokenUtil;
 
-    public GroupModel add(long adminId, GroupModel groupModel) {
-        UserEntity userEntity = userRepository.findById(adminId).get();
-        GroupEntity groupEntity = new GroupEntity();
-        groupEntity = groupConverter.convertGroupModelToGroupEntity(groupModel, userEntity, false);
-        // groupEntity.setCreatedAt(new Date());
+    public ResponseEntity<String> add(GroupModel groupModel, String token) {
+
+        UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
+        GroupEntity groupEntity = groupConverter.convertGroupModelToGroupEntity(groupModel);
+
+        groupEntity.setAdmin(userEntity);
+        groupEntity.getMembers().add(userEntity);
+
         groupEntity = groupRepository.save(groupEntity);
-        addMembersToGroup(groupEntity.getId(), adminId);
-        for (int i = 0; i < groupModel.getMembers().size(); i++) {
-            addMembersToGroup(groupEntity.getId(), groupModel.getMembers().get(i).getId());
-        }
-        return groupConverter.convertGroupEntityToGroupModel(groupEntity);
+        userEntity.getGroups().add(groupEntity);
+        userRepository.save(userEntity);
+
+        if(groupRepository.findById(groupEntity.getId()).isPresent())
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Group created successfully");
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Problem happened");
+
     }
 
     public GroupModel addMembersToGroup(long groupId, long userId) {
@@ -112,7 +126,7 @@ public class GroupService {
     }
 
     public List<PostModel> getAllPostsInGroupByGId(Long g_id) {
-        return postConverter.postEntityListToModelList(postRepositroy.getAllPostByGroupId(g_id), true, true, false, false, true);
+        return postConverter.postEntityListToModelList(postRepositroy.getGroupsPosts(g_id), true, true, false, false, true);
     }
 
     public List<UserModel> getAllUsersInGroupByGId(Long g_id) {

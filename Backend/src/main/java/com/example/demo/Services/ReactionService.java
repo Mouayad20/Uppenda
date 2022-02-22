@@ -6,7 +6,7 @@ import com.example.demo.Entities.ReactionEntity;
 import com.example.demo.Entities.ReactionTypeEntity;
 import com.example.demo.Entities.UserEntity;
 import com.example.demo.Models.ReactionModel;
-import com.example.demo.Repositories.PostRepositroy;
+import com.example.demo.Repositories.PostRepository;
 import com.example.demo.Repositories.ReactionRepository;
 import com.example.demo.Repositories.ReactionsTypeRepository;
 import com.example.demo.Repositories.UserRepository;
@@ -21,7 +21,7 @@ public class ReactionService {
     @Autowired
     private ReactionRepository reactionRepository;
     @Autowired
-    private PostRepositroy postRepositroy;
+    private PostRepository postRepositroy;
     @Autowired
     private UserRepository userRepository;
     @Autowired
