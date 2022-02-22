@@ -65,7 +65,6 @@ public class PageService {
     public PageModel update(PageModel pageModel) {
         PageEntity pageEntity = pageRepository.findById(pageModel.getId()).get();
 
-        pageEntity.setId(pageModel.getId());
         pageEntity.setName(pageModel.getName());
         pageEntity.setDescription(pageModel.getDescription());
         pageEntity.setImgPath(pageModel.getImgPath());

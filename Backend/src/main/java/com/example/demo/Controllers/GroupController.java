@@ -25,18 +25,6 @@ public class GroupController {
         return groupService.add(groupModel, token.substring("Bearer ".length()));
     }
 
-    @PostMapping(path = "/addMember/group_id={g_id},user_id={u_id}")
-    public GroupModel addMemberTorGroup(@PathVariable(name = "g_id", required = true) long g_id,
-                                        @PathVariable(name = "u_id") long memberId) {
-        return groupService.addMembersToGroup(g_id, memberId);
-    }
-
-    @PostMapping(path = "/deleteMember/group_id={g_id},user_id={u_id}")
-    public GroupModel deleteMemberFromGroup(@PathVariable(name = "g_id", required = true) long g_id,
-                                            @PathVariable(name = "u_id", required = true) long memberId) {
-        return groupService.deleteMemberFromGroup(g_id, memberId);
-    }
-
     /* Put Request */
 
     @PutMapping(path = "/update")
@@ -46,8 +34,8 @@ public class GroupController {
 
     /* Delete Request */
 
-    @DeleteMapping(path = "/delete/Id={id}")
-    public ResponseEntity<Object> delete(@PathVariable(required = true, name = "id") long id) {
+    @DeleteMapping(path = "/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable(name = "id") Long id) {
         return groupService.delete(id);
     }
 
@@ -58,39 +46,41 @@ public class GroupController {
         return new GroupModel();
     }
 
+    @GetMapping(path = "/addMember/groupId={group_id},memberId={member_id}")
+    public ResponseEntity<String> addMember(@PathVariable(name = "group_id", required = true) Long groupId,
+                                            @PathVariable(name = "member_id", required = true) Long memberId) {
+        return groupService.addMember(groupId, memberId);
+    }
+
+    @GetMapping(path = "/deleteMember/groupId={group_id},memberId={member_id}")
+    public ResponseEntity<String> deleteMember(@PathVariable(name = "group_id", required = true) Long groupId,
+                                               @PathVariable(name = "member_id", required = true) Long memberId) {
+        return groupService.deleteMember(groupId, memberId);
+    }
+
+    @GetMapping(path = "/getGroup/{id}")
+    public GroupModel getGroup(@PathVariable(name = "id", required = true) Long id) {
+        return groupService.getGroup(id);
+    }
+
     @GetMapping(path = "/getAll")
-    public List<GroupModel> getAllGroups() {
-        return groupService.getAllGroups();
+    public List<GroupModel> getAll() {
+        return groupService.getAll();
     }
 
-    @GetMapping(path = "/getGroup/Id={id}")
-    public GroupModel findById(@PathVariable(name = "id", required = true) long id) {
-        return groupService.findById(id);
+    @GetMapping("/getGroupPosts/{group_id}")
+    public List<PostModel> getGroupPosts(@PathVariable(name = "group_id", required = true) Long group_id) {
+        return groupService.getGroupPosts(group_id);
     }
 
-    @GetMapping(path = "/getGroup/Name={name}")
-    public GroupModel findByName(@PathVariable(required = true, name = "name") String name) {
-        return groupService.findByName(name);
-    }
-
-    @GetMapping(path = "/changeAdmin/groupId={group_id},adminId={admin_id}")
-    public GroupModel changeAdmin(@PathVariable(name = "group_id", required = true) long id,
-                                  @PathVariable(required = true, name = "admin_id") long adminId) {
-        return groupService.changeAdmin(id, adminId);
-    }
-
-    @GetMapping("/getAllPostsInGroupByGId/{g_id}")
-    public List<PostModel> getAllPostsInGroupByGId(@PathVariable(name = "g_id", required = true) Long g_id) {
-        return groupService.getAllPostsInGroupByGId(g_id);
-    }
-
-    @GetMapping("/getAllUsersInGroupByGId/{g_id}")
-    public List<UserModel> getAllUsersInGroupByGId(@PathVariable(name = "g_id", required = true) Long g_id) {
-        return groupService.getAllUsersInGroupByGId(g_id);
+    @GetMapping("/getGroupUsers/{group_id}")
+    public List<UserModel> getGroupUsers(@PathVariable(name = "group_id", required = true) Long group_id) {
+        return groupService.getGroupUsers(group_id);
     }
 
     @GetMapping(path = "/search/word={word}")
     public List<GroupModel> search(@PathVariable String word) {
         return groupService.search(word);
     }
+
 }

@@ -4,11 +4,11 @@ import com.example.demo.Converters.GroupConverter;
 import com.example.demo.Converters.PageConverter;
 import com.example.demo.Converters.PostConverter;
 import com.example.demo.Converters.UserConverter;
-import com.example.demo.Entities.GroupEntity;
-import com.example.demo.Entities.PageEntity;
 import com.example.demo.Entities.PostEntity;
 import com.example.demo.Entities.UserEntity;
-import com.example.demo.Models.*;
+import com.example.demo.Models.PostModel;
+import com.example.demo.Models.SignInModel;
+import com.example.demo.Models.UserModel;
 import com.example.demo.Repositories.GroupRepository;
 import com.example.demo.Repositories.PageRepository;
 import com.example.demo.Repositories.PostRepository;
@@ -141,11 +141,11 @@ public class UserService implements UserDetailsService {
         if (!userRepository.findById(userEntity.getId()).isPresent())
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body("Page deleted successfully ");
+                    .body("User deleted successfully ");
         else
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
-                    .body("Page not deleted, problem happened");
+                    .body("User not deleted, problem happened");
 
     }
 
@@ -376,31 +376,6 @@ public class UserService implements UserDetailsService {
         }
         return postModelList;
     }
-
-    ////////// group methods
-
-    public GroupModel enterIntoGroup(long userId, GroupEntity groupEntity) {
-        UserEntity userEntity = userRepository.findById(userId).get();
-        if (!userEntity.getGroups().contains(groupEntity)) {
-            userEntity.getGroups().add(groupEntity);
-            userRepository.save(userEntity);
-        }
-        GroupModel groupModel = groupConverter
-                .convertGroupEntityToGroupModel(groupRepository.findById(groupEntity.getId()).get());
-        return groupModel;
-    }
-
-    public boolean exitFromGroup(long userId, GroupEntity groupEntity) {
-        UserEntity userEntity = userRepository.findById(userId).get();
-        if (userEntity.getGroups().contains(groupEntity)) {
-            userEntity.getGroups().remove(groupEntity);
-            userEntity = userRepository.save(userEntity);
-            return true;
-        } else
-            return false;
-
-    }
-
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

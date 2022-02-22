@@ -29,7 +29,7 @@ public class GroupEntity {
     @ManyToOne()
     private UserEntity admin;
 
-    @ManyToMany(mappedBy = "groups")
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<UserEntity> members;
 
     public GroupEntity() {

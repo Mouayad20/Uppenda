@@ -22,7 +22,7 @@ public interface PostRepository extends CrudRepository<PostEntity, Long> {
     public List<PostEntity> getUserPosts(@Param("u_id") Long u_id);
 
     @Query(value = "SELECT * FROM post WHERE g_id=:g_id", nativeQuery = true)
-    public List<PostEntity> getGroupsPosts(@Param("g_id") Long g_id);
+    public List<PostEntity> getGroupPosts(@Param("g_id") Long g_id);
 
     @Query(value = "SELECT * FROM post WHERE page_id=:p_id", nativeQuery = true)
     public List<PostEntity> getPagePosts(@Param("p_id") Long p_id);

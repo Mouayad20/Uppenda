@@ -70,7 +70,7 @@ public class UserEntity {
     private List<ChatEntity> chats;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<ChatEntity> hiddenChats;
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(mappedBy = "members")
     private List<GroupEntity> groups;
     @ManyToMany(mappedBy = "members")
     private List<PageEntity> pages;
