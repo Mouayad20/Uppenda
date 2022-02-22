@@ -20,7 +20,7 @@ public class PageController {
     /* Post Request */
 
     @PostMapping(path = "/add")
-    public ResponseEntity<String> add(@RequestBody(required = true) PageModel pageModel,
+    public ResponseEntity<String> add(@RequestBody PageModel pageModel,
                                       @RequestHeader("Authorization") String token) {
         return pageService.add(pageModel, token.substring("Bearer ".length()));
     }
@@ -34,7 +34,7 @@ public class PageController {
 
     /* Delete Request */
 
-    @DeleteMapping(path = "/delete/Id={id}")
+    @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<Object> delete(@PathVariable(required = true, name = "id") long id) {
         return pageService.delete(id);
     }
@@ -46,42 +46,36 @@ public class PageController {
         return new PageModel();
     }
 
-    @GetMapping(path = "/addMember/pageId={id},memberId={m_id}")
-    public PageModel addMember(@PathVariable(name = "id", required = true) long pageId,
-                               @PathVariable(name = "m_id", required = true) long memberId) {
+    @GetMapping(path = "/addMember/pageId={page_id},memberId={member_id}")
+    public ResponseEntity<String> addMember(@PathVariable(name = "page_id", required = true) Long pageId,
+                                            @PathVariable(name = "member_id", required = true) Long memberId) {
         return pageService.addMember(pageId, memberId);
     }
 
-    @GetMapping(path = "/deleteMember/pageId={id},memberId={m_id}")
-    public PageModel deleteMember(@PathVariable(name = "id", required = true) long pageId,
-                                  @PathVariable(name = "m_id", required = true) long memberId) {
+    @GetMapping(path = "/deleteMember/pageId={page_id},memberId={member_id}")
+    public ResponseEntity<String> deleteMember(@PathVariable(name = "page_id", required = true) Long pageId,
+                                               @PathVariable(name = "member_id", required = true) Long memberId) {
         return pageService.deleteMember(pageId, memberId);
     }
 
-    @GetMapping(path = "/getPageById/id={id}")
-    public PageModel getPageById(@PathVariable Long id) {
-        return pageService.getPageById(id);
+    @GetMapping(path = "/getPage/{id}")
+    public ResponseEntity<Object> getPage(@PathVariable(name = "id") Long id) {
+        return pageService.getPage(id);
     }
 
     @GetMapping(path = "/getAll")
     public List<PageModel> getAll() {
-        return pageService.getAllPages();
+        return pageService.getAll();
     }
 
-    @GetMapping(path = "/changeAdmin/pageId={page_id},adminId={admin_id}")
-    public PageModel changeAdmin(@PathVariable(name = "page_id", required = true) long id,
-                                 @PathVariable(required = true, name = "admin_id") long adminId) {
-        return pageService.changeAdmin(id, adminId);
+    @GetMapping("/getPagePosts/{page_id}")
+    public List<PostModel> getPagePosts(@PathVariable(name = "page_id", required = true) Long page_id) {
+        return pageService.getPagePosts(page_id);
     }
 
-    @GetMapping("/getAllPostsInPageByPId/{p_id}")
-    public List<PostModel> getAllPostsInPageByPId(@PathVariable(name = "p_id", required = true) Long p_id) {
-        return pageService.fetchAllPostFromPageById(p_id);
-    }
-
-    @GetMapping("/getAllUsersInPageByPId/{p_id}")
-    public List<UserModel> getAllUsersInGroupByGId(@PathVariable(name = "p_id", required = true) Long p_id) {
-        return pageService.fetchAllUserFromPageByPId(p_id);
+    @GetMapping("/getPageUsers/{page_id}")
+    public List<UserModel> getPageUsers(@PathVariable(name = "page_id", required = true) Long page_id) {
+        return pageService.getPageUsers(page_id);
     }
 
     @GetMapping(path = "/search/word={word}")

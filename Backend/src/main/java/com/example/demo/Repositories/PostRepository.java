@@ -25,7 +25,7 @@ public interface PostRepository extends CrudRepository<PostEntity, Long> {
     public List<PostEntity> getGroupsPosts(@Param("g_id") Long g_id);
 
     @Query(value = "SELECT * FROM post WHERE page_id=:p_id", nativeQuery = true)
-    public List<PostEntity> getPagesPosts(@Param("p_id") Long p_id);
+    public List<PostEntity> getPagePosts(@Param("p_id") Long p_id);
 
     /*
     "SELECT * FROM post WHERE u_id=:u_id OR ( u_id=:u_id AND g_id=(SELECT groups_id FROM users_groups WHERE members_id=:u_id)) OR ( u_id=:u_id AND page_id=(SELECT pages_id FROM users_pages WHERE members_id=:u_id)) ORDER BY `post`.`created_at` DESC"

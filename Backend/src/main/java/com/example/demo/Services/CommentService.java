@@ -26,8 +26,6 @@ public class CommentService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private InterestService interestService;
-    @Autowired
     private CommentConverter commentConverter;
     @Autowired
     private PostConverter postConverter;
@@ -39,7 +37,6 @@ public class CommentService {
         UserEntity userEntity = userRepository.findById(u_id).get();
         PostEntity postEntity = postRepositroy.findById(post_id).get();
 
-        interestService.addInterest(postEntity, userEntity);
         commentModel.setPostModel(postConverter.postEntityToModel(postEntity, false, false, true, true, false));
         commentModel.setUserModel(userConverter.convertUserEntityToUserModel(userEntity));
         CommentEntity savedEntity = commentConverter.commentModelToEntity(commentModel);

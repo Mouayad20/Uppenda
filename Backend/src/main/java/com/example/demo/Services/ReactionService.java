@@ -25,8 +25,6 @@ public class ReactionService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private InterestService interestService;
-    @Autowired
     private ReactionsTypeRepository reactionsTypeRepository;
     @Autowired
     private ReactionConverter reactionConverter;
@@ -44,8 +42,6 @@ public class ReactionService {
         reactionEntity.setPostEntity(postEntity);
         reactionEntity.setUserEntity(userEntity);
         reactionEntity.setReaction(reactionsEntity);
-
-        interestService.addInterest(postEntity, userEntity);
 
         return reactionConverter.reactionEntityToModel(reactionRepository.save(reactionEntity), false, true);
 

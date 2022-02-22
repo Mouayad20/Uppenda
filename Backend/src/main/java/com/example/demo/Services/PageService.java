@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PageService {
@@ -29,7 +28,7 @@ public class PageService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private PostRepository postRepositroy;
+    private PostRepository postRepository;
     @Autowired
     private UserService userService;
     @Autowired
@@ -64,78 +63,100 @@ public class PageService {
     }
 
     public PageModel update(PageModel pageModel) {
-        PageEntity pageEntity = new PageEntity();
+        PageEntity pageEntity = pageRepository.findById(pageModel.getId()).get();
+
         pageEntity.setId(pageModel.getId());
+        pageEntity.setName(pageModel.getName());
         pageEntity.setDescription(pageModel.getDescription());
         pageEntity.setImgPath(pageModel.getImgPath());
-        pageEntity.setName(pageModel.getName());
-        pageEntity = pageRepository.save(pageEntity);
 
+        pageEntity = pageRepository.save(pageEntity);
         return pageConverter.convertPageEntityToPageModel(pageEntity);
     }
 
     public ResponseEntity<Object> delete(long id) {
-        Optional<PageEntity> pageEntity = pageRepository.findById(id);
-        if (!pageEntity.isEmpty()) {
-            for (UserEntity userEntity : pageEntity.get().getMembers()) {
-                userService.exitFromPage(userEntity.getId(), pageEntity.get());
-            }
-            pageRepository.deleteById(id);
-            if (pageRepository.findById(id).isPresent())
-                return ResponseEntity.unprocessableEntity().body("deleat operation not allawed");
-            else
-                return ResponseEntity.ok("sucsessfuly deleated");
-        } else
-            return ResponseEntity.ok("page is not found");
+        pageRepository.deleteById(id);
+        if (!pageRepository.findById(id).isPresent())
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Page deleted successfully ");
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Page not deleted, problem happened");
     }
 
-    public PageModel addMember(long id, long userId) {
-        PageEntity pageEntity = pageRepository.findById(id).get();
-        return userService.enterIntoPage(userId, pageEntity);
+    public ResponseEntity<String> addMember(Long pageId, Long memberId) {
+
+        PageEntity pageEntity = pageRepository.findById(pageId).get();
+        UserEntity userEntity = userRepository.findById(memberId).get();
+
+        if (!pageEntity.getMembers().contains(userEntity)) {
+            pageEntity.getMembers().add(userEntity);
+        }
+        PageEntity savedPage = pageRepository.save(pageEntity);
+
+        if (savedPage.getMembers().contains(userEntity))
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Member added successfully");
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Problem happened");
     }
 
-    public PageModel deleteMember(long id, long memberId) {
-        PageEntity pageEntity = pageRepository.findById(id).get();
-        userService.exitFromPage(memberId, pageEntity);
-        return pageConverter.convertPageEntityToPageModel(pageEntity);
+    public ResponseEntity<String> deleteMember(Long pageId, Long memberId) {
+
+        PageEntity pageEntity = pageRepository.findById(pageId).get();
+        UserEntity userEntity = userRepository.findById(memberId).get();
+
+        if (pageEntity.getMembers().contains(userEntity)) {
+            pageEntity.getMembers().remove(userEntity);
+        }
+
+        PageEntity savedPage = pageRepository.save(pageEntity);
+
+        if (!savedPage.getMembers().contains(userEntity))
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Member removed successfully");
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Problem happened");
     }
 
-    public PageModel getPageById(Long id) {
-        return pageConverter.convertPageEntityToPageModel(pageRepository.findById(id).get());
+    public ResponseEntity<Object> getPage(Long id) {
+        if (pageRepository.findById(id).isPresent())
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(pageConverter.convertPageEntityToPageModel(pageRepository.findById(id).get()));
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("This Page not exist");
     }
 
-    public List<PageModel> getAllPages() {
+    public List<PageModel> getAll() {
         List<PageModel> pages = new ArrayList<>();
-        for (PageEntity pageEntity : pageRepository.getAllPages()) {
+        for (PageEntity pageEntity : pageRepository.getAll()) {
             pages.add(pageConverter.convertPageEntityToPageModel(pageEntity));
         }
         return pages;
     }
 
-    public PageModel changeAdmin(long id, long adminId) {
-        Optional<PageEntity> pageEntity = pageRepository.findById(id);
-        Optional<UserEntity> userEntity = userRepository.findById(adminId);
-        PageEntity savedEntity = new PageEntity();
-        ;
-        if (!pageEntity.isEmpty() && !userEntity.isEmpty()) {
-            if (pageEntity.get().getAdmin().getId() != userEntity.get().getId()) {
-                pageEntity.get().setAdmin(userEntity.get());
-                savedEntity = pageRepository.save(pageEntity.get());
-            }
-        }
-        return pageConverter.convertPageEntityToPageModel(savedEntity);
+    public List<PostModel> getPagePosts(Long page_id) {
+        return postConverter.postEntityListToModelList(postRepository.getPagePosts(page_id),
+                true, true, false, false, true);
     }
 
-    public List<PostModel> fetchAllPostFromPageById(Long p_id) {
-        return postConverter.postEntityListToModelList(postRepositroy.getPagesPosts(p_id), true, true, false, false, true);
-    }
-
-    public List<UserModel> fetchAllUserFromPageByPId(Long p_id) {
-        return userConverter.convertUserListEntityToListModel(pageRepository.findById(p_id).get().getMembers());
+    public List<UserModel> getPageUsers(Long page_id) {
+        return userConverter.convertUserListEntityToListModel(pageRepository.findById(page_id).get().getMembers());
     }
 
     public List<PageModel> search(String word) {
-        return pageConverter.convertPageEntityListToPageModelList(pageRepository.searchPage(word));
+        return pageConverter.convertPageEntityListToPageModelList(pageRepository.search(word));
     }
 
 }

@@ -73,16 +73,6 @@ public class PostController {
         return postService.getUserPosts(email);
     }
 
-    @GetMapping(path = "/getGroupsPosts/group_id={id}")
-    public List<PostModel> getGroupsPosts(@PathVariable(name = "id", required = true) long id) {
-        return postService.getGroupsPosts(id);
-    }
-
-    @GetMapping(path = "/getPagesPosts/page_id={id}")
-    public List<PostModel> getPagesPosts(@PathVariable(name = "id", required = true) long id) {
-        return postService.getPagesPosts(id);
-    }
-
     @GetMapping(path = "/getSummery")
     public List<PostModel> getSummery(@RequestHeader("Authorization") String token) {
         return postService.getSummery(token.substring("Bearer ".length()));

@@ -52,7 +52,7 @@ public class UserController {
     /* Delete Request */
 
     @DeleteMapping("/delete")
-    public boolean delete(@RequestHeader("Authorization") String token) {
+    public ResponseEntity<String> delete(@RequestHeader("Authorization") String token) {
         return userService.delete(token.substring("Bearer ".length()));
     }
 

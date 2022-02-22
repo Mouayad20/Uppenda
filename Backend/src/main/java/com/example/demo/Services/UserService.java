@@ -135,11 +135,18 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public boolean delete(String token) {
+    public ResponseEntity<String> delete(String token) {
         UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
         userRepository.delete(userEntity);
-        if (userRepository.findById(userEntity.getId()).isPresent()) return false;
-        else return true;
+        if (!userRepository.findById(userEntity.getId()).isPresent())
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Page deleted successfully ");
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Page not deleted, problem happened");
+
     }
 
     public List<UserModel> search(String word) {
@@ -368,30 +375,6 @@ public class UserService implements UserDetailsService {
                     true, true, true, true, true));
         }
         return postModelList;
-    }
-
-    ////////// page methods
-
-    public PageModel enterIntoPage(long userId, PageEntity pageEntity) {
-        UserEntity userEntity = userRepository.findById(userId).get();
-        if (!userEntity.getPages().contains(pageEntity)) {
-            userEntity.getPages().add(pageEntity);
-            userRepository.save(userEntity);
-        }
-        PageModel pageModel = pageConverter
-                .convertPageEntityToPageModel(pageRepository.findById(pageEntity.getId()).get());
-        return pageModel;
-    }
-
-    public boolean exitFromPage(long id, PageEntity pageEntity) {
-        UserEntity userEntity = userRepository.findById(id).get();
-        if (userEntity.getPages().contains(pageEntity)) {
-            userEntity.getPages().remove(pageEntity);
-            userEntity = userRepository.save(userEntity);
-            return true;
-        } else
-            return false;
-
     }
 
     ////////// group methods

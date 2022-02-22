@@ -1,8 +1,6 @@
 package com.example.demo.Entities;
 
-import com.example.demo.DemoApplication;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -39,7 +37,7 @@ public class PageEntity {
     //////////////// ManyToMany  /////////////////
     //////////////////////////////////////////////
 
-    @ManyToMany(mappedBy = "pages")
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<UserEntity> members;
 
     //////////////////////////////////////////////
@@ -108,16 +106,6 @@ public class PageEntity {
 
     public void setAdmin(UserEntity admin) {
         this.admin = admin;
-    }
-
-    @Override
-    public String toString() {
-        try {
-            return DemoApplication.objectMapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 
 }

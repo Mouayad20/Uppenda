@@ -7,18 +7,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface PageRepository extends CrudRepository<PageEntity, Long> {
 
     @Query(value = "SELECT * FROM `pages` WHERE 1", nativeQuery = true)
-    List<PageEntity> getAllPages();
-
-    @Query(value = "SELECT * FROM `pages` WHERE `admin_id` = :admin_id", nativeQuery = true)
-    Optional<List<PageEntity>> getAllPagesThatUserIsAdimnIn(@Param("admin_id") Long id);
+    List<PageEntity> getAll();
 
     @Query(value = "SELECT * FROM pages WHERE  name LIKE %:namePage% ", nativeQuery = true)
-    public List<PageEntity> searchPage(@Param("namePage") String namePage);
+    List<PageEntity> search(@Param("namePage") String namePage);
+
+    //    @Query(value = "SELECT * FROM `pages` WHERE `admin_id` = :admin_id", nativeQuery = true)
+    //    Optional<List<PageEntity>> getAllPagesThatUserIsAdimnIn(@Param("admin_id") Long id);
 
 }

@@ -1,10 +1,8 @@
 package com.example.demo.Entities;
 
-import com.example.demo.DemoApplication;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,8 +13,7 @@ import java.util.List;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class UserEntity {
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    List<InterestEntity> interest;
+
     @Id
     @GeneratedValue(
             strategy = GenerationType.IDENTITY
@@ -55,9 +52,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<AnswersEntity> answersEntities;
     @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
-    private List<PageEntity> myPages ;
+    private List<PageEntity> myPages;
     @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
-    private List<GroupEntity> myGroups ;
+    private List<GroupEntity> myGroups;
 
     //////////////////////////////////////////////
     //////////////// ManyToMany //////////////////
@@ -75,7 +72,7 @@ public class UserEntity {
     private List<ChatEntity> hiddenChats;
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<GroupEntity> groups;
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(mappedBy = "members")
     private List<PageEntity> pages;
 
     //////////////////////////////////////////////
@@ -106,7 +103,6 @@ public class UserEntity {
                       List<UserEntity> friends,
                       List<GroupEntity> groups,
                       List<PageEntity> pages,
-                      List<InterestEntity> interest,
                       List<AnswersEntity> answersEntities,
                       List<PageEntity> myPages,
                       List<GroupEntity> myGroups) {
@@ -131,7 +127,6 @@ public class UserEntity {
         this.friends = friends;
         this.groups = groups;
         this.pages = pages;
-        this.interest = interest;
         this.answersEntities = answersEntities;
         this.myPages = myPages;
         this.myGroups = myGroups;
@@ -311,14 +306,6 @@ public class UserEntity {
 
     public void setPages(List<PageEntity> pages) {
         this.pages = pages;
-    }
-
-    public List<InterestEntity> getInterest() {
-        return this.interest;
-    }
-
-    public void setInterest(List<InterestEntity> interest) {
-        this.interest = interest;
     }
 
     public List<AnswersEntity> getAnswersEntities() {

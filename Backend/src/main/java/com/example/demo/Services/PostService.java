@@ -171,15 +171,6 @@ public class PostService {
                 true, true, true, true, true);
     }
 
-    public List<PostModel> getGroupsPosts(Long id) {
-        return postConverter.postEntityListToModelList(postRepositroy.getGroupsPosts(id),
-                true, true, true, true, true);
-    }
-
-    public List<PostModel> getPagesPosts(Long id) {
-        return postConverter.postEntityListToModelList(postRepositroy.getPagesPosts(id), true, true, true, true, true);
-    }
-
     public List<PostModel> getSummery(String token) {
         return postConverter.postEntityListToModelList(postRepositroy.getSummery(userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get().getId()),
                 true, true, true, true, true);
