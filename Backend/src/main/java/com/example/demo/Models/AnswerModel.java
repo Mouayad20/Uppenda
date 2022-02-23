@@ -52,13 +52,4 @@ public class AnswerModel {
         this.question = question;
     }
 
-    @Override
-    public String toString() {
-        try {
-            return DemoApplication.objectMapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
