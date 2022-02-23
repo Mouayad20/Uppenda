@@ -21,10 +21,10 @@ public class DemoApplication {
 
 /*
 
-0xFFFB71C1C Love
-0xFF000000 Angry
-0xFFF9A825 Sad
-0xFF9C27B0  Like
-0xFFF06292 Fun
+0xFFFB71C1C  Love
+0xFF000000   Angry
+0xFFF9A825   Sad
+0xFF9C27B0   Like
+0xFFF06292   Fun
 
 */

@@ -64,9 +64,8 @@ public class CommentService {
     }
 
     public ResponseEntity<String> delete(Long id) {
-        CommentEntity commentEntity = commentRepository.findById(id).get();
         commentRepository.deleteById(id);
-        if (!commentRepository.findById(commentEntity.getId()).isPresent())
+        if (!commentRepository.findById(id).isPresent())
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body("Comment deleted successfully ");

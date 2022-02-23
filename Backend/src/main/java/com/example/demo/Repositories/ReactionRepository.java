@@ -12,6 +12,6 @@ import java.util.List;
 public interface ReactionRepository extends CrudRepository<ReactionEntity, Long> {
 
     @Query(value = "SELECT * FROM reactions WHERE post_id=:post_id", nativeQuery = true)
-    public List<ReactionEntity> getAllReactionsByPostId(@Param("post_id") Long post_id);
+    public List<ReactionEntity> getReactionsPost(@Param("post_id") Long post_id);
 
 }
