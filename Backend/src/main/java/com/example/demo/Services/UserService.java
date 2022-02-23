@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private PageRepository pageRepository;
     @Autowired
-    private PostRepository postRepositroy;
+    private PostRepository postRepository;
     @Autowired
     private GroupService groupService;
     @Autowired
@@ -146,7 +146,6 @@ public class UserService implements UserDetailsService {
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
                     .body("User not deleted, problem happened");
-
     }
 
     public List<UserModel> search(String word) {
@@ -243,18 +242,18 @@ public class UserService implements UserDetailsService {
 
         UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
 
-        if (!postRepositroy.findById(post_id).isPresent())
+        if (!postRepository.findById(post_id).isPresent())
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
                     .body("This post is not exist");
 
-        PostEntity postEntity = postRepositroy.findById(post_id).get();
+        PostEntity postEntity = postRepository.findById(post_id).get();
 
         userEntity.getSavedPost().add(postEntity);
         postEntity.getSavers().add(userEntity);
 
         UserEntity savedUser = userRepository.save(userEntity);
-        PostEntity savedPost = postRepositroy.save(postEntity);
+        PostEntity savedPost = postRepository.save(postEntity);
 
         if (savedUser.getSavedPost().contains(savedPost))
             return ResponseEntity
@@ -271,18 +270,18 @@ public class UserService implements UserDetailsService {
 
         UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
 
-        if (!postRepositroy.findById(post_id).isPresent())
+        if (!postRepository.findById(post_id).isPresent())
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
                     .body("This post is not exist");
 
-        PostEntity postEntity = postRepositroy.findById(post_id).get();
+        PostEntity postEntity = postRepository.findById(post_id).get();
 
         userEntity.getSavedPost().remove(postEntity);
         postEntity.getSavers().remove(userEntity);
 
         UserEntity savedUser = userRepository.save(userEntity);
-        PostEntity savedPost = postRepositroy.save(postEntity);
+        PostEntity savedPost = postRepository.save(postEntity);
 
         if (!savedUser.getSavedPost().contains(savedPost))
             return ResponseEntity
@@ -301,7 +300,7 @@ public class UserService implements UserDetailsService {
         List<Long> list = userRepository.getALlSavedPost(userEntity.getId());
         List<PostModel> postModelList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            postModelList.add(postConverter.postEntityToModel(postRepositroy.findById(list.get(i)).get(),
+            postModelList.add(postConverter.postEntityToModel(postRepository.findById(list.get(i)).get(),
                     true, true, true, true, true));
         }
         return postModelList;
@@ -313,18 +312,18 @@ public class UserService implements UserDetailsService {
 
         UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
 
-        if (!postRepositroy.findById(post_id).isPresent())
+        if (!postRepository.findById(post_id).isPresent())
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
                     .body("This post is not exist");
 
-        PostEntity postEntity = postRepositroy.findById(post_id).get();
+        PostEntity postEntity = postRepository.findById(post_id).get();
 
         userEntity.getSharedPost().add(postEntity);
         postEntity.getParticipants().add(userEntity);
 
         UserEntity savedUser = userRepository.save(userEntity);
-        PostEntity sharedPost = postRepositroy.save(postEntity);
+        PostEntity sharedPost = postRepository.save(postEntity);
 
         if (savedUser.getSharedPost().contains(sharedPost))
             return ResponseEntity
@@ -340,18 +339,18 @@ public class UserService implements UserDetailsService {
 
         UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
 
-        if (!postRepositroy.findById(post_id).isPresent())
+        if (!postRepository.findById(post_id).isPresent())
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
                     .body("This post is not exist");
 
-        PostEntity postEntity = postRepositroy.findById(post_id).get();
+        PostEntity postEntity = postRepository.findById(post_id).get();
 
         userEntity.getSharedPost().remove(postEntity);
         postEntity.getParticipants().remove(userEntity);
 
         UserEntity savedUser = userRepository.save(userEntity);
-        PostEntity sharedPost = postRepositroy.save(postEntity);
+        PostEntity sharedPost = postRepository.save(postEntity);
 
         if (!savedUser.getSharedPost().contains(sharedPost))
             return ResponseEntity
@@ -371,7 +370,7 @@ public class UserService implements UserDetailsService {
         List<Long> list = userRepository.getALlSharedPost(userEntity.getId());
         List<PostModel> postModelList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            postModelList.add(postConverter.postEntityToModel(postRepositroy.findById(list.get(i)).get(),
+            postModelList.add(postConverter.postEntityToModel(postRepository.findById(list.get(i)).get(),
                     true, true, true, true, true));
         }
         return postModelList;

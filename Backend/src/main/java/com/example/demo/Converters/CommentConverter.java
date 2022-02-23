@@ -23,11 +23,10 @@ public class CommentConverter {
         commentEntity.setContent(commentModel.getContent());
         commentEntity.setImage_path(commentModel.getImagePath());
         commentEntity.setCreatedAt(commentModel.getCreatedAt());
-        commentEntity.setPostEntity(postConverter.postModelToEntity(commentModel.getPostModel()));
-        commentEntity.setUserEntity(userConverter.convertUserModelToUserEntity(commentModel.getUserModel(), true)); /////////////////////////////////////// true
-        /////////////////////////////////////// or
-        /////////////////////////////////////// false
-        /////////////////////////////////////// ???
+        if (commentModel.getPostModel() != null)
+            commentEntity.setPostEntity(postConverter.postModelToEntity(commentModel.getPostModel()));
+        if (commentModel.getUserModel() != null)
+            commentEntity.setUserEntity(userConverter.convertUserModelToUserEntity(commentModel.getUserModel(), true));
         return commentEntity;
 
     }

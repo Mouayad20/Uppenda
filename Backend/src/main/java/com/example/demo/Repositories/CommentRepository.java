@@ -12,5 +12,5 @@ import java.util.List;
 public interface CommentRepository extends CrudRepository<CommentEntity, Long> {
 
     @Query(value = "SELECT * FROM comment WHERE post_id = :post_id", nativeQuery = true)
-    List<CommentEntity> getAllCommentByPostId(@Param("post_id") Long post_id);
+    List<CommentEntity> getCommentsPost(@Param("post_id") Long post_id);
 }

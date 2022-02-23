@@ -4,13 +4,14 @@ import com.example.demo.Converters.CommentConverter;
 import com.example.demo.Converters.PostConverter;
 import com.example.demo.Converters.UserConverter;
 import com.example.demo.Entities.CommentEntity;
-import com.example.demo.Entities.PostEntity;
-import com.example.demo.Entities.UserEntity;
 import com.example.demo.Models.CommentModel;
 import com.example.demo.Repositories.CommentRepository;
 import com.example.demo.Repositories.PostRepository;
 import com.example.demo.Repositories.UserRepository;
+import com.example.demo.Security.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -22,7 +23,7 @@ public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
     @Autowired
-    private PostRepository postRepositroy;
+    private PostRepository postRepository;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -31,17 +32,26 @@ public class CommentService {
     private PostConverter postConverter;
     @Autowired
     private UserConverter userConverter;
+    @Autowired
+    private TokenUtil tokenUtil;
 
-    public CommentModel add(CommentModel commentModel, Long post_id, Long u_id) {
+    public ResponseEntity<String> add(CommentModel commentModel, Long post_id, String token) {
 
-        UserEntity userEntity = userRepository.findById(u_id).get();
-        PostEntity postEntity = postRepositroy.findById(post_id).get();
+        CommentEntity commentEntity = commentConverter.commentModelToEntity(commentModel);
 
-        commentModel.setPostModel(postConverter.postEntityToModel(postEntity, false, false, true, true, false));
-        commentModel.setUserModel(userConverter.convertUserEntityToUserModel(userEntity));
-        CommentEntity savedEntity = commentConverter.commentModelToEntity(commentModel);
-        savedEntity = commentRepository.save(savedEntity);
-        return commentConverter.commentEntityToModel(savedEntity, false);
+        commentEntity.setPostEntity(postRepository.findById(post_id).get());
+        commentEntity.setUserEntity(userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get());
+
+        CommentEntity savedEntity = commentRepository.save(commentEntity);
+
+        if (commentRepository.findById(savedEntity.getId()).isPresent()) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Comment added successfully");
+        } else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Problem happened");
 
     }
 
@@ -53,14 +63,21 @@ public class CommentService {
         return commentConverter.commentEntityToModel(commentRepository.save(commentEntity), false);
     }
 
-    public CommentModel delete(Long id) {
+    public ResponseEntity<String> delete(Long id) {
         CommentEntity commentEntity = commentRepository.findById(id).get();
         commentRepository.deleteById(id);
-        return commentConverter.commentEntityToModel(commentEntity, false);
+        if (!commentRepository.findById(commentEntity.getId()).isPresent())
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Comment deleted successfully ");
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Comment not deleted, problem happened");
     }
 
-    public List<CommentModel> fetchAllCommentByPostId(Long post_id) {
-        return commentConverter.commentEntityListToModelList(commentRepository.getAllCommentByPostId(post_id));
+    public List<CommentModel> getCommentsPost(Long post_id) {
+        return commentConverter.commentEntityListToModelList(commentRepository.getCommentsPost(post_id));
 
     }
 
