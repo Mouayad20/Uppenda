@@ -3,11 +3,13 @@ package com.example.demo.Services;
 import com.example.demo.Converters.GroupConverter;
 import com.example.demo.Converters.PostConverter;
 import com.example.demo.Converters.UserConverter;
+import com.example.demo.Entities.ChatEntity;
 import com.example.demo.Entities.GroupEntity;
 import com.example.demo.Entities.UserEntity;
 import com.example.demo.Models.GroupModel;
 import com.example.demo.Models.PostModel;
 import com.example.demo.Models.UserModel;
+import com.example.demo.Repositories.ChatRepository;
 import com.example.demo.Repositories.GroupRepository;
 import com.example.demo.Repositories.PostRepository;
 import com.example.demo.Repositories.UserRepository;
@@ -39,6 +41,8 @@ public class GroupService {
     @Autowired
     private UserConverter userConverter;
     @Autowired
+    private ChatRepository chatRepository;
+    @Autowired
     private TokenUtil tokenUtil;
 
     public ResponseEntity<String> add(GroupModel groupModel, String token) {
@@ -46,12 +50,18 @@ public class GroupService {
         UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
         GroupEntity groupEntity = groupConverter.convertGroupModelToGroupEntity(groupModel);
 
+        ChatEntity chatEntity = new ChatEntity();
+
         groupEntity.setAdmin(userEntity);
         groupEntity.getMembers().add(userEntity);
 
         groupEntity = groupRepository.save(groupEntity);
         userEntity.getGroups().add(groupEntity);
+        chatEntity.setGroupEntity(groupEntity);
         userRepository.save(userEntity);
+        chatRepository.save(chatEntity);
+
+
 
         if (groupRepository.findById(groupEntity.getId()).isPresent())
             return ResponseEntity

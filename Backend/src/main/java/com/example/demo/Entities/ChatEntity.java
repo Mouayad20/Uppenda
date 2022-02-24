@@ -1,11 +1,9 @@
 package com.example.demo.Entities;
 
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,33 +16,33 @@ public class ChatEntity {
             strategy = GenerationType.IDENTITY
     )
     private Long id;
-    private String tittleGroup;
-    private String imageGroup;
-
-    @ManyToMany(mappedBy = "chats")
-    private List<UserEntity> users;
-
-    @ManyToMany(mappedBy = "hiddenChats")
-    private List<UserEntity> usersHiddenChats;
+    private boolean isHidden1;
+    private boolean isHidden2;
+    @OneToOne
+    private GroupEntity groupEntity;
 
     @OneToMany(mappedBy = "chatEntity", cascade = CascadeType.ALL)
     private List<MessageEntity> messages;
 
+    @ManyToOne()
+    private UserEntity user1;
+
+    @ManyToOne()
+    private UserEntity user2;
+
+
+
     public ChatEntity() {
-        users = new ArrayList<>();
     }
 
-    public ChatEntity(Long id, String tittleGroup, String imageGroup, List<UserEntity> users, List<UserEntity> usersHiddenChats, List<MessageEntity> messages) {
+    public ChatEntity(Long id,boolean isHidden1,boolean isHidden2, GroupEntity groupEntity, List<MessageEntity> messages, UserEntity user1, UserEntity user2) {
         this.id = id;
-        this.tittleGroup = tittleGroup;
-        this.imageGroup = imageGroup;
-        this.users = users;
-        this.usersHiddenChats = usersHiddenChats;
+        this.isHidden1 = isHidden1;
+        this.isHidden2 = isHidden2;
+        this.groupEntity = groupEntity;
         this.messages = messages;
-    }
-
-    public int giveMeLength() {
-        return this.users.size();
+        this.user1 = user1;
+        this.user2 = user2;
     }
 
     public Long getId() {
@@ -55,36 +53,28 @@ public class ChatEntity {
         this.id = id;
     }
 
-    public String getTittleGroup() {
-        return tittleGroup;
+    public boolean isHidden1() {
+        return isHidden1;
     }
 
-    public void setTittleGroup(String tittleGroup) {
-        this.tittleGroup = tittleGroup;
+    public void setHidden1(boolean hidden1) {
+        isHidden1 = hidden1;
     }
 
-    public String getImageGroup() {
-        return imageGroup;
+    public boolean isHidden2() {
+        return isHidden2;
     }
 
-    public void setImageGroup(String imageGroup) {
-        this.imageGroup = imageGroup;
+    public void setHidden2(boolean hidden2) {
+        isHidden2 = hidden2;
     }
 
-    public List<UserEntity> getUsers() {
-        return users;
+    public GroupEntity getGroupEntity() {
+        return groupEntity;
     }
 
-    public void setUsers(List<UserEntity> users) {
-        this.users = users;
-    }
-
-    public List<UserEntity> getUsersHiddenChats() {
-        return usersHiddenChats;
-    }
-
-    public void setUsersHiddenChats(List<UserEntity> usersHiddenChats) {
-        this.usersHiddenChats = usersHiddenChats;
+    public void setGroupEntity(GroupEntity groupEntity) {
+        this.groupEntity = groupEntity;
     }
 
     public List<MessageEntity> getMessages() {
@@ -93,5 +83,21 @@ public class ChatEntity {
 
     public void setMessages(List<MessageEntity> messages) {
         this.messages = messages;
+    }
+
+    public UserEntity getUser1() {
+        return user1;
+    }
+
+    public void setUser1(UserEntity user1) {
+        this.user1 = user1;
+    }
+
+    public UserEntity getUser2() {
+        return user2;
+    }
+
+    public void setUser2(UserEntity user2) {
+        this.user2 = user2;
     }
 }

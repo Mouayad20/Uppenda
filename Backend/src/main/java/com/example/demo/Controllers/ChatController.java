@@ -1,8 +1,11 @@
 package com.example.demo.Controllers;
 
+import com.example.demo.Converters.ChatConverter;
 import com.example.demo.Models.ChatModel;
+import com.example.demo.Repositories.ChatRepository;
 import com.example.demo.Services.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,18 +20,14 @@ public class ChatController {
     /* Post Request */
 
     @PostMapping("/add")
-    public ChatModel add(@RequestBody ChatModel chatModel) {
+    public ResponseEntity<String> add(@RequestBody ChatModel chatModel) {
         return chatService.add(chatModel);
     }
 
-    @PostMapping("/addMember/user_id={user_id},chat_id={chat_id}")
-    public boolean addMember(@PathVariable(name = "user_id") Long user_id, @PathVariable(name = "chat_id") Long chat_id) {
-        return chatService.addMember(user_id, chat_id);
-    }
-
-    @PostMapping("/hiddenChat/user_id={user_id},chat_id={chat_id}")
-    public boolean hiddenChat(@PathVariable(name = "user_id") Long user_id, @PathVariable(name = "chat_id") Long chat_id) {
-        return chatService.hiddenChat(user_id, chat_id);
+    @PostMapping("/hideChat/chat_id={chat_id}")
+    public ResponseEntity<String> hiddenChat(@RequestHeader("Authorization") String token,
+                                             @PathVariable(name = "chat_id") Long chat_id) {
+        return chatService.hiddenChat(token.substring("Bearer ".length()), chat_id);
     }
 
     /* Get Request */
@@ -38,13 +37,13 @@ public class ChatController {
         return new ChatModel();
     }
 
-    @GetMapping("/getAllChatByUserID/user_id={user_id}")
-    public List<ChatModel> getAllChatByUID(@PathVariable(name = "user_id") Long user_id) {
-        return chatService.getALlChatByUserId(user_id);
+    @GetMapping("/getUser\'sChats")
+    public List<ChatModel> getUsersChats(@RequestHeader("Authorization") String token) {
+        return chatService.getUsersChats(token.substring("Bearer ".length()));
     }
 
-    @GetMapping("/getChatById/chat_id={c_id}")
-    public ChatModel getChatById(@PathVariable(name = "c_id") Long c_id) {
-        return chatService.getChatById(c_id);
+    @GetMapping("/getChat/chat_id={chat_id}")
+    public ChatModel getChatById(@PathVariable(name = "chat_id") Long chat_id) {
+        return chatService.getChatById(chat_id);
     }
 }

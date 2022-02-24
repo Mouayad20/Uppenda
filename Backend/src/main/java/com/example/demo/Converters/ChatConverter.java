@@ -15,51 +15,42 @@ public class ChatConverter {
     private UserConverter userConverter;
     @Autowired
     private MessageConverter messageConverter;
+    @Autowired
+    private GroupConverter groupConverter;
 
     public ChatEntity chatModelToEntity(ChatModel chatModel) {
         ChatEntity chatEntity = new ChatEntity();
-        chatEntity.setId(chatModel.getId());
-        chatEntity.setTittleGroup(chatModel.getTittleGroup());
-        chatEntity.setImageGroup(chatModel.getImageGroup());
-        if (chatModel.getUsers() != null) {
-            for (int i = 0; i < chatModel.getUsers().size(); i++) {
-                chatEntity.getUsers().add(userConverter.convertUserModelToUserEntity(chatModel.getUsers().get(i), true));
-            }
-        } else
-            chatEntity.setUsers(new ArrayList<>());
+        chatEntity.setHidden1(chatModel.isHidden1());
+        chatEntity.setHidden2(chatModel.isHidden2());
+        if (chatModel.getId() != null)
+            chatEntity.setId(chatModel.getId());
+        if (chatModel.getGroupModel() != null)
+            chatEntity.setGroupEntity(groupConverter.convertGroupModelToGroupEntity(chatModel.getGroupModel()));
+        if (chatModel.getMessages() != null)
+            chatEntity.setMessages(messageConverter.messageModelListToEntityList(chatModel.getMessages()));
+        if (chatModel.getUser1() != null)
+            chatEntity.setUser1(userConverter.convertUserModelToUserEntity(chatModel.getUser1(), true));
+        if (chatModel.getUser2() != null)
+            chatEntity.setUser2(userConverter.convertUserModelToUserEntity(chatModel.getUser2(), true));
 
-        if (chatModel.getMessages() != null) {
-            for (int i = 0; i < chatModel.getMessages().size(); i++) {
-                chatEntity.getMessages().add(messageConverter.messageModelToEntity(chatModel.getMessages().get(i)));
-            }
-        } else
-            chatEntity.setMessages(new ArrayList<>());
-        if (chatModel.getUsersHiddenChats() != null) {
-            for (int i = 0; i < chatModel.getUsers().size(); i++) {
-                chatEntity.getUsersHiddenChats()
-                        .add(userConverter.convertUserModelToUserEntity(chatModel.getUsersHiddenChats().get(i), true));
-            }
-        } else
-            chatEntity.setUsersHiddenChats(new ArrayList<>());
         return chatEntity;
     }
 
-    public ChatModel chatEntityToModel(ChatEntity chatEntity, boolean withUsers, boolean withMessage) {
+    public ChatModel chatEntityToModel(ChatEntity chatEntity) {
 
         ChatModel chatModel = new ChatModel();
-        chatModel.setId(chatEntity.getId());
-        chatModel.setTittleGroup(chatEntity.getTittleGroup());
-        chatModel.setImageGroup(chatEntity.getImageGroup());
-        if (withMessage) {
-            // System.out.println("\n__________\n" +
-            // messageEntityListToModleList(chatEntity.getMessages(), false) +
-            // "\n__________\n");
+        chatModel.setHidden1(chatEntity.isHidden1());
+        chatModel.setHidden2(chatEntity.isHidden2());
+        if (chatEntity.getId() != null)
+            chatModel.setId(chatEntity.getId());
+        if (chatEntity.getGroupEntity() != null)
+            chatModel.setGroupModel(groupConverter.convertGroupEntityToGroupModel(chatEntity.getGroupEntity()));
+        if (chatEntity.getMessages() != null)
             chatModel.setMessages(messageConverter.messageEntityListToModelList(chatEntity.getMessages(), false));
-        }
-        if (withUsers) {
-            chatModel.setUsers(userConverter.convertUserListEntityToListModel(chatEntity.getUsers()));
-            chatModel.setUsersHiddenChats(userConverter.convertUserListEntityToListModel(chatEntity.getUsersHiddenChats()));
-        }
+        if (chatEntity.getUser1() != null)
+            chatModel.setUser1(userConverter.convertUserEntityToUserModel(chatEntity.getUser1()));
+        if (chatEntity.getUser2() != null)
+            chatModel.setUser2(userConverter.convertUserEntityToUserModel(chatEntity.getUser2()));
 
         return chatModel;
 
@@ -69,17 +60,17 @@ public class ChatConverter {
         List<ChatModel> chatModels = new ArrayList<>();
         if (chatEntities != null) {
             for (ChatEntity chatEntity : chatEntities) {
-                chatModels.add(chatEntityToModel(chatEntity, false, true));
+                chatModels.add(chatEntityToModel(chatEntity));
             }
         }
         return chatModels;
     }
 
-    public List<ChatModel> chatListEntityToListModel(List<ChatEntity> chatEntities, boolean withUsers) {
+    public List<ChatModel> chatListEntityToListModel(List<ChatEntity> chatEntities) {
         List<ChatModel> chatModels = new ArrayList<>();
         if (chatEntities != null) {
             for (ChatEntity chatEntity : chatEntities) {
-                chatModels.add(chatEntityToModel(chatEntity, withUsers, true));
+                chatModels.add(chatEntityToModel(chatEntity));
             }
         }
         return chatModels;

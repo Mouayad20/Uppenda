@@ -66,10 +66,6 @@ public class UserEntity {
     private List<PostEntity> savedPost;
     @ManyToMany(mappedBy = "participants")
     private List<PostEntity> sharedPost;
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<ChatEntity> chats;
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<ChatEntity> hiddenChats;
     @ManyToMany(mappedBy = "members")
     private List<GroupEntity> groups;
     @ManyToMany(mappedBy = "members")
@@ -322,22 +318,6 @@ public class UserEntity {
 
     public void setIp(String ip) {
         this.ip = ip;
-    }
-
-    public List<ChatEntity> getChats() {
-        return chats;
-    }
-
-    public void setChats(List<ChatEntity> chats) {
-        this.chats = chats;
-    }
-
-    public List<ChatEntity> getHiddenChats() {
-        return hiddenChats;
-    }
-
-    public void setHiddenChats(List<ChatEntity> hiddenChats) {
-        this.hiddenChats = hiddenChats;
     }
 
     public List<MessageEntity> getMessages() {

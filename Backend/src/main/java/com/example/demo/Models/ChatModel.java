@@ -1,52 +1,28 @@
 package com.example.demo.Models;
 
 import java.util.List;
-import java.util.Objects;
 
 public class ChatModel {
 
     private Long id;
-    private String tittleGroup;
-    private String imageGroup;
-    private MessageModel lastMessage;
-    private UserModel receiver;
-    private List<UserModel> users;
+    private boolean isHidden1;
+    private boolean isHidden2;
+    private GroupModel groupModel;
     private List<MessageModel> messages;
-    private List<UserModel> usersHiddenChats;
+    private UserModel user1;
+    private UserModel user2;
 
     public ChatModel() {
-        this.id = null;
-        this.tittleGroup = null;
-        this.imageGroup = null;
-        this.users = null;
-        this.usersHiddenChats = null;
-        this.messages = null;
     }
 
-    public ChatModel(Long id, String tittleGroup, String imageGroup, List<UserModel> users,
-                     List<UserModel> usersHiddenChats, List<MessageModel> messages) {
+    public ChatModel(Long id, boolean isHidden1,boolean isHidden2, GroupModel groupModel, List<MessageModel> messages, UserModel user1, UserModel user2) {
         this.id = id;
-        this.tittleGroup = tittleGroup;
-        this.imageGroup = imageGroup;
-        this.users = users;
-        this.usersHiddenChats = usersHiddenChats;
+        this.isHidden1 = isHidden1;
+        this.isHidden2 = isHidden2;
+        this.groupModel = groupModel;
         this.messages = messages;
-    }
-
-    public UserModel getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(UserModel receiver) {
-        this.receiver = receiver;
-    }
-
-    public MessageModel getLastMessage() {
-        return lastMessage;
-    }
-
-    public void setLastMessage(MessageModel lastMessage) {
-        this.lastMessage = lastMessage;
+        this.user1 = user1;
+        this.user2 = user2;
     }
 
     public Long getId() {
@@ -57,36 +33,28 @@ public class ChatModel {
         this.id = id;
     }
 
-    public String getTittleGroup() {
-        return tittleGroup;
+    public boolean isHidden1() {
+        return isHidden1;
     }
 
-    public void setTittleGroup(String tittleGroup) {
-        this.tittleGroup = tittleGroup;
+    public void setHidden1(boolean hidden1) {
+        isHidden1 = hidden1;
     }
 
-    public String getImageGroup() {
-        return imageGroup;
+    public boolean isHidden2() {
+        return isHidden2;
     }
 
-    public void setImageGroup(String imageGroup) {
-        this.imageGroup = imageGroup;
+    public void setHidden2(boolean hidden2) {
+        isHidden2 = hidden2;
     }
 
-    public List<UserModel> getUsers() {
-        return users;
+    public GroupModel getGroupModel() {
+        return groupModel;
     }
 
-    public void setUsers(List<UserModel> users) {
-        this.users = users;
-    }
-
-    public List<UserModel> getUsersHiddenChats() {
-        return usersHiddenChats;
-    }
-
-    public void setUsersHiddenChats(List<UserModel> usersHiddenChats) {
-        this.usersHiddenChats = usersHiddenChats;
+    public void setGroupModel(GroupModel groupModel) {
+        this.groupModel = groupModel;
     }
 
     public List<MessageModel> getMessages() {
@@ -97,24 +65,19 @@ public class ChatModel {
         this.messages = messages;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof ChatModel)) {
-            return false;
-        }
-        ChatModel chatModel = (ChatModel) o;
-        return Objects.equals(id, chatModel.id) && Objects.equals(tittleGroup, chatModel.tittleGroup)
-                && Objects.equals(imageGroup, chatModel.imageGroup)
-                && Objects.equals(lastMessage, chatModel.lastMessage) && Objects.equals(receiver, chatModel.receiver)
-                && Objects.equals(users, chatModel.users) && Objects.equals(messages, chatModel.messages)
-                && Objects.equals(usersHiddenChats, chatModel.usersHiddenChats);
+    public UserModel getUser1() {
+        return user1;
     }
 
-    @Override
-    public String toString() {
-        return "{" + "id=" + id + ", tittleGroup='" + tittleGroup + '\'' + ", imageGroup='" + imageGroup + '\''
-                + ", lastMessage=" + lastMessage + '}';
+    public void setUser1(UserModel user1) {
+        this.user1 = user1;
+    }
+
+    public UserModel getUser2() {
+        return user2;
+    }
+
+    public void setUser2(UserModel user2) {
+        this.user2 = user2;
     }
 }

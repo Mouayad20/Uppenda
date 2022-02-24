@@ -92,7 +92,6 @@ public class UserConverter {
         userModel.setPostModels(postConverter.postEntityListToModelList(userEntity.getPostEntities(), false, false, false, false, false)); ////////////////////////////////////////////////////////////////
         userModel.setSavedPost(new ArrayList<>());
         userModel.setSharedPost(new ArrayList<>());
-        userModel.setChats(new ArrayList<>());
         userModel.setMessages(new ArrayList<>());
         userModel.setCommentModels(new ArrayList<>());
         userModel.setReactionModels(new ArrayList<>());

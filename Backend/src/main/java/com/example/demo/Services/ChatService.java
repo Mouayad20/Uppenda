@@ -4,13 +4,14 @@ import com.example.demo.Converters.ChatConverter;
 import com.example.demo.Entities.ChatEntity;
 import com.example.demo.Entities.UserEntity;
 import com.example.demo.Models.ChatModel;
-import com.example.demo.Models.MessageModel;
 import com.example.demo.Repositories.ChatRepository;
 import com.example.demo.Repositories.UserRepository;
+import com.example.demo.Security.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -24,165 +25,64 @@ public class ChatService {
     private MessageService messageService;
     @Autowired
     private ChatConverter chatConverter;
+    @Autowired
+    private TokenUtil tokenUtil;
 
-    public ChatModel add(ChatModel chatModel) {
+    public ResponseEntity<String> add(ChatModel chatModel) {
 
-        boolean isSoso = false;
+        ChatEntity chatEntity = chatRepository.save(chatConverter.chatModelToEntity(chatModel));
 
-        ChatEntity chatEntity = new ChatEntity();
-        ChatEntity savedChat;
-
-        chatEntity = chatConverter.chatModelToEntity(chatModel);
-
-        for (ChatEntity chatEntity2 : chatRepository.findAll()) {
-            for (int i = 0; i < chatEntity2.getUsers().size(); i++) {
-                if (chatEntity2.getUsers().get(i).getId() == chatModel.getUsers().get(i).getId()) {
-                    isSoso = true;
-                } else {
-                    isSoso = false;
-                }
-            }
-        }
-        if (isSoso) {
-            return new ChatModel();
-        } else
-            savedChat = chatRepository.save(chatEntity);
-
-        for (int i = 0; i < savedChat.getUsers().size(); i++) {
-            userRepository.findById(savedChat.getUsers().get(i).getId()).get().getChats().add(savedChat);
-            userRepository.save(userRepository.findById(savedChat.getUsers().get(i).getId()).get());
-        }
-
-        if (chatRepository.findById(savedChat.getId()).isPresent())
-            return chatConverter.chatEntityToModel(savedChat, true, true);
+        if (chatRepository.findById(chatEntity.getId()).isPresent())
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Chat created successfully");
         else
-            return new ChatModel();
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Problem happened");
 
     }
 
-    public boolean addMember(Long user_id, Long chat_id) {
-        UserEntity userEntity = userRepository.findById(user_id).get();
+    public ResponseEntity<String> hiddenChat(String token, Long chat_id) {
+
+        UserEntity userEntity = userRepository.findByEmail(tokenUtil.getEmailFromToken(token)).get();
         ChatEntity chatEntity = chatRepository.findById(chat_id).get();
 
-        userEntity.getChats().add(chatEntity);
-        chatEntity.getUsers().add(userEntity);
-
-        UserEntity savedUser = userRepository.save(userEntity);
-        ChatEntity savedChat = chatRepository.save(chatEntity);
-
-        if (userRepository.findById(savedUser.getId()).isPresent()
-                && chatRepository.findById(savedChat.getId()).isPresent())
-            return true;
+        if (chatEntity.getUser1().getId() == userEntity.getId())
+            chatEntity.setHidden1(true);
         else
-            return false;
-    }
+            chatEntity.setHidden2(true);
 
-    public boolean hiddenChat(Long user_id, Long chat_id) {
+        chatEntity = chatRepository.save(chatEntity);
 
-        UserEntity userEntity = userRepository.findById(user_id).get();
-        ChatEntity chatEntity = chatRepository.findById(chat_id).get();
-
-        userEntity.getHiddenChats().add(chatEntity);
-        chatEntity.getUsersHiddenChats().add(userEntity);
-
-        UserEntity savedUser = userRepository.save(userEntity);
-        ChatEntity savedChat = chatRepository.save(chatEntity);
-
-        if (userRepository.findById(savedUser.getId()).isPresent()
-                && chatRepository.findById(savedChat.getId()).isPresent())
-            return true;
+        if (chatEntity.isHidden1() && chatEntity.isHidden2()) {
+            chatRepository.deleteById(chat_id);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Chat hidden successfully");
+        } else if (chatEntity.isHidden1() || chatEntity.isHidden2())
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Chat hidden successfully");
         else
-            return false;
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Problem happened");
 
     }
 
-    public List<ChatModel> getALlChatByUserId(Long user_id) {
-        List<ChatModel> list = chatConverter
-                .chatListEntityToListModel(userRepository.findById(user_id).get().getChats(), true);
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getMessages().size() == 0) {
-                list.get(i).setLastMessage(new MessageModel("there is no message yet", new Date()));
-            } else {
-                System.out.println(messageService.getLastMessage(list.get(i).getId()));
-                list.get(i).setLastMessage(messageService.getLastMessage(list.get(i).getId()));
-            }
-            if (list.get(i).getUsers().size() == 2 && list.get(i).getTittleGroup() == null) {
-                for (int j = 0; j < list.get(i).getUsers().size(); j++) {
-                    if (list.get(i).getUsers().get(j).getId() != user_id)
-                        list.get(i).setReceiver(list.get(i).getUsers().get(j));
-                }
-            }
-        }
-        return list;
+    public List<ChatModel> getUsersChats(String token) {
+        return chatConverter.chatListEntityToListModel(
+                chatRepository.findByUser1(
+                        userRepository.findByEmail(
+                                tokenUtil.getEmailFromToken(token)
+                        ).get()
+                )
+        );
     }
 
-    public ChatModel getChatById(Long c_id) {
-        return chatConverter.chatEntityToModel(chatRepository.findById(c_id).get(), true, true);
+    public ChatModel getChatById(Long chat_id) {
+        return chatConverter.chatEntityToModel(chatRepository.findById(chat_id).get());
     }
 
 }
-/*
-
-     delete this code when you finish
-
-     public List<ChatModel> getAllChatByUserId(Long user_id){
-
-     }
-
-     public List<ChatModel> getAllByUID(Long me_id){
-     List<ChatModel> list = new ArrayList<>();
-     for (ChatEntity chatEntity : chatRepository.getChatByUserId(me_id)) {
-     ChatModel chatModel = new ChatModel();
-    // chatModel.setReceiver(chatConverter.userEntityToModel(chatEntity.getHeEntity()));
-     chatModel.setLastMessage(messageService.getLastMessage(chatEntity.getId())==null?"there
-     is no messgaes
-     yet":messageService.getLastMessage(chatEntity.getId()).getContent());
-     chatModel.setDateOfLastMessage(messageService.getLastMessage(chatEntity.getId())==null?"there
-     is no messgaes
-     yet":messageService.getLastMessage(chatEntity.getId()).getDateOfSent().toString());
-
-     list.add(chatModel);
-     }
-
-     return list;
-     }
-
-     public String deleteById(Long c_id,Long u_id){
-
-     String isPresent = "deleted";
-
-     UserEntity userEntity = userRepository.findById(u_id).get();
-
-     System.out.println("\n\n\n---------1---------\n\n\t\t\t\t"+userEntity.getChats()+"\n\n\n*****************\n\n");
-     System.out.println("\n\n\n---------2---------\n\n\t\t\t\t"+chatRepository.findById(c_id).get()+"\n\n\n*****************\n\n");
-
-     userEntity.getChats().remove(chatRepository.findById(c_id).get());
-
-     System.out.println("\n\n\n\n\n\t\t\t\t"+userEntity.getChats()+"\n\n\n*****************\n\n");
-     UserEntity savedUser = userRepository.save(userEntity);
-
-     System.out.println("\n\n\n\n\n\t\t\t\t"+savedUser.getName()+"\n\n\n");
-     System.out.println("\n\n\n\n\n\t\t\t\t"+savedUser.getChats()+"\n\n\n");
-     for (ChatEntity chatEntity : savedUser.getChats()) {
-     if (chatEntity.getId() == c_id)
-     isPresent = "not deleted" ;
-     }
-     return isPresent;
-     }
-
-     public String deleteChat(Long s_id, Long r_id) {
-     Long chat_id = chatRepository.getChat(s_id, r_id).getId();
-     chatRepository.delete(chatRepository.getChat(s_id, r_id));
-     if (chatRepository.findById(chat_id).isPresent()) return "deleted chat falied
-     ";
-     else return "deleted chat sucsfuly";
-     }
-
-     public ChatEntity findById(Long id){
-     return chatRepository.findById(id).get();
-     }
-
-     public ChatEntity getChat(Long s_id,Long r_id) {
-     return chatRepository.getChat(s_id,r_id);
-     }
-*/

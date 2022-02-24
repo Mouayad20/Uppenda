@@ -1,25 +1,15 @@
 package com.example.demo.Repositories;
 
 import com.example.demo.Entities.ChatEntity;
-import org.springframework.data.jpa.repository.Query;
+import com.example.demo.Entities.UserEntity;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-
 public interface ChatRepository extends CrudRepository<ChatEntity, Long> {
 
-    @Query(value = "SELECT users_id FROM users_chats WHERE chats_id=:c_id ", nativeQuery = true)
-    public List<Long> getIDsUsersInChatByCID(@Param("c_id") Long c_id);
-
-//    @Query(value = "SELECT * FROM chats WHERE me_id = :id ",nativeQuery = true)
-//    List<ChatEntity> getChatByUserId( @Param("id")Long id );
-//
-//    @Query(value = "SELECT * FROM chats WHERE me_id=:m_id AND he_id=:h_id",nativeQuery = true)
-//    ChatEntity getChat(@Param("m_id")Long x1,@Param("h_id")Long x2);
-
+    List<ChatEntity> findByUser1(UserEntity userEntity);
 
 }

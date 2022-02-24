@@ -28,7 +28,6 @@ public class UserModel {
     private List<PostModel> postModels;
     private List<PostModel> savedPost;
     private List<PostModel> sharedPost;
-    private List<ChatModel> chats;
     private List<MessageModel> messages;
     private List<AnswerModel> answerModels;
     private List<GroupModel> groups;
@@ -245,14 +244,6 @@ public class UserModel {
 
     public void setIp(String ip) {
         this.ip = ip;
-    }
-
-    public List<ChatModel> getChats() {
-        return this.chats;
-    }
-
-    public void setChats(List<ChatModel> chats) {
-        this.chats = chats;
     }
 
     public List<MessageModel> getMessages() {
