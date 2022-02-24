@@ -5,9 +5,10 @@ import com.example.demo.Entities.MessageEntity;
 import com.example.demo.Models.MessageModel;
 import com.example.demo.Repositories.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,65 +26,20 @@ public class MessageService {
         return messageConverter.messageEntityToModel(messageRepository.save(messageEntity), false);
     }
 
-    public String delete(Long id) {
+    public ResponseEntity<String> delete(Long id) {
         messageRepository.deleteById(id);
-        if (messageRepository.findById(id).isPresent()) return "message deleted falied";
-        else return "message deleted succssfly";
+        if (!messageRepository.findById(id).isPresent())
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("Message deleted successfully ");
+        else
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body("Message not deleted, problem happened");
     }
 
-    public List<MessageModel> getAllMessages() {
-        return messageConverter.messageEntityIterableToModelList(messageRepository.findAll());
-    }
-
-    public MessageModel getLastMessage(Long chat_id) {
-        return getAllMessageInSpecificChat(chat_id).get(0);
-    }
-
-    public List<MessageModel> getAllMessageInSpecificChat(Long chat_id) {
-        if (messageRepository.getAllMessageInSpecificChat(chat_id) == null) {
-            return new ArrayList<MessageModel>();
-        } else {
-            return messageConverter.messageEntityListToModelList(messageRepository.getAllMessageInSpecificChat(chat_id), false);
-        }
-    }
-
-    public List<MessageModel> getAllMessageForSpecificUser(Long c_id, Long s_id) {
-        return messageConverter.messageEntityListToModelList(messageRepository.getAllMessagesByUserId(c_id, s_id), false);
-    }
-
-    public MessageModel saveMessage(MessageModel messageModel) {
-        return messageConverter.messageEntityToModel(messageRepository.save(messageConverter.messageModelToEntity(messageModel)), false);
+    public List<MessageModel> getChatMessage(Long chat_id) {
+        return messageConverter.messageEntityListToModelList(messageRepository.getChatMessage(chat_id), false);
     }
 
 }
-
-/*
-    public MessageModel saveMessage(MessageModel messageModel , Long sender_id , Long reciver_id){
-
-        MessageEntity messageEntity = new MessageEntity();
-        messageEntity.setContent(messageModel.getContent());
-        messageEntity.setDateOfSent(messageModel.getDateOfSent());
-        messageEntity.setSender(userRepository.findById(sender_id).get());
-
-
-
-        MessageEntity messageEntityForMe = new MessageEntity();
-
-        messageEntityForMe.setChatEntity(chatRepository.getChat(sender_id, reciver_id));
-        messageEntityForMe.setSender    (userRepository.findById(sender_id).get());
-        messageEntityForMe.setContent   (messageModel  .getContent   ());
-        messageEntityForMe.setDateOfSent(messageModel  .getDateOfSent());
-
-        MessageModel savedMessage = messageConverter.messageEntityToModle(messageRepository.save(messageEntityForMe));
-
-        MessageEntity messageEntityForHe = new MessageEntity();
-        messageEntityForHe.setChatEntity(chatRepository.getChat( reciver_id,sender_id));
-        messageEntityForHe.setSender    (userRepository.findById(sender_id).get());
-        messageEntityForHe.setContent   (messageModel  .getContent   ());
-        messageEntityForHe.setDateOfSent(messageModel  .getDateOfSent());
-
-        messageRepository.save(messageEntityForHe);
-
-        return savedMessage;
-
- */

@@ -6,14 +6,13 @@ import java.util.Date;
 public class MessageModel {
 
     private Long id;
-    private Long s_id;
-    private Long c_id;
     private String content;
     private Date dateOfSent;
     private ChatModel chatModel;
     private UserModel sender;
 
     public MessageModel() {
+        this.dateOfSent = new Date();
     }
 
     public MessageModel(String content, Date dateOfSent) {
@@ -61,29 +60,11 @@ public class MessageModel {
         this.sender = sender;
     }
 
-    public Long getS_id() {
-        return s_id;
-    }
-
-    public void setS_id(Long s_id) {
-        this.s_id = s_id;
-    }
-
-    public Long getC_id() {
-        return c_id;
-    }
-
-    public void setC_id(Long c_id) {
-        this.c_id = c_id;
-    }
-
     @Override
     public String toString() {
         return "{\"id\":" + getId() + "" +
                 ",\"content\":\"" + getContent() + "\"" +
                 ",\"dateOfSent\":\"" + getDateOfSent() + "\"" +
-                ",\"s_id\":\"" + getS_id() + "\"" +
-                ",\"sender\":\"" + getSender() + "\"" +
-                ",\"c_id\":" + getC_id() + "}";
+                ",\"sender\":\"" + getSender() + "}";
     }
 }

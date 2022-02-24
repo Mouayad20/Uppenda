@@ -28,6 +28,7 @@ public class MessageEntity {
     @ManyToOne
     @JoinColumn(name = "chat_id")
     private ChatEntity chatEntity;
+
     @ManyToOne
     @JoinColumn(name = "sender_id")
     private UserEntity sender;
@@ -102,6 +103,4 @@ public class MessageEntity {
                 ", sender='" + getSender() + "'" +
                 "}";
     }
-
-
 }

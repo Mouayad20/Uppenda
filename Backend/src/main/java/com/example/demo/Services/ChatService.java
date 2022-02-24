@@ -82,7 +82,7 @@ public class ChatService {
     }
 
     public ChatModel getChatById(Long chat_id) {
-        return chatConverter.chatEntityToModel(chatRepository.findById(chat_id).get());
+        return  chatConverter.chatEntityToModel(chatRepository.findById(chat_id).get());
     }
 
 }
