@@ -40,7 +40,7 @@ public class TokenFilter extends OncePerRequestFilter {
 
         if (header != null && securityContext.getAuthentication() == null) {
 
-            System.out.println("\n\t This token is not authenticated yet\n");
+            logger.error("This token is not authenticated yet");
 
             String token = header.substring("Bearer ".length());
 
@@ -48,8 +48,7 @@ public class TokenFilter extends OncePerRequestFilter {
 
             if (email != null) {
 
-                System.out.println("\n\t This email is true  \n");
-                System.out.println(email);
+                logger.info("This email is true ");
 
                 UserModel user = userConverter.getUserModelWithBasicInformation(userRepository.findByEmail(email).get());
 
@@ -57,7 +56,7 @@ public class TokenFilter extends OncePerRequestFilter {
 
                 if (tokenUtil.isValid(token, userDetails)) {
 
-                    System.out.println("\n\t\t  this token is not expired \n");
+                    logger.info("This token is not expired ");
 
                     UsernamePasswordAuthenticationToken authenticatedToken = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
 
@@ -66,11 +65,11 @@ public class TokenFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticatedToken);
 
                 } else
-                    System.out.println("\n\t\t  this token is not valid \n");
+                    logger.error("This token is not valid ");
             } else
-                System.out.println("\n\t\t  this mobile is false \n");
+                logger.error("This email is false ");
         } else
-            System.out.println("\n\t\t  This token is not allowed \n");
+            logger.error("This token is not allowed ");
 
         filterChain.doFilter(request, response);
 

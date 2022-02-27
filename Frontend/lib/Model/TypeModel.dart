@@ -1,27 +1,22 @@
-class TypeModel{
+class TypeModel {
   String id;
-  String typename;
+  String type;
 
+  TypeModel({this.id, this.type});
 
-  TypeModel({this.id, this.typename}) ;
-
-  TypeModel.fromJson(Map<String, dynamic> json){
-      this.id       = json["id"].toString();
-      this.typename = json["typename"];
+  TypeModel.fromJson(Map<String, dynamic> json) {
+    this.id = json["id"].toString();
+    this.type = json["type"];
   }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id']          = this.id;
-    data['typename']    = this.typename;
+    data['id'] = this.id;
+    data['type'] = this.type;
     return data;
   }
 
-    String getId() {
-    return id;
-  }
+  get getId => id;
 
-
-  String getName() {
-    return typename;
-  }
+  get getType => type;
 }

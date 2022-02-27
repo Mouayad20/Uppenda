@@ -1,11 +1,10 @@
 import 'package:ppp/Model/CommentModel.dart';
 import 'package:ppp/Model/GroupModel.dart';
-import 'package:ppp/Model/LikeModel.dart';
 import 'package:ppp/Model/MediaModel.dart';
 import 'package:ppp/Model/PageModel.dart';
+import 'package:ppp/Model/ReactionModel.dart';
 import 'package:ppp/Model/TypeModel.dart';
 import 'package:ppp/Model/UserModel.dart';
-import 'package:ppp/main.dart';
 
 class PostModel {
   String id;
@@ -15,18 +14,11 @@ class PostModel {
   GroupModel groupModel;
   PageModel pageModel;
   TypeModel type;
-  List<LikeModel> likeModels;
+  List<ReactionModel> reactionModels;
   List<CommentModel> commentModels;
   List<MediaModel> media = [];
   List<UserModel> savers;
   List<UserModel> participants;
-
-////// for delete
-  String imagePost;
-  String videoPost;
-  // List<ShareModel> share;
-
-///////
 
   PostModel(
       {this.id,
@@ -34,12 +26,10 @@ class PostModel {
       this.createdAt,
       this.pageModel,
       this.groupModel,
-      this.imagePost,
-      this.videoPost,
       this.content,
       this.type,
       this.commentModels,
-      this.likeModels,
+      this.reactionModels,
       this.media,
       this.savers,
       this.participants});
@@ -55,32 +45,32 @@ class PostModel {
     if (json["pageModel"] != null)
       this.pageModel = PageModel.fromJson(json["pageModel"]);
     if (json["type"] != null) this.type = TypeModel.fromJson(json["type"]);
-    if (json['likeModels'] != null) {
-      this.likeModels = new List<LikeModel>();
-      json['likeModels'].forEach((v) {
-        this.likeModels.add(new LikeModel.fromJson(v));
+    if (json['reactionModels'] != null) {
+      this.reactionModels = [];
+      json['reactionModels'].forEach((v) {
+        this.reactionModels.add(new ReactionModel.fromJson(v));
       });
     }
     if (json['commentModels'] != null) {
-      this.commentModels = new List<CommentModel>();
+      this.commentModels = [];
       json['commentModels'].forEach((v) {
         this.commentModels.add(new CommentModel.fromJson(v));
       });
     }
     if (json['media'] != null) {
-      this.media = new List<MediaModel>();
+      this.media = [];
       json['media'].forEach((v) {
         this.media.add(new MediaModel.fromJson(v));
       });
     }
     if (json['savers'] != null) {
-      this.savers = new List<UserModel>();
+      this.savers = [];
       json['savers'].forEach((v) {
         this.savers.add(new UserModel.fromJson(v));
       });
     }
     if (json['participants'] != null) {
-      this.participants = new List<UserModel>();
+      this.participants = [];
       json['participants'].forEach((v) {
         this.participants.add(new UserModel.fromJson(v));
       });
@@ -96,8 +86,9 @@ class PostModel {
     if (this.groupModel != null) data['groupModel'] = this.groupModel.toJson();
     if (this.pageModel != null) data['pageModel'] = this.pageModel.toJson();
     if (this.type != null) data['type'] = this.type.toJson();
-    if (this.likeModels != null) {
-      data['likeModels'] = this.likeModels.map((v) => v.toJson()).toList();
+    if (this.reactionModels != null) {
+      data['reactionModels'] =
+          this.reactionModels.map((v) => v.toJson()).toList();
     }
     if (this.commentModels != null) {
       data['commentModels'] =
@@ -136,14 +127,6 @@ class PostModel {
 
   set setContent(content) => this.content = content;
 
-  get getImagePost => this.imagePost;
-
-  set setImagePost(imagePost) => this.imagePost = imagePost;
-
-  get getVideoPost => this.videoPost;
-
-  set setVideoPost(videoPost) => this.videoPost = videoPost;
-
   get getGroupModel => this.groupModel;
 
   set setGroupModel(groupModel) => this.groupModel = groupModel;
@@ -156,9 +139,9 @@ class PostModel {
 
   set setCommentModels(commentModels) => this.commentModels = commentModels;
 
-  get getLikeModels => this.likeModels;
+  get getReactionModels => this.reactionModels;
 
-  set setLikeModels(likeModels) => this.likeModels = likeModels;
+  set setReactionModels(reactionModels) => this.reactionModels = reactionModels;
 
   get getMedia => this.media;
 
@@ -172,63 +155,63 @@ class PostModel {
 
   set setParticipants(participants) => this.participants = participants;
 
-  // static List<PostModel> posts = [
-  //   PostModel(
-  //     id: "1",
-  //     // createdAt: "28/7/2021",
-  //     content:
-  //         "Love the design of all the products at an affordable price. Everything is so easy to put together. Ordering and shipping \n is easy and very professionally\n handled, and all customer service has been timely and helpful.together. Ordering and shipping \n is easy and very professionally\n handled, and all customer service has been timely and helpfultogether. Ordering and shipping \n is easy and very professionally\n handled, and all customer service has been timely and helpfultogether. Ordering and shipping \n is easy and very professionally\n handled, and all customer service has been timely and helpfultogether. Ordering and shipping \n is easy and very professionally\n handled, and all customer service has been timely and helpfultogether. Ordering and shipping \n is easy and very professionally\n handled, and all customer service has been timely and helpful",
-  //     commentModels: CommentModel.comments,
-  //     likeModels: LikeModel.likes,
-  //     userModel: MyApp.currentUser,
-  //     share: ShareModel.shares,
-  //     type: TypeModel(id: "1", typename: "Sport"),
-  //   ),
-  //   PostModel(
-  //     id: "2",
-  //     // createdAt: "5/7/2021",
-  //     imagePost: "images/LongTermMemory.jpg",
-  //     commentModels: CommentModel.comments,
-  //     likeModels: LikeModel.likes,
-  //     userModel: MyApp.currentUser,
-  //     share: ShareModel.shares,
-  //     type: TypeModel(id: "2", typename: "Historical"),
-  //   ),
-  //   PostModel(
-  //     id: "15",
-  //     // createdAt: "12/7/2021",
-  //     videoPost: "images/videoo.mp4",
-  //     commentModels: CommentModel.comments,
-  //     likeModels: LikeModel.likes,
-  //     userModel: MyApp.currentUser,
-  //     groupModel: GroupModel.groups[2],
-  //     share: ShareModel.shares,
-  //     type: TypeModel(id: "2", typename: "Historical"),
-  //   ),
-  //   PostModel(
-  //     id: "4",
-  //     // createdAt: "2/5/2021",
-  //     imagePost: "images/logo.jpg",
-  //     content:
-  //         "Love the design of all the products at an affordable price. Everything is so easy to put together. Ordering and shipping\n is easy and very professionally\n handled, and all customer service has been timely and helpful.",
-  //     commentModels: CommentModel.comments,
-  //     likeModels: LikeModel.likes,
-  //     userModel: UserModel.users[8],
-  //     share: ShareModel.shares,
-  //     type: TypeModel(id: "5", typename: "Fashoin"),
-  //   ),
-  //   PostModel(
-  //     id: "15",
-  //     // createdAt: "2/9/2021",
-  //     videoPost: "images/videoo.mp4",
-  //     content:
-  //         "Love the design of all the products at an affordable price. Everything is so easy to put together. Ordering and shipping\n is easy and very professionally\n handled, and all customer service has been timely and helpful.",
-  //     commentModels: CommentModel.comments,
-  //     likeModels: LikeModel.likes,
-  //     share: ShareModel.shares,
-  //     pageModel: PageModel.pages[2],
-  //     type: TypeModel(id: "5", typename: "Fashoin"),
-  //   ),
-  // ];
+// static List<PostModel> posts = [
+//   PostModel(
+//     id: "1",
+//     // createdAt: "28/7/2021",
+//     content:
+//         "Love the design of all the products at an affordable price. Everything is so easy to put together. Ordering and shipping \n is easy and very professionally\n handled, and all customer service has been timely and helpful.together. Ordering and shipping \n is easy and very professionally\n handled, and all customer service has been timely and helpfultogether. Ordering and shipping \n is easy and very professionally\n handled, and all customer service has been timely and helpfultogether. Ordering and shipping \n is easy and very professionally\n handled, and all customer service has been timely and helpfultogether. Ordering and shipping \n is easy and very professionally\n handled, and all customer service has been timely and helpfultogether. Ordering and shipping \n is easy and very professionally\n handled, and all customer service has been timely and helpful",
+//     commentModels: CommentModel.comments,
+//     likeModels: LikeModel.likes,
+//     userModel: MyApp.currentUser,
+//     share: ShareModel.shares,
+//     type: TypeModel(id: "1", typename: "Sport"),
+//   ),
+//   PostModel(
+//     id: "2",
+//     // createdAt: "5/7/2021",
+//     imagePost: "images/LongTermMemory.jpg",
+//     commentModels: CommentModel.comments,
+//     likeModels: LikeModel.likes,
+//     userModel: MyApp.currentUser,
+//     share: ShareModel.shares,
+//     type: TypeModel(id: "2", typename: "Historical"),
+//   ),
+//   PostModel(
+//     id: "15",
+//     // createdAt: "12/7/2021",
+//     videoPost: "images/videoo.mp4",
+//     commentModels: CommentModel.comments,
+//     likeModels: LikeModel.likes,
+//     userModel: MyApp.currentUser,
+//     groupModel: GroupModel.groups[2],
+//     share: ShareModel.shares,
+//     type: TypeModel(id: "2", typename: "Historical"),
+//   ),
+//   PostModel(
+//     id: "4",
+//     // createdAt: "2/5/2021",
+//     imagePost: "images/logo.jpg",
+//     content:
+//         "Love the design of all the products at an affordable price. Everything is so easy to put together. Ordering and shipping\n is easy and very professionally\n handled, and all customer service has been timely and helpful.",
+//     commentModels: CommentModel.comments,
+//     likeModels: LikeModel.likes,
+//     userModel: UserModel.users[8],
+//     share: ShareModel.shares,
+//     type: TypeModel(id: "5", typename: "Fashoin"),
+//   ),
+//   PostModel(
+//     id: "15",
+//     // createdAt: "2/9/2021",
+//     videoPost: "images/videoo.mp4",
+//     content:
+//         "Love the design of all the products at an affordable price. Everything is so easy to put together. Ordering and shipping\n is easy and very professionally\n handled, and all customer service has been timely and helpful.",
+//     commentModels: CommentModel.comments,
+//     likeModels: LikeModel.likes,
+//     share: ShareModel.shares,
+//     pageModel: PageModel.pages[2],
+//     type: TypeModel(id: "5", typename: "Fashoin"),
+//   ),
+// ];
 
 }

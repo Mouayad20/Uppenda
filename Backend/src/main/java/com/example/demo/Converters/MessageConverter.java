@@ -21,7 +21,6 @@ public class MessageConverter {
         messageModel.setId(messageEntity.getId());
         messageModel.setContent(messageEntity.getContent());
         messageModel.setDateOfSent(messageEntity.getDateOfSent());
-        messageModel.setS_id(messageEntity.getSender().getId());
         if (withChats)
             messageModel.setChatModel(chatConverter.chatEntityToModel(messageEntity.getChatEntity()));
         messageModel.setSender(userConverter.getUserModelWithBasicInformation(messageEntity.getSender()));

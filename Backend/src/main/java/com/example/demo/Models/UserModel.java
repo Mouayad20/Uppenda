@@ -39,22 +39,6 @@ public class UserModel {
 
     public UserModel() {
 
-//        firstName = "mahmood";
-//        lastName = "shamieh";
-//        mobile = password = "0945861450";
-//        email = "mahmoodshamiehh2000@gmail.com";
-//        studyLevel = "first year at ITE";
-//        onLine = false;
-//        gender = "male";
-//        age = created_at = new Date();
-//        friends = new ArrayList<>();
-//        groups = new ArrayList<>();
-//        pages = new ArrayList<>();
-//        postModels = new ArrayList<>();
-//        commentModels = new ArrayList<>();
-//        reactionModels = new ArrayList<>();
-//        location = "Damascus";
-
     }
 
 

@@ -4,7 +4,6 @@ import com.example.demo.DemoApplication;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,12 +21,6 @@ public class GroupModel {
 
 
     public GroupModel() {
-        id = 0;
-        name = "alaa";
-        imgPath = "c:\\sdfssgjznfSHJVbhbbagxyj";
-        description = "this is the first group in my data base";
-        createdAt = new Date();
-        members = new ArrayList<>();
     }
 
 

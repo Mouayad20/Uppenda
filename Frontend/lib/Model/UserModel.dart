@@ -1,11 +1,13 @@
 import 'dart:core';
-import 'package:http/http.dart';
+
 import 'package:ppp/Model/PostModel.dart';
+
 import 'AnswerModel.dart';
-import 'ChatModel.dart';
+import 'CommentModel.dart';
 import 'GroupModel.dart';
 import 'MessageModel.dart';
 import 'PageModel.dart';
+import 'ReactionModel.dart';
 
 class UserModel {
   String id;
@@ -25,19 +27,13 @@ class UserModel {
   List<PostModel> postModels;
   List<PostModel> savedPost;
   List<PostModel> sharedPost;
-  List<ChatModel> chats;
-
   List<MessageModel> messages;
   List<AnswerModel> answerModels;
   List<GroupModel> groups;
   List<PageModel> pages;
   List<UserModel> friends;
-
-  String token;
-
-  get getToken => this.token;
-
-  set setToken(token) => this.token = token;
+  List<CommentModel> commentModels;
+  List<ReactionModel> reactionModels;
 
   UserModel(
       {this.firstName,
@@ -58,11 +54,12 @@ class UserModel {
       this.password,
       this.studyLevel,
       this.postModels,
-      this.chats,
       this.messages,
       this.savedPost,
       this.sharedPost,
-      this.answerModels}) {
+      this.answerModels,
+      this.commentModels,
+      this.reactionModels}) {
     this.age = DateTime.now();
     this.createdAt = DateTime.now();
   }
@@ -84,57 +81,63 @@ class UserModel {
     this.onLine = json["onLine"];
     if (json["imagePath"] != null) this.imagePath = json["imagePath"];
     if (json['postModels'] != null) {
-      this.postModels = new List<PostModel>();
+      this.postModels = [];
       json['postModels'].forEach((v) {
         this.postModels.add(new PostModel.fromJson(v));
       });
     }
     if (json['savedPost'] != null) {
-      this.savedPost = new List<PostModel>();
+      this.savedPost = [];
       json['savedPost'].forEach((v) {
         this.savedPost.add(new PostModel.fromJson(v));
       });
     }
     if (json['sharedPost'] != null) {
-      this.sharedPost = new List<PostModel>();
+      this.sharedPost = [];
       json['sharedPost'].forEach((v) {
         this.sharedPost.add(new PostModel.fromJson(v));
       });
     }
-    if (json['chats'] != null) {
-      this.chats = new List<ChatModel>();
-      json['chats'].forEach((v) {
-        this.chats.add(new ChatModel.fromJson(v));
-      });
-    }
     if (json['messages'] != null) {
-      this.messages = new List<MessageModel>();
+      this.messages = [];
       json['messages'].forEach((v) {
         this.messages.add(new MessageModel.fromJson(v));
       });
     }
     if (json['answerModels'] != null) {
-      this.answerModels = new List<AnswerModel>();
+      this.answerModels = [];
       json['answerModels'].forEach((v) {
         this.answerModels.add(new AnswerModel.fromJson(v));
       });
     }
     if (json['groups'] != null) {
-      this.groups = new List<GroupModel>();
+      this.groups = [];
       json['groups'].forEach((v) {
         this.groups.add(new GroupModel.fromJson(v));
       });
     }
     if (json['pages'] != null) {
-      this.pages = new List<PageModel>();
+      this.pages = [];
       json['pages'].forEach((v) {
         this.pages.add(new PageModel.fromJson(v));
       });
     }
     if (json['friends'] != null) {
-      this.friends = new List<UserModel>();
+      this.friends = [];
       json['friends'].forEach((v) {
         this.friends.add(new UserModel.fromJson(v));
+      });
+    }
+    if (json['commentModels'] != null) {
+      this.commentModels = [];
+      json['commentModels'].forEach((v) {
+        this.commentModels.add(new CommentModel.fromJson(v));
+      });
+    }
+    if (json['reactionModels'] != null) {
+      this.reactionModels = [];
+      json['reactionModels'].forEach((v) {
+        this.reactionModels.add(new ReactionModel.fromJson(v));
       });
     }
   }
@@ -164,9 +167,6 @@ class UserModel {
     if (this.sharedPost != null) {
       data['sharedPost'] = this.sharedPost.map((v) => v.toJson()).toList();
     }
-    if (this.chats != null) {
-      data['chats'] = this.chats.map((v) => v.toJson()).toList();
-    }
     if (this.messages != null) {
       data['messages'] = this.messages.map((v) => v.toJson()).toList();
     }
@@ -181,6 +181,14 @@ class UserModel {
     }
     if (this.friends != null) {
       data['friends'] = this.friends.map((v) => v.toJson()).toList();
+    }
+    if (this.commentModels != null) {
+      data['commentModels'] =
+          this.commentModels.map((v) => v.toJson()).toList();
+    }
+    if (this.reactionModels != null) {
+      data['reactionModels'] =
+          this.reactionModels.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -261,10 +269,6 @@ class UserModel {
 
   set setSharedPost(sharedPost) => this.sharedPost = sharedPost;
 
-  get getChats => this.chats;
-
-  set setChats(chats) => this.chats = chats;
-
   get getMessages => this.messages;
 
   set setMessages(messages) => this.messages = messages;
@@ -272,6 +276,14 @@ class UserModel {
   get getIp => this.ip;
 
   set setIp(ip) => this.ip = ip;
+
+  get getCommentModel => this.commentModels;
+
+  set setCommentModel(commentModels) => this.commentModels = commentModels;
+
+  get getReactionModel => this.reactionModels;
+
+  set setReactionModel(reactionModels) => this.reactionModels = reactionModels;
 
   static List<UserModel> users = [
     UserModel(

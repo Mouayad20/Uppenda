@@ -1,8 +1,5 @@
 package com.example.demo.Models;
 
-import com.example.demo.DemoApplication;
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 public class AnswerModel {
 
     private Long id;

@@ -1,4 +1,3 @@
-import 'dart:core';
 import 'package:ppp/Model/UserModel.dart';
 import 'package:ppp/main.dart';
 
@@ -9,8 +8,8 @@ class CommentModel {
   String content;
   String imagePath;
   String createdAt;
-  UserModel userModel;
   PostModel postModel;
+  UserModel userModel;
 
   CommentModel({
     this.id,

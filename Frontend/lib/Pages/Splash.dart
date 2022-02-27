@@ -129,14 +129,10 @@ class _SecoundScreenState extends State<SecoundScreen> {
           color: Colors.purple,
         ),
         primaryTextTheme: TextTheme(
-          title: TextStyle(
-            color: Colors.purple,
-          ),
+
         ),
         textTheme: TextTheme(
-          title: TextStyle(
-            color: Colors.purple,
-          ),
+
         ),
       ),
       home: Scaffold(

@@ -1,60 +1,52 @@
+import 'GroupModel.dart';
 import 'MessageModel.dart';
 import 'UserModel.dart';
 
 class ChatModel {
-  String id;
-  String tittleGroup;
-  String imageGroup;
-  MessageModel lastMessage;
-  UserModel receiver;
-  List<UserModel> users;
-  List<MessageModel> messages;
 
+  String id;
+  bool isHidden1;
+  bool isHidden2;
+  GroupModel groupModel;
+  List<MessageModel> messages;
+  UserModel user1;
+  UserModel user2;
   bool unread = true;
 
   ChatModel(
       {this.id,
-      this.receiver,
-      this.imageGroup,
-      this.tittleGroup,
-      this.users,
+      this.isHidden1,
+      this.isHidden2,
+      this.groupModel,
       this.messages,
-      this.lastMessage,
+      this.user1,
+      this.user2,
       this.unread});
 
   ChatModel.fromJson(Map<String, dynamic> json) {
     this.id = json["id"].toString();
-    this.tittleGroup = json["tittleGroup"];
-    if (this.imageGroup != null) this.imageGroup = json["imageGroup"];
-    if (json["lastMessage"] != null)
-      this.lastMessage = MessageModel.fromJson(json["lastMessage"]);
-    if (json["receiver"] != null)
-      this.receiver = UserModel.fromJson(json["receiver"]);
-    if (json['users'] != null) {
-      this.users = new List<UserModel>();
-      json['users'].forEach((v) {
-        this.users.add(new UserModel.fromJson(v));
-      });
-    }
+    this.isHidden1 = json["isHidden1"];
+    this.isHidden2 = json["isHidden2"];
+    if (json["groupModel"] != null)
+      this.groupModel = GroupModel.fromJson(json["groupModel"]);
     if (json['messages'] != null) {
       this.messages = new List<MessageModel>();
       json['messages'].forEach((v) {
         this.messages.add(new MessageModel.fromJson(v));
       });
     }
+    if (json["user1"] != null) this.user1 = UserModel.fromJson(json["user1"]);
+    if (json["user2"] != null) this.user2 = UserModel.fromJson(json["user2"]);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data["id"] = this.id;
-    data["tittleGroup"] = this.tittleGroup;
-    if (this.imageGroup != null) data["imageGroup"] = this.imageGroup;
-    if (this.lastMessage != null)
-      data['lastMessage'] = this.lastMessage.toJson();
-    if (this.receiver != null) data['receiver'] = this.receiver.toJson();
-    if (this.users != null) {
-      data['users'] = this.users.map((v) => v.toJson()).toList();
-    }
+    data["isHidden1"] = this.isHidden1;
+    data["isHidden2"] = this.isHidden2;
+    if (this.groupModel != null) data['groupModel'] = this.groupModel.toJson();
+    if (this.user1 != null) data['user1'] = this.user1.toJson();
+    if (this.user2 != null) data['user2'] = this.user2.toJson();
     if (this.messages != null) {
       data['messages'] = this.messages.map((v) => v.toJson()).toList();
     }
@@ -65,31 +57,31 @@ class ChatModel {
 
   set setId(id) => this.id = id;
 
-  get getTittleGroup => this.tittleGroup;
+  get getIsHidden1 => this.isHidden1;
 
-  set setTittleGroup(tittleGroup) => this.tittleGroup = tittleGroup;
+  set setIsHidden1(isHidden1) => this.isHidden1 = isHidden1;
 
-  get getImageGroup => this.imageGroup;
+  get getIsHidden2 => this.isHidden2;
 
-  set setImageGroup(imageGroup) => this.imageGroup = imageGroup;
+  set setIsHidden2(isHidden2) => this.isHidden2 = isHidden2;
 
-  get getLastMessage => this.lastMessage;
+  get getGroupModel => this.groupModel;
 
-  set setLastMessage(lastMessage) => this.lastMessage = lastMessage;
-
-  get getReceiver => this.receiver;
-
-  set setReceiver(receiver) => this.receiver = receiver;
-
-  get getUnread => this.unread;
-
-  set setUnread(unread) => this.unread = unread;
-
-  get getUsers => this.users;
-
-  set setUsers(users) => this.users = users;
+  set setGroupModel(groupModel) => this.groupModel = groupModel;
 
   get getMessages => this.messages;
 
   set setMessages(messages) => this.messages = messages;
+
+  get getUser1 => this.user1;
+
+  set setUser1(user1) => this.user1 = user1;
+
+  get getUser2 => this.user2;
+
+  set setUser2(user2) => this.user2 = user2;
+
+  get getUnread => this.unread;
+
+  set setUnread(unread) => this.unread = unread;
 }

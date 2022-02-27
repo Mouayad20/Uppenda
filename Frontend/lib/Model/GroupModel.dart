@@ -9,8 +9,8 @@ class GroupModel {
   String name;
   String imgPath;
   String description;
-  DateTime createdAt;
   UserModel admin;
+  DateTime createdAt;
   List<PostModel> postModels;
   List<UserModel> members;
 

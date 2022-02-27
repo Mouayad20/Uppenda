@@ -1,4 +1,3 @@
-import 'dart:core';
 import 'package:ppp/Model/UserModel.dart';
 import 'package:ppp/main.dart';
 
@@ -33,13 +32,13 @@ class PageModel {
     if (json["imgPath"] != null) this.imgPath = json["imgPath"];
     if (json["admin"] != null) this.admin = UserModel.fromJson(json["admin"]);
     if (json['members'] != null) {
-      this.members = new List<UserModel>();
+      this.members = [];
       json['members'].forEach((v) {
         this.members.add(new UserModel.fromJson(v));
       });
     }
     if (json['postModels'] != null) {
-      this.postModels = new List<PostModel>();
+      this.postModels = [];
       json['postModels'].forEach((v) {
         this.postModels.add(new PostModel.fromJson(v));
       });
