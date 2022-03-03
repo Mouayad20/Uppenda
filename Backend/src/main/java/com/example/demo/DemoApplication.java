@@ -20,7 +20,7 @@ public class DemoApplication {
 
 
 /*
-
+vc
 0xFFFB71C1C  Love
 0xFF000000   Angry
 0xFFF9A825   Sad
