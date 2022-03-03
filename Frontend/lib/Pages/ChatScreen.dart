@@ -18,7 +18,7 @@ class ChatScreen extends StatefulWidget {
 
   ChatModel chatModel;
 
-  ChatScreen({required this.chatModel, required this.channel});
+  ChatScreen({Key? key, required this.chatModel, required this.channel}) : super(key: key);
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -26,11 +26,11 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   MessageController messageController = MessageController();
-  TextEditingController messageText = new TextEditingController();
+  TextEditingController messageText = TextEditingController();
   MessageModel? messageModel;
   Future<List<dynamic>>? listBack;
   List listFront = [];
-  var curentSnapShot;
+  var current;
 
   void addMessageToListFront(dynamic value) {
     // print("\n\nlololloloo\n\n");
@@ -134,7 +134,7 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             ),
           ),
-          new StreamBuilder(
+          StreamBuilder(
             stream: widget.channel.stream,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
