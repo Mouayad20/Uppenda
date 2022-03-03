@@ -11,24 +11,25 @@ import '../Widgets/Logo.dart';
 import '../Widgets/TextFieldCustom.dart';
 
 class LogInPage extends StatelessWidget {
-  UserController _userController = new UserController();
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  UserController userController = UserController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
-      padding: EdgeInsets.only(top: 0),
-      physics: BouncingScrollPhysics(),
+      padding: const EdgeInsets.only(top: 0),
+      physics: const BouncingScrollPhysics(),
       children: [
         Stack(
           children: [HeaderLogin(), LogoHeader()],
         ),
         Title(),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         // EmailAndPassword()
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             children: [
               TextFieldCustom(
@@ -37,7 +38,7 @@ class LogInPage extends StatelessWidget {
                 texto: 'Email',
                 controller: emailController,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFieldCustom(
                 icono: Icons.visibility_off,
                 type: TextInputType.text,
@@ -51,24 +52,25 @@ class LogInPage extends StatelessWidget {
 
         ForgetPassword(),
 
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
 
         // ButtonSignIn()
         Container(
-          margin: EdgeInsets.all(25),
+          margin: const EdgeInsets.all(25),
           decoration: BoxDecoration(
               color: Colors.purple, borderRadius: BorderRadius.circular(50)),
           child: FlatButton(
               onPressed: () {
-                if (emailController.text.length == 0 ||
-                    passwordController.text.length == 0)
+                if (emailController.text.isEmpty ||
+                    passwordController.text.isEmpty) {
                   showAlertDialog(context, "complete all field please");
-                AuthRequest authRequest = new AuthRequest(
+                }
+                SignInModel authRequest = SignInModel(
                     email: emailController.text.trim(),
                     password: passwordController.text.trim());
-                if (emailController.text.length != 0 &&
-                    passwordController.text.length != 0) {
-                  _userController.signIn(authRequest).then((value) {
+                if (emailController.text.isNotEmpty &&
+                    passwordController.text.isNotEmpty) {
+                  userController.signIn(authRequest).then((value) {
                     print('>>>>>>>>>>>>   ' + value['userModel'].toString());
                     if (value['userModel'] == null) {
                       showAlertDialog(context, "invalid email or password");
@@ -88,7 +90,7 @@ class LogInPage extends StatelessWidget {
                 // if(== null)
                 //   showAlertDialog(context);
               },
-              child: Text(
+              child: const Text(
                 'SIGN IN',
                 style: TextStyle(
                     fontFamily: 'Merienda', color: Colors.white, fontSize: 18),
@@ -112,7 +114,7 @@ void showAlertDialog(BuildContext context, String message) {
   AlertDialog alert = AlertDialog(
     content: Text(
       message,
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.purple,
       ),
     ),
@@ -132,7 +134,7 @@ class Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(15.0),
       child: Row(
         children: [
           FlatButton(
@@ -141,7 +143,7 @@ class Title extends StatelessWidget {
                 builder: (context) => LogInPage(),
               ),
             ),
-            child: Text(
+            child: const Text(
               'SIGN IN',
               style: TextStyle(
                 fontFamily: 'Merienda',
@@ -150,7 +152,7 @@ class Title extends StatelessWidget {
               ),
             ),
           ),
-          Text(
+          const Text(
             '/',
             style: TextStyle(
               fontSize: 25,
@@ -164,7 +166,7 @@ class Title extends StatelessWidget {
                 builder: (context) => SignUp(),
               ),
             ),
-            child: Text(
+            child: const Text(
               'SIGN UP',
               style: TextStyle(
                 fontFamily: 'Merienda',
@@ -184,11 +186,11 @@ class ForgetPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(right: 25, top: 20),
+      padding: const EdgeInsets.only(right: 25, top: 20),
       alignment: Alignment.centerRight,
       child: FlatButton(
         onPressed: () => Navigator.pushNamed(context, 'ForgetPassword'),
-        child: Text(
+        child: const Text(
           'Forget Password?',
           style: TextStyle(
             fontFamily: 'Merienda',

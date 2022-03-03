@@ -28,7 +28,7 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void initState() {
-    chatController.getAllChatByUID(MyApp.currentUser.id).then((value) {
+    chatController.getAllChatByUID(MyApp.currentUser.id!).then((value) {
       setState(() {
         chatsList = value;
         listUsers = MyApp.currentUser.getFriends;
@@ -37,7 +37,7 @@ class _ChatPageState extends State<ChatPage> {
             for (var j = 0; j < chatsList.length; j++) {
               print("for");
               if (MyApp.currentUser.getFriends[i].getId ==
-                  chatsList[j].getReceiver.getId) {
+                  chatsList[j].getUser2.getId) {
                 print("iffffffffffff");
                 setState(() {
                   listUsers.remove(MyApp.currentUser.getFriends[i]);
@@ -58,7 +58,7 @@ class _ChatPageState extends State<ChatPage> {
       children: [
         Scaffold(
           appBar: AppBar(
-            title: Text(
+            title: const Text(
               "Chats",
               style: TextStyle(
                   letterSpacing: 4,
@@ -68,7 +68,7 @@ class _ChatPageState extends State<ChatPage> {
                   color: Colors.purple),
             ),
             leading: IconButton(
-              icon: Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back),
               color: Colors.purple,
               onPressed: () {
                 Navigator.push(
@@ -79,7 +79,7 @@ class _ChatPageState extends State<ChatPage> {
           ),
           backgroundColor: Colors.white,
           body: chatsList.isEmpty
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : ChatList(
@@ -89,12 +89,12 @@ class _ChatPageState extends State<ChatPage> {
         Positioned(
           bottom: 30,
           right: 25,
-          child: Container(
+          child: SizedBox(
             width: 60,
             height: 60,
             child: FloatingActionButton(
               heroTag: 3,
-              child: Icon(
+              child: const Icon(
                 Icons.add,
                 size: 30,
                 color: Color.fromRGBO(233, 207, 236, 1),
@@ -116,8 +116,8 @@ class _ChatPageState extends State<ChatPage> {
       builder: (BuildContext context) => Padding(
         padding: const EdgeInsets.all(8.0),
         child: CupertinoActionSheet(
-          title: listUsers.length == 0
-              ? Text(
+          title: listUsers.isEmpty
+              ? const Text(
                   "No friends yet",
                   style: TextStyle(
                     letterSpacing: 3,
@@ -127,7 +127,7 @@ class _ChatPageState extends State<ChatPage> {
                     fontWeight: FontWeight.w600,
                   ),
                 )
-              : Text(
+              : const Text(
                   "friends",
                   style: TextStyle(
                     letterSpacing: 2,
@@ -151,7 +151,7 @@ class _ChatPageState extends State<ChatPage> {
                           height: 30.0,
                           width: 30.0,
                           color: Colors.transparent,
-                          child: CircleAvatar(
+                          child: const CircleAvatar(
                             backgroundColor: Color.fromRGBO(233, 207, 236, 1),
                             foregroundColor: Colors.purple,
                             child: Icon(Icons.person),
@@ -163,17 +163,18 @@ class _ChatPageState extends State<ChatPage> {
                           width: 30.0,
                           color: Colors.transparent,
                           child: CircleAvatar(
-                            backgroundColor: Color.fromRGBO(233, 207, 236, 1),
+                            backgroundColor:
+                                const Color.fromRGBO(233, 207, 236, 1),
                             backgroundImage: Image.network(
                               MyApp.mainURL +
                                   listUsers[index]
                                       .imagePath
                                       .toString()
                                       .replaceAll("\\", "/"),
-                              headers: {
-                                "Authorization":
-                                    "Bearer " + MyApp.currentUser.getToken
-                              },
+                              // headers: {
+                              //   "Authorization":
+                              //       "Bearer " + MyApp.currentUser.getToken
+                              // },
                             ).image,
                           ),
                         ),
@@ -182,7 +183,7 @@ class _ChatPageState extends State<ChatPage> {
                           listUsers[index].getFirstName +
                               ' ' +
                               listUsers[index].getLastName,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 15,
                             color: Colors.purple,
                             fontFamily: 'Merienda',
@@ -194,9 +195,8 @@ class _ChatPageState extends State<ChatPage> {
                           list.add(MyApp.currentUser);
                           list.add(listUsers[index]);
                           ChatModel chatModel = ChatModel();
-                          chatModel.setReceiver = listUsers[index];
+                          chatModel.setUser2 = listUsers[index];
                           chatModel.messages = [];
-                          chatModel.setUsers = list;
 
                           chatController.addChat(chatModel).then((value) {
                             setState(() {
@@ -209,7 +209,7 @@ class _ChatPageState extends State<ChatPage> {
                             MaterialPageRoute(
                               builder: (_) => ChatScreen(
                                 chatModel: chatModel,
-                                channel: new IOWebSocketChannel.connect(
+                                channel: IOWebSocketChannel.connect(
                                   "ws://" + MyApp.ip + "/chat",
                                 ),
                               ),

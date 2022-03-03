@@ -29,39 +29,42 @@ import 'MainPage.dart';
 
 class Group1 extends StatefulWidget {
   String group_id;
-  Group1({this.group_id});
+
+  Group1({Key? key, required this.group_id}) : super(key: key);
+
   @override
   _Group1State createState() => _Group1State();
 }
 
 class _Group1State extends State<Group1> {
-  GroupController _groupController = new GroupController();
-  GroupModel _groupModel;
+  final GroupController _groupController = GroupController();
+  GroupModel? _groupModel;
   PostController postController = PostController();
 
-  String profileId;
+  String? profileId;
+
   Future<String> getUserFromCache() async {
     SharedPreferences cache = await SharedPreferences.getInstance();
-    return cache.getString('id');
+    return ""; //cache.getString('id');
   }
 
   @override
   void initState() {
     super.initState();
-    getUserFromCache().then((idFromChash) {
+    getUserFromCache().then((idFromCash) {
       setState(() {
-        profileId = idFromChash;
+        profileId = idFromCash;
       });
     });
 
     _groupController.getGroupById1(widget.group_id.toString()).then((value) {
       setState(() {
         _groupModel = value;
-        postController.getAllPostsForGroup(_groupModel.getId).then((value) {
+        postController.getAllPostsForGroup(_groupModel!.getId).then((value) {
           setState(() {
-            _groupModel.setPostModels = value;
+            _groupModel!.setPostModels = value;
             print("______________");
-            print(_groupModel.getPostModels.length.toString());
+            print(_groupModel!.getPostModels.length.toString());
             print("______________");
           });
         });
@@ -88,7 +91,7 @@ class _Group1State extends State<Group1> {
               ),
             );
           },
-          icon: Icon(
+          icon: const Icon(
             MdiIcons.homeSearchOutline,
             size: 30,
             color: Colors.purple,
@@ -97,7 +100,7 @@ class _Group1State extends State<Group1> {
         title: SizedBox(
           height: 40.0,
           child: InkWell(
-            child: Text(
+            child: const Text(
               "Uppenda",
               style: TextStyle(
                   letterSpacing: 4,
@@ -127,7 +130,7 @@ class _Group1State extends State<Group1> {
                     ),
                   );
                 },
-                icon: Icon(
+                icon: const Icon(
                   MdiIcons.messageOutline,
                   size: 28,
                   color: Colors.purple,
@@ -136,7 +139,7 @@ class _Group1State extends State<Group1> {
         ],
       ),
       body: _groupModel == null
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : SingleChildScrollView(
@@ -145,10 +148,10 @@ class _Group1State extends State<Group1> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                      padding: EdgeInsets.only(top: 15, bottom: 20),
+                      padding: const EdgeInsets.only(top: 15, bottom: 20),
                       child: Center(
                         child: Text(
-                          _groupModel.getName,
+                          _groupModel!.getName,
                           style: TextStyle(
                               color: Colors.purple,
                               fontFamily: 'Merienda',
@@ -156,8 +159,8 @@ class _Group1State extends State<Group1> {
                               shadows: [
                                 Shadow(
                                   blurRadius: 5,
-                                  color: Colors.purple[100],
-                                  offset: Offset(5.0, 5.0),
+                                  color: Colors.purple[100]!,
+                                  offset: const Offset(5.0, 5.0),
                                 ),
                               ]),
                         ),
@@ -167,23 +170,23 @@ class _Group1State extends State<Group1> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: _groupModel.getImage == null
-                              ? AssetImage("images/download.jpg")
+                          image: _groupModel!.getImage == null
+                              ? const AssetImage("images/download.jpg")
                               : Image.network(
                                   MyApp.mainURL +
-                                      _groupModel.getImage
+                                      _groupModel!.getImage
                                           .toString()
                                           .replaceAll("\\", "/"),
-                                  headers: {
-                                    "Authorization":
-                                        "Bearer " + MyApp.currentUser.getToken
-                                  },
+                                  // headers: {
+                                  //   "Authorization":
+                                  //       "Bearer " + MyApp.currentUser.getToken
+                                  // },
                                 ).image,
                           fit: BoxFit.cover,
                         ),
                         borderRadius: BorderRadius.circular(90),
                         color: Colors.white60,
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                               color: Color.fromRGBO(233, 177, 236, 1),
                               spreadRadius: 4,
@@ -191,14 +194,14 @@ class _Group1State extends State<Group1> {
                               offset: Offset(0, 0)),
                         ]),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   FutureBuilder<bool>(
-                      future: _groupController.isUserAdmin(_groupModel),
+                      future: _groupController.isUserAdmin(_groupModel!),
                       builder: (context, snapshot) {
-                        if (snapshot.data == null) return Text("sadad");
-                        if (snapshot.data)
+                        if (snapshot.data == null) return const Text("sadad");
+                        if (snapshot.data != null) {
                           return Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -206,12 +209,12 @@ class _Group1State extends State<Group1> {
                               Column(
                                 children: [
                                   Card(
-                                    shape: new RoundedRectangleBorder(
+                                    shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            new BorderRadius.circular(50)),
+                                            BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                           color: Colors.purple,
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(40),
@@ -235,13 +238,13 @@ class _Group1State extends State<Group1> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             IconButton(
-                                              icon: Icon(
+                                              icon: const Icon(
                                                 Icons.delete,
                                               ),
                                               iconSize: 25,
                                               onPressed: () {
                                                 _groupController
-                                                    .deleteGroup(_groupModel);
+                                                    .deleteGroup(_groupModel!);
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -257,7 +260,7 @@ class _Group1State extends State<Group1> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 3,
                                   ),
                                   Text(
@@ -271,12 +274,12 @@ class _Group1State extends State<Group1> {
                               Column(
                                 children: [
                                   Card(
-                                    shape: new RoundedRectangleBorder(
+                                    shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            new BorderRadius.circular(50)),
+                                            BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                           color: Colors.purple,
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(40),
@@ -300,13 +303,13 @@ class _Group1State extends State<Group1> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             IconButton(
-                                              icon: Icon(
+                                              icon: const Icon(
                                                 Icons.supervised_user_circle,
                                               ),
                                               iconSize: 25,
                                               onPressed: () {
                                                 showMembers(context,
-                                                    _groupModel.getMembers);
+                                                    _groupModel!.getMembers);
                                               },
                                               color: Colors.white,
                                             ),
@@ -315,7 +318,7 @@ class _Group1State extends State<Group1> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 3,
                                   ),
                                   Text(
@@ -329,12 +332,12 @@ class _Group1State extends State<Group1> {
                               Column(
                                 children: [
                                   Card(
-                                    shape: new RoundedRectangleBorder(
+                                    shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            new BorderRadius.circular(50)),
+                                            BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                           color: Colors.purple,
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(40),
@@ -358,12 +361,12 @@ class _Group1State extends State<Group1> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             IconButton(
-                                              icon: Icon(
+                                              icon: const Icon(
                                                   MdiIcons.informationVariant),
                                               iconSize: 25,
                                               onPressed: () {
                                                 showInformation(
-                                                    context, _groupModel);
+                                                    context, _groupModel!);
                                               },
                                               color: Colors.white,
                                             ),
@@ -372,7 +375,7 @@ class _Group1State extends State<Group1> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 3,
                                   ),
                                   Text(
@@ -385,22 +388,22 @@ class _Group1State extends State<Group1> {
                               ),
                             ],
                           );
-                        else {
+                        } else {
                           return Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
                               joinOrLeaveButton(
-                                  context, _groupModel, _groupController),
+                                  context, _groupModel!, _groupController),
                               Column(
                                 children: [
                                   Card(
-                                    shape: new RoundedRectangleBorder(
+                                    shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            new BorderRadius.circular(50)),
+                                            BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                           color: Colors.purple,
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(40),
@@ -424,13 +427,13 @@ class _Group1State extends State<Group1> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             IconButton(
-                                              icon: Icon(
+                                              icon: const Icon(
                                                 Icons.supervised_user_circle,
                                               ),
                                               iconSize: 25,
                                               onPressed: () {
                                                 showMembers(context,
-                                                    _groupModel.getMembers);
+                                                    _groupModel!.getMembers);
                                               },
                                               color: Colors.white,
                                             ),
@@ -439,7 +442,7 @@ class _Group1State extends State<Group1> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 3,
                                   ),
                                   Text(
@@ -453,12 +456,12 @@ class _Group1State extends State<Group1> {
                               Column(
                                 children: [
                                   Card(
-                                    shape: new RoundedRectangleBorder(
+                                    shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            new BorderRadius.circular(50)),
+                                            BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                           color: Colors.purple,
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(40),
@@ -482,12 +485,12 @@ class _Group1State extends State<Group1> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             IconButton(
-                                              icon: Icon(
+                                              icon: const Icon(
                                                   MdiIcons.informationVariant),
                                               iconSize: 25,
                                               onPressed: () {
                                                 showInformation(
-                                                    context, _groupModel);
+                                                    context, _groupModel!);
                                               },
                                               color: Colors.white,
                                             ),
@@ -496,7 +499,7 @@ class _Group1State extends State<Group1> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 3,
                                   ),
                                   Text(
@@ -511,10 +514,10 @@ class _Group1State extends State<Group1> {
                           );
                         }
                       }),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Divider(
+                  const Divider(
                     color: Colors.purple,
                     thickness: 0.7,
                   ),
@@ -523,7 +526,7 @@ class _Group1State extends State<Group1> {
                     child: Container(
                       height: height * 0.80,
                       width: width,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
@@ -542,8 +545,8 @@ class _Group1State extends State<Group1> {
                       child: Padding(
                         padding: const EdgeInsets.only(
                             bottom: 10, left: 8, right: 8, top: 10),
-                        child: _groupModel.getPostModels.length == 0
-                            ? Center(
+                        child: _groupModel!.getPostModels.length == 0
+                            ? const Center(
                                 child: Text(
                                   "There are no posts yet...",
                                   style: TextStyle(
@@ -555,10 +558,10 @@ class _Group1State extends State<Group1> {
                                 ),
                               )
                             : ListView.builder(
-                                itemCount: _groupModel.getPostModels.length,
+                                itemCount: _groupModel!.getPostModels.length,
                                 itemBuilder: (context, i) {
                                   return PostBody(
-                                      post: _groupModel.getPostModels[i]);
+                                      post: _groupModel!.getPostModels[i]);
                                 },
                               ),
                       ),
@@ -583,12 +586,12 @@ class _Group1State extends State<Group1> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Profile(
-                          user_id: profileId,
+                          user_id: profileId!,
                         ),
                       ),
                     );
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     MdiIcons.account,
                     size: 30,
                     color: Colors.purple,
@@ -598,18 +601,16 @@ class _Group1State extends State<Group1> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 2.0, 0.0),
                 child: IconButton(
-                  icon: Icon(Icons.supervised_user_circle,
+                  icon: const Icon(Icons.supervised_user_circle,
                       color: Colors.purple, size: 30),
                   onPressed: () {
                     showGroupsButton();
-
-                    /// _showgroups(context);
                   },
                 ),
               ),
               FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add_circle_sharp,
                     size: 40,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -626,7 +627,7 @@ class _Group1State extends State<Group1> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 5.0, 0.0),
                 child: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.description,
                     color: Colors.purple,
                     size: 30,
@@ -639,7 +640,7 @@ class _Group1State extends State<Group1> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 3.0, 0.0),
                 child: IconButton(
-                  icon: Icon(Icons.home, color: Colors.purple, size: 30),
+                  icon: const Icon(Icons.home, color: Colors.purple, size: 30),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -666,7 +667,7 @@ class _Group1State extends State<Group1> {
           children: [
             CupertinoActionSheet(
               title: MyApp.currentUser.getGroups.length == 0
-                  ? Text(
+                  ? const Text(
                       "No Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -676,7 +677,7 @@ class _Group1State extends State<Group1> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -691,7 +692,7 @@ class _Group1State extends State<Group1> {
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupmodel: MyApp.currentUser.getGroups[index]),
+                        groupModel: MyApp.currentUser.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -700,12 +701,12 @@ class _Group1State extends State<Group1> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -740,7 +741,7 @@ class _Group1State extends State<Group1> {
           children: [
             CupertinoActionSheet(
               title: MyApp.currentUser.getPages.length == 0
-                  ? Text(
+                  ? const Text(
                       "No Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -750,7 +751,7 @@ class _Group1State extends State<Group1> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -774,12 +775,12 @@ class _Group1State extends State<Group1> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -805,7 +806,7 @@ class _Group1State extends State<Group1> {
   }
 
   void showMembers(BuildContext context, List<UserModel> members) {
-    List<Widget> usersInfo = new List();
+    List<Widget> usersInfo = [];
     for (int i = 0; i < members.length; i++) {
       usersInfo.add(
         UserInfo(
@@ -813,13 +814,13 @@ class _Group1State extends State<Group1> {
         ),
       );
       usersInfo.add(
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
       );
     }
     Widget cancelButton = TextButton(
-      child: Text(
+      child: const Text(
         "OK",
         style: TextStyle(color: Colors.purple),
       ),
@@ -828,13 +829,13 @@ class _Group1State extends State<Group1> {
       },
     );
     AlertDialog alert = AlertDialog(
-      content: Container(
+      content: SizedBox(
         width: 350,
         child: ListView(
           children: usersInfo,
         ),
       ),
-      actions: [
+      actions: const [
         // cancelButton,
       ],
     );
@@ -848,7 +849,7 @@ class _Group1State extends State<Group1> {
 
   showInformation(BuildContext context, GroupModel groupModel) {
     Widget cancelButton = TextButton(
-      child: Text(
+      child: const Text(
         "OK",
         style: TextStyle(color: Colors.purple),
       ),
@@ -857,31 +858,31 @@ class _Group1State extends State<Group1> {
       },
     );
     AlertDialog alert = AlertDialog(
-      content: Container(
+      content: SizedBox(
         width: 380,
         child: ListView(
           children: [
             Column(
               children: [
-                Center(
+                const Center(
                   child: Text(
                     "Description",
                     style:
                         TextStyle(color: Colors.black, fontFamily: 'Merienda'),
                   ),
                 ),
-                Divider(
+                const Divider(
                   color: Colors.purple,
                   thickness: 1,
                 ),
                 Center(
                   child: Text(
                     groupModel.getDescription,
-                    style:
-                        TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
+                    style: const TextStyle(
+                        color: Colors.purple, fontFamily: 'Merienda'),
                   ),
                 ),
-                Divider(
+                const Divider(
                   color: Colors.purple,
                   thickness: 1,
                 ),
@@ -892,25 +893,25 @@ class _Group1State extends State<Group1> {
                       groupModel.getCreatedAt.month.toString() +
                       "/" +
                       groupModel.getCreatedAt.day.toString(),
-                  style:
-                      TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
+                  style: const TextStyle(
+                      color: Colors.purple, fontFamily: 'Merienda'),
                 ),
-                Divider(
+                const Divider(
                   color: Colors.purple,
                   thickness: 1,
                 ),
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       "To Update Group:",
                       style: TextStyle(color: Colors.purple),
                     ),
                     IconButton(
-                        icon: Icon(Icons.edit, color: Colors.purple),
+                        icon: const Icon(Icons.edit, color: Colors.purple),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
-                                  UpdateGroup(groupModel: _groupModel)));
+                                  UpdateGroup(groupModel: _groupModel!)));
                         }),
                   ],
                 ),
@@ -919,7 +920,7 @@ class _Group1State extends State<Group1> {
           ],
         ),
       ),
-      actions: [
+      actions: const [
         // cancelButton,
       ],
     );
@@ -947,7 +948,7 @@ class _Group1State extends State<Group1> {
         builder: (context, snapshot) {
           // print("??????????"+snapshot.data.toString());
           if (snapshot.data == null) {
-            return Container(
+            return const SizedBox(
               width: 0,
               height: 0,
             );
@@ -956,11 +957,11 @@ class _Group1State extends State<Group1> {
             return Column(
               children: [
                 Card(
-                  shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(50)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
                   color: Colors.purple[200],
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Colors.purple,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(40),
@@ -981,14 +982,14 @@ class _Group1State extends State<Group1> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.person_add,
                             ),
                             iconSize: 25,
                             onPressed: () {
                               groupController.joinToGroup(
                                   MyApp.currentUser.getId, groupModel.getId);
-                              SnackBar mysnackbar = SnackBar(
+                              SnackBar mysnackbar = const SnackBar(
                                   duration: Duration(seconds: 1),
                                   backgroundColor:
                                       Color.fromRGBO(233, 207, 236, 1),
@@ -1008,7 +1009,7 @@ class _Group1State extends State<Group1> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 3,
                 ),
                 Text(
@@ -1023,11 +1024,11 @@ class _Group1State extends State<Group1> {
             return Column(
               children: [
                 Card(
-                  shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(50)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
                   color: Colors.purple[200],
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Colors.purple,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(40),
@@ -1048,7 +1049,7 @@ class _Group1State extends State<Group1> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.exit_to_app,
                             ),
                             iconSize: 25,
@@ -1071,7 +1072,7 @@ class _Group1State extends State<Group1> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 3,
                 ),
                 Text(
@@ -1081,8 +1082,9 @@ class _Group1State extends State<Group1> {
                 ),
               ],
             );
-          } else
-            return null;
+          } else {
+            return Container();
+          }
         });
   }
 }

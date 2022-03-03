@@ -22,27 +22,30 @@ import '../main.dart';
 import 'MainPage.dart';
 
 class Page1 extends StatefulWidget {
-  final String page_id;
-  const Page1({Key key, this.page_id}) : super(key: key);
+  String page_id;
+
+  Page1({required this.page_id});
+
   @override
   _Page1State createState() => _Page1State();
 }
 
 class _Page1State extends State<Page1> {
-  PageControler _pageController = new PageControler();
-  PageModel _pageModel;
+  PageControler _pageController = PageControler();
+  PageModel? _pageModel;
   PostController postController = PostController();
 
-  String profileId;
+  String? profileId;
+
   Future<String> getUserFromCache() async {
     SharedPreferences cache = await SharedPreferences.getInstance();
-    return cache.getString('id');
+    return ""; // cache.getString('id');
   }
 
   @override
   void initState() {
     super.initState();
-    getUserFromCache().then((idFromChash) {
+    getUserFromCache().then((idFromCash) {
       setState(() {
         profileId = idFromChash;
       });
@@ -201,9 +204,9 @@ class _Page1State extends State<Page1> {
                               Column(
                                 children: [
                                   Card(
-                                    shape: new RoundedRectangleBorder(
+                                    shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            new BorderRadius.circular(50)),
+                                            BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -271,9 +274,9 @@ class _Page1State extends State<Page1> {
                               Column(
                                 children: [
                                   Card(
-                                    shape: new RoundedRectangleBorder(
+                                    shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            new BorderRadius.circular(50)),
+                                            BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -329,9 +332,9 @@ class _Page1State extends State<Page1> {
                               Column(
                                 children: [
                                   Card(
-                                    shape: new RoundedRectangleBorder(
+                                    shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            new BorderRadius.circular(50)),
+                                            BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -395,9 +398,9 @@ class _Page1State extends State<Page1> {
                               Column(
                                 children: [
                                   Card(
-                                    shape: new RoundedRectangleBorder(
+                                    shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            new BorderRadius.circular(50)),
+                                            BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -453,9 +456,9 @@ class _Page1State extends State<Page1> {
                               Column(
                                 children: [
                                   Card(
-                                    shape: new RoundedRectangleBorder(
+                                    shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            new BorderRadius.circular(50)),
+                                            BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -824,7 +827,7 @@ class _Page1State extends State<Page1> {
   }
 
   List posts() {
-    List<Widget> list = new List();
+    List<Widget> list = List();
     list.add(SizedBox(height: 0));
     list.add(Text(
       'Page Posts',
@@ -924,7 +927,7 @@ class _Page1State extends State<Page1> {
   }
 
   void showMembers(BuildContext context, List<UserModel> members) {
-    List<Widget> usersInfo = new List();
+    List<Widget> usersInfo = List();
     for (int i = 0; i < members.length; i++) {
       usersInfo.add(UserInfo(
         userModel: members.elementAt(i),
@@ -986,8 +989,8 @@ class _Page1State extends State<Page1> {
             return Column(
               children: [
                 Card(
-                  shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(50)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
                   color: Colors.purple[200],
                   child: Container(
                     decoration: BoxDecoration(
@@ -1053,8 +1056,8 @@ class _Page1State extends State<Page1> {
             return Column(
               children: [
                 Card(
-                  shape: new RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(50)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50)),
                   color: Colors.purple[200],
                   child: Container(
                     decoration: BoxDecoration(

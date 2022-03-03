@@ -1,6 +1,8 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:async';
 import 'dart:convert';
-/////////
+
 import 'package:frontend/Controllers/MessageController.dart';
 import 'package:frontend/Model/ChatModel.dart';
 import 'package:frontend/Model/MessageModel.dart';
@@ -18,7 +20,8 @@ class ChatScreen extends StatefulWidget {
 
   ChatModel chatModel;
 
-  ChatScreen({Key? key, required this.chatModel, required this.channel}) : super(key: key);
+  ChatScreen({Key? key, required this.chatModel, required this.channel})
+      : super(key: key);
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -30,7 +33,7 @@ class _ChatScreenState extends State<ChatScreen> {
   MessageModel? messageModel;
   Future<List<dynamic>>? listBack;
   List listFront = [];
-  var current;
+  var currentSnapShot;
 
   void addMessageToListFront(dynamic value) {
     // print("\n\nlololloloo\n\n");
@@ -47,10 +50,10 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       backgroundColor: Colors.white.withOpacity(0.95),
       appBar: AppBar(
-        brightness: Brightness.dark,
+        // brightness: Brightness.dark,
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           color: Colors.purple,
           onPressed: () {
             Navigator.push(
@@ -62,23 +65,23 @@ class _ChatScreenState extends State<ChatScreen> {
           text: TextSpan(
             children: [
               TextSpan(
-                text: widget.chatModel.getTittleGroup != null
-                    ? widget.chatModel.getTittleGroup
-                    : widget.chatModel.receiver.getFirstName +
+                text: widget.chatModel.getGroupModel != null
+                    ? widget.chatModel.getGroupModel.name
+                    : widget.chatModel.getUser2.getFirstName +
                         " " +
-                        widget.chatModel.receiver.getLastName,
-                style: TextStyle(
+                        widget.chatModel.getUser2.getLastName,
+                style: const TextStyle(
                   fontFamily: 'Merienda',
                   color: Colors.purple,
                   fontSize: 20,
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              TextSpan(text: '\n'),
-              widget.chatModel.getTittleGroup != null
-                  ? TextSpan()
-                  : widget.chatModel.receiver.getOnLine
-                      ? TextSpan(
+              const TextSpan(text: '\n'),
+              widget.chatModel.getGroupModel.name != null
+                  ? const TextSpan()
+                  : widget.chatModel.getUser2.getOnLine
+                      ? const TextSpan(
                           text: 'Online',
                           style: TextStyle(
                             fontFamily: 'Merienda',
@@ -87,7 +90,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             fontWeight: FontWeight.w400,
                           ),
                         )
-                      : TextSpan(
+                      : const TextSpan(
                           text: 'Offline',
                           style: TextStyle(
                             fontFamily: 'Merienda',
@@ -106,31 +109,37 @@ class _ChatScreenState extends State<ChatScreen> {
             child: FutureBuilder<List>(
               future: listBack,
               builder: (context, snapshot) {
-                if (snapshot.data == null) return SizedBox();
-                if (snapshot.hasError) print(snapshot.error);
-                if (snapshot.hasData) {
-                  listFront = snapshot.data;
-                  if (listFront.isEmpty)
-                    return Center(
-                      child: Text(
-                        "There are no messages yet...",
-                        style: TextStyle(
-                            letterSpacing: 1,
-                            fontFamily: 'Merienda',
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.purple),
-                      ),
-                    );
-
-                  if (listFront.isNotEmpty)
-                    return MessageList(
-                      list: listFront,
-                    );
-                } else
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
+                return Container();
+                // if (snapshot.data == null) return const SizedBox();
+                // if (snapshot.hasError) {
+                //   print(snapshot.error);
+                //   return Container();
+                // }
+                // if (snapshot.hasData) {
+                //   listFront = snapshot.data!;
+                //   if (listFront.isEmpty) {
+                //     return const Center(
+                //       child: Text(
+                //         "There are no messages yet...",
+                //         style: TextStyle(
+                //             letterSpacing: 1,
+                //             fontFamily: 'Merienda',
+                //             fontSize: 20,
+                //             fontWeight: FontWeight.w500,
+                //             color: Colors.purple),
+                //       ),
+                //     );
+                //   }
+                //   if (listFront.isNotEmpty) {
+                //     return MessageList(
+                //       list: listFront,
+                //     );
+                //   }
+                // } else {
+                //   return const Center(
+                //     child: CircularProgressIndicator(),
+                //   );
+                // }
               },
             ),
           ),
@@ -139,12 +148,11 @@ class _ChatScreenState extends State<ChatScreen> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 print(">>>>  snap  " + snapshot.hasData.toString());
-                messageModel =
-                    MessageModel.fromJson(json.decode(snapshot.data));
-                if (curentSnapShot != snapshot.data) {
-                  curentSnapShot = snapshot.data;
-                  Timer(Duration(microseconds: 1), () {
-                    addMessageTolistFront(messageModel.toJson());
+                // messageModel = MessageModel.fromJson(json.decode(snapshot.data));
+                if (currentSnapShot != snapshot.data) {
+                  currentSnapShot = snapshot.data;
+                  Timer(const Duration(microseconds: 1), () {
+                    addMessageToListFront(messageModel!.toJson());
                   });
 
                   return Container();
@@ -163,27 +171,27 @@ class _ChatScreenState extends State<ChatScreen> {
 
   _sendMessageArea() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       height: 70,
       color: Colors.white,
       child: Row(
         children: <Widget>[
           IconButton(
-            icon: Icon(Icons.photo),
+            icon: const Icon(Icons.photo),
             iconSize: 25,
             color: Colors.purple,
             onPressed: () {},
           ),
           Expanded(
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Send a message..',
               ),
               controller: messageText,
             ),
           ),
           IconButton(
-            icon: Icon(Icons.send),
+            icon: const Icon(Icons.send),
             iconSize: 25,
             color: Colors.purple,
             onPressed: () {
@@ -191,14 +199,14 @@ class _ChatScreenState extends State<ChatScreen> {
                 print("\n\t   Onpressed   \n");
                 MessageModel sendedMessage = MessageModel(
                   content: messageText.text.trim(),
-                  s_id: MyApp.currentUser.id.toString(),
-                  c_id: widget.chatModel.id,
+                  sender: MyApp.currentUser,
+                  chatModel: widget.chatModel,
                 );
                 print("\t\t\t" + messageText.text);
                 sendedMessage.setUnread = true;
                 // sendedMessage.setSender = MyApp.currentUser;
                 messageText.clear();
-                addMessageTolistFront(sendedMessage.toJson());
+                addMessageToListFront(sendedMessage.toJson());
                 widget.channel.sink.add(json.encode(sendedMessage.toJson()));
               }
             },
@@ -208,9 +216,9 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  // @override
-  // void dispose() {
-  //   widget.channel.sink.close();
-  //   super.dispose();
-  // }
+// @override
+// void dispose() {
+//   widget.channel.sink.close();
+//   super.dispose();
+// }
 }
