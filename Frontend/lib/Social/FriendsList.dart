@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/Controllers/ChatController.dart';
-import 'package:frontend/Model/ChatModel.dart';
 import 'package:frontend/Model/UserModel.dart';
-import 'package:frontend/Pages/ChatScreen.dart';
 import 'package:frontend/Pages/profile.dart';
 import 'package:frontend/main.dart';
-import 'package:web_socket_channel/io.dart';
 
 class FriendsList extends StatefulWidget {
   UserModel friend;
-  FriendsList({this.friend});
+  FriendsList({Key? key, required this.friend}) : super(key: key);
 
   @override
   _FriendsListState createState() => _FriendsListState();
@@ -28,7 +24,7 @@ class _FriendsListState extends State<FriendsList> {
               height: 30.0,
               width: 30.0,
               color: Colors.transparent,
-              child: CircleAvatar(
+              child: const CircleAvatar(
                 backgroundColor: Color.fromRGBO(233, 207, 236, 1),
                 foregroundColor: Colors.purple,
                 child: Icon(Icons.person),
@@ -40,20 +36,20 @@ class _FriendsListState extends State<FriendsList> {
               width: 30.0,
               color: Colors.transparent,
               child: CircleAvatar(
-                backgroundColor: Color.fromRGBO(233, 207, 236, 1),
+                backgroundColor: const Color.fromRGBO(233, 207, 236, 1),
                 backgroundImage: Image.network(
                   MyApp.mainURL +
                       widget.friend.imagePath.toString().replaceAll("\\", "/"),
-                  headers: {
-                    "Authorization": "Bearer " + MyApp.currentUser.getToken
-                  },
+                  // headers: {
+                  //   "Authorization": "Bearer " + MyApp.currentUser.getToken
+                  // },
                 ).image,
               ),
             ),
           TextButton(
             child: Text(
               widget.friend.getFirstName + ' ' + widget.friend.getLastName,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 15,
                 color: Colors.purple,
                 fontFamily: 'Merienda',

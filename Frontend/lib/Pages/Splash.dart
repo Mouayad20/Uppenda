@@ -14,10 +14,11 @@ class FirstScreen extends StatefulWidget {
 }
 
 class _FirstScreenState extends State<FirstScreen> {
+  @override
   void initState() {
     super.initState();
     Future.delayed(
-      Duration(seconds: 7),
+      const Duration(seconds: 7),
       () {
         Navigator.pushReplacement(
           context,
@@ -28,6 +29,7 @@ class _FirstScreenState extends State<FirstScreen> {
       },
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
@@ -38,10 +40,10 @@ class _FirstScreenState extends State<FirstScreen> {
         waveColor: Colors.purple,
         boxBackgroundColor: Colors.white,
         boxHeight: 800.0,
-        loadDuration: Duration(
+        loadDuration: const Duration(
           seconds: 6,
         ),
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           fontSize: 80.0,
           fontWeight: FontWeight.w500,
           letterSpacing: 6,
@@ -61,16 +63,18 @@ class _SecondScreenState extends State<SecondScreen> {
   UserController userController = UserController();
 
   Future<String> getUserFromCache() async {
-    SharedPreferences cache = await SharedPreferences.getInstance();
-    return cache.getString('id');
+    // SharedPreferences cache = await SharedPreferences.getInstance();
+    // return cache.getString('id');
+    return "1";
   }
 
   Future<String> getTokenFromCache() async {
-    SharedPreferences cache = await SharedPreferences.getInstance();
-    return cache.getString('token');
+    // SharedPreferences cache = await SharedPreferences.getInstance();
+    // return cache.getString('token');
+    return "token";
   }
 
-  bool mimo;
+  bool? mimo;
 
   @override
   void initState() {
@@ -81,7 +85,7 @@ class _SecondScreenState extends State<SecondScreen> {
           setState(() {
             getTokenFromCache().then((tkn) {
               setState(() {
-                MyApp.currentUser.setToken = tkn;
+                // MyApp.currentUser.setToken = tkn;
               });
             });
             userController.getUserById(value1).then((value) {
@@ -97,9 +101,7 @@ class _SecondScreenState extends State<SecondScreen> {
                         .updateUser(MyApp.currentUser, false)
                         .then((value3) {
                       setState(() {
-                        if (value3 != null) {
-                          MyApp.currentUser = value3;
-                        }
+                        MyApp.currentUser = value3;
                       });
                     });
                   });
@@ -124,26 +126,26 @@ class _SecondScreenState extends State<SecondScreen> {
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
         primaryColor: Colors.white,
-        primaryIconTheme: IconThemeData(
+        primaryIconTheme: const IconThemeData(
           color: Colors.purple,
         ),
-        primaryTextTheme: TextTheme(
-          title: TextStyle(
+        primaryTextTheme: const TextTheme(
+          titleLarge: TextStyle(
             color: Colors.purple,
           ),
         ),
-        textTheme: TextTheme(
-          title: TextStyle(
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(
             color: Colors.purple,
           ),
         ),
       ),
       home: Scaffold(
         body: mimo == null
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : mimo
+            : mimo!
                 ? SocialHome()
                 : LogInPage(),
       ),

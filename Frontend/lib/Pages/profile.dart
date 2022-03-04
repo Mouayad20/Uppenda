@@ -1,10 +1,8 @@
-import 'dart:convert';
-import 'dart:developer';
-import 'dart:ffi';
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:frontend/Body/PostBody.dart';
 import 'package:frontend/Controllers/PostController.dart';
 import 'package:frontend/Model/PostModel.dart';
@@ -13,55 +11,56 @@ import 'package:frontend/Pages/settings.dart';
 import 'package:frontend/Social/FriendsList.dart';
 import 'package:frontend/Social/Social_Home.dart';
 import 'package:frontend/main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/Model/UserModel.dart';
 import 'package:frontend/Controllers/UserController.dart';
 
 class Profile extends StatefulWidget {
   final String user_id;
-  const Profile({this.user_id});
+
+  const Profile({Key? key, required this.user_id}) : super(key: key);
+
   @override
   _ProfileState createState() => _ProfileState();
 }
 
 class _ProfileState extends State<Profile> {
-  List<PostModel> postModels;
+  List<PostModel>? postModels;
   PostController postController = PostController();
-  UserController userController = new UserController();
-  UserModel userModel;
+  UserController userController = UserController();
+  UserModel? userModel;
 
-  String profileId;
+  String? profileId;
+
   Future<String> getUserFromCache() async {
-    SharedPreferences cache = await SharedPreferences.getInstance();
-    return cache.getString('id');
+    // SharedPreferences cache = await SharedPreferences.getInstance();
+    // return cache.getString('id');
+    return "";
   }
 
   @override
   void initState() {
     super.initState();
-    getUserFromCache().then((idFromChash) {
+    getUserFromCache().then((idFromCash) {
       setState(() {
-        if (idFromChash != null) {
-          print("**********iddddddd1**********");
-          print(idFromChash);
-          print("**********iddddddd2***********");
-          profileId = idFromChash;
-          userController.getUserById(widget.user_id).then((value) {
-            setState(() {
-              userModel = value;
-            });
+        // print("**********id1**********");
+        // print(idFromCash);
+        // print("**********id2***********");
+        profileId = idFromCash;
+        userController.getUserById(widget.user_id).then((value) {
+          setState(() {
+            userModel = value;
           });
-          userController.getUserById(idFromChash).then((value) {
-            setState(() {
-              MyApp.currentUser = value;
-            });
+        });
+        userController.getUserById(idFromCash).then((value) {
+          setState(() {
+            MyApp.currentUser = value;
           });
-          postController.getAllPostsForUser(widget.user_id).then((value) {
-            setState(() {
-              postModels = value;
-            });
+        });
+        postController.getAllPostsForUser(widget.user_id).then((value) {
+          setState(() {
+            postModels = value;
           });
-        }
+        });
       });
     });
   }
@@ -72,14 +71,14 @@ class _ProfileState extends State<Profile> {
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: userModel == null
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : Stack(
               fit: StackFit.expand,
               children: [
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
                         Colors.purple,
@@ -93,8 +92,8 @@ class _ProfileState extends State<Profile> {
                 Scaffold(
                   backgroundColor: Colors.transparent,
                   body: SingleChildScrollView(
-                    physics:
-                        BouncingScrollPhysics(), //لرفع سكرول كل الشغلات الموجودة بالصفحة للاعلى
+                    physics: const BouncingScrollPhysics(),
+                    //لرفع سكرول كل الشغلات الموجودة بالصفحة للاعلى
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 14, vertical: 50),
@@ -104,23 +103,21 @@ class _ProfileState extends State<Profile> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Container(
-                                child: IconButton(
-                                  icon: Icon(Icons.chevron_left),
-                                  color: Colors.white,
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => SocialHome(),
-                                      ),
-                                    );
-                                  },
-                                ),
+                              IconButton(
+                                icon: const Icon(Icons.chevron_left),
+                                color: Colors.white,
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => SocialHome(),
+                                    ),
+                                  );
+                                },
                               ),
                               Container(
-                                  child: profileId == userModel.getId
+                                  child: profileId == userModel!.getId
                                       ? IconButton(
-                                          icon: Icon(Icons.settings),
+                                          icon: const Icon(Icons.settings),
                                           color: Colors.white,
                                           onPressed: () {
                                             Navigator.of(context).push(
@@ -137,13 +134,13 @@ class _ProfileState extends State<Profile> {
 
 //////////////////////////////////////////////////End top page/////////////////////////////////////////////////////////
 
-                          SizedBox(
+                          const SizedBox(
                             height: 25,
                           ),
 
 ///////////////////////////////////////////////////start info//////////////////////////////////////////////////////////
 
-                          Text(
+                          const Text(
                             'PROFILE',
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -152,13 +149,13 @@ class _ProfileState extends State<Profile> {
                               fontFamily: 'DancingScript',
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 22,
                           ),
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                          Container(
+                          SizedBox(
                             // height: height * 0.43,
                             height: height / 2,
                             child: LayoutBuilder(
@@ -182,38 +179,38 @@ class _ProfileState extends State<Profile> {
                                         ),
                                         child: Column(
                                           children: [
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 65,
                                             ),
-                                            if (userModel.getFirstName !=
+                                            if (userModel!.getFirstName !=
                                                     null &&
-                                                userModel.getLastName != null)
+                                                userModel!.getLastName != null)
                                               Text(
-                                                userModel.getFirstName +
+                                                userModel!.getFirstName +
                                                     " " +
-                                                    userModel.getLastName,
-                                                style: TextStyle(
+                                                    userModel!.getLastName,
+                                                style: const TextStyle(
                                                   color: Colors.purple,
                                                   fontFamily: 'Merienda',
                                                   fontSize: 30,
                                                 ),
                                               ),
-                                            SizedBox(height: 5),
+                                            const SizedBox(height: 5),
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Container(
                                                   child: profileId ==
-                                                          userModel.getId
+                                                          userModel!.getId
                                                       ? IconButton(
-                                                          icon: Icon(
+                                                          icon: const Icon(
                                                               Icons.group,
                                                               color: Colors
                                                                   .purple),
                                                           color: Colors.grey,
                                                           onPressed: () {
-                                                            getButtomSheetFriend(
+                                                            getBottomSheetFriend(
                                                               MyApp.currentUser
                                                                   .getFriends,
                                                             );
@@ -222,9 +219,9 @@ class _ProfileState extends State<Profile> {
                                                       : _isMyFriend(
                                                               MyApp.currentUser
                                                                   .getFriends,
-                                                              userModel.getId)
+                                                              userModel!.getId)
                                                           ? IconButton(
-                                                              icon: Icon(
+                                                              icon: const Icon(
                                                                 Icons
                                                                     .person_remove,
                                                                 color: Colors
@@ -236,13 +233,13 @@ class _ProfileState extends State<Profile> {
                                                                   MyApp
                                                                       .currentUser
                                                                       .getId,
-                                                                  userModel
+                                                                  userModel!
                                                                       .getId,
                                                                 );
                                                               },
                                                             )
                                                           : IconButton(
-                                                              icon: Icon(
+                                                              icon: const Icon(
                                                                   Icons.add,
                                                                   color: Colors
                                                                       .purple),
@@ -251,7 +248,7 @@ class _ProfileState extends State<Profile> {
                                                                     MyApp
                                                                         .currentUser
                                                                         .getId,
-                                                                    userModel
+                                                                    userModel!
                                                                         .getId);
                                                               },
                                                             ),
@@ -271,10 +268,10 @@ class _ProfileState extends State<Profile> {
                                           decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               border: Border.all(
-                                                  color: Colors.purple[600],
+                                                  color: Colors.purple[600]!,
                                                   width: 4)),
-                                          child: userModel.getImage == null
-                                              ? CircleAvatar(
+                                          child: userModel!.getImage == null
+                                              ? const CircleAvatar(
                                                   child: Icon(
                                                     Icons.person,
                                                     size: 80,
@@ -285,16 +282,16 @@ class _ProfileState extends State<Profile> {
                                               : CircleAvatar(
                                                   backgroundImage: NetworkImage(
                                                     MyApp.mainURL +
-                                                        userModel.getImage
+                                                        userModel!.getImage
                                                             .toString()
                                                             .replaceAll(
                                                                 "\\", "/"),
-                                                    headers: {
-                                                      "Authorization":
-                                                          "Bearer " +
-                                                              MyApp.currentUser
-                                                                  .getToken
-                                                    },
+                                                    // headers: {
+                                                    //   "Authorization":
+                                                    //       "Bearer " +
+                                                    //           MyApp.currentUser
+                                                    //               .getToken
+                                                    // },
                                                   ),
                                                   backgroundColor: Colors.blue,
                                                   // minRadius: 50,
@@ -307,12 +304,12 @@ class _ProfileState extends State<Profile> {
                                     Positioned(
                                       top: 130,
                                       right: 20,
-                                      child: Container(
+                                      child: SizedBox(
                                           height: 50,
                                           width: 30,
-                                          child: profileId == userModel.getId
+                                          child: profileId == userModel!.getId
                                               ? IconButton(
-                                                  icon: Icon(
+                                                  icon: const Icon(
                                                     Icons.edit,
                                                     color: Colors.purple,
                                                   ),
@@ -324,7 +321,7 @@ class _ProfileState extends State<Profile> {
                                                         builder: (context) =>
                                                             EditProfile(
                                                                 userModel:
-                                                                    userModel),
+                                                                    userModel!),
                                                       ),
                                                     );
                                                   },
@@ -338,11 +335,11 @@ class _ProfileState extends State<Profile> {
                           ),
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                          SizedBox(
+                          const SizedBox(
                             height: 30,
                           ),
 
-                          Container(
+                          SizedBox(
                             height: height * 0.33,
                             child: LayoutBuilder(
                               builder: (context, constraints) {
@@ -351,7 +348,7 @@ class _ProfileState extends State<Profile> {
                                 return Stack(
                                   fit: StackFit.expand,
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Container(
@@ -365,7 +362,7 @@ class _ProfileState extends State<Profile> {
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 8),
                                         child: ListView(
-                                          children: profileInfo(userModel),
+                                          children: profileInfo(userModel!),
                                         ),
                                       ),
                                     ),
@@ -377,7 +374,7 @@ class _ProfileState extends State<Profile> {
 
 ////////////////////////////////////////////////////start list of posts///////////////////////////////////////////////////////////////
 
-                          SizedBox(height: 30),
+                          const SizedBox(height: 30),
 
                           Container(
                             height: height * 0.92,
@@ -390,14 +387,14 @@ class _ProfileState extends State<Profile> {
                               padding: const EdgeInsets.only(
                                   bottom: 10, left: 8, right: 8, top: 0),
                               child: postModels == null
-                                  ? Center(
+                                  ? const Center(
                                       child: CircularProgressIndicator(),
                                     )
                                   : ListView.builder(
-                                      itemCount: postModels.length,
+                                      itemCount: postModels!.length,
                                       itemBuilder: (context, i) {
                                         return PostBody(
-                                          post: postModels[i],
+                                          post: postModels![i],
                                         );
                                       },
                                     ),
@@ -413,16 +410,16 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  getButtomSheetFriend(List<UserModel> listUsers) {
+  getBottomSheetFriend(List<UserModel> listUsers) {
     return showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) => Padding(
         padding: const EdgeInsets.all(8.0),
         child: CupertinoActionSheet(
-          title: listUsers.length == null
-              ? Center(child: CircularProgressIndicator())
-              : listUsers.length == 0
-                  ? Text(
+          title: listUsers.isEmpty
+              ? const Center(child: CircularProgressIndicator())
+              : listUsers.isEmpty
+                  ? const Text(
                       "No friends yet",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -432,7 +429,7 @@ class _ProfileState extends State<Profile> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "friends",
                       style: TextStyle(
                         letterSpacing: 2,
@@ -457,10 +454,8 @@ class _ProfileState extends State<Profile> {
 
   bool _isMyFriend(List<UserModel> list, String userPostId) {
     bool isFriend = false;
-    if (list != null) {
-      for (var userModel in list) {
-        if (userModel.getId == userPostId) isFriend = true;
-      }
+    for (var userModel in list) {
+      if (userModel.getId == userPostId) isFriend = true;
     }
     return isFriend;
   }
@@ -479,25 +474,26 @@ class _ProfileState extends State<Profile> {
 //   return list;
 // }
 
-List profileInfo(UserModel user) {
-  List<Widget> list = new List();
-  if (user.getGender != null)
+List<Widget> profileInfo(UserModel user) {
+  List<Widget> list = [];
+  if (user.getGender != null) {
     list.add(
       ListTile(
         title: Text(
           user.getGender.toString(),
-          style: TextStyle(
+          style: const TextStyle(
               color: Colors.deepPurple, fontSize: 20, fontFamily: 'Merienda'),
         ),
-        leading: Icon(
+        leading: const Icon(
           Icons.person,
           color: Colors.purple,
         ),
       ),
     );
-  if (user.getAge != null)
+  }
+  if (user.getAge != null) {
     list.add(
-      ListTile(
+      const ListTile(
         title: Text(
           // user.getAge().year.toString() +
           //     "/" +
@@ -514,61 +510,66 @@ List profileInfo(UserModel user) {
         ),
       ),
     );
-  if (user.getStudyLevel != null)
+  }
+  if (user.getStudyLevel != null) {
     list.add(
       ListTile(
         title: Text(
           user.getStudyLevel.toString(),
-          style: TextStyle(
+          style: const TextStyle(
               color: Colors.deepPurple, fontSize: 20, fontFamily: 'Merienda'),
         ),
-        leading: Icon(
+        leading: const Icon(
           Icons.school_outlined,
           color: Colors.purple,
         ),
       ),
     );
-  if (user.getLocation != null)
+  }
+  if (user.getLocation != null) {
     list.add(
       ListTile(
         title: Text(
           user.getLocation.toString(),
-          style: TextStyle(
+          style: const TextStyle(
               color: Colors.deepPurple, fontSize: 20, fontFamily: 'Merienda'),
         ),
-        leading: Icon(
+        leading: const Icon(
           Icons.location_on_outlined,
           color: Colors.purple,
         ),
       ),
     );
-  if (user.getEmail != null)
+  }
+  if (user.getEmail != null) {
     list.add(
       ListTile(
         title: Text(
           user.getEmail.toString(),
-          style: TextStyle(
+          style: const TextStyle(
               color: Colors.deepPurple, fontSize: 20, fontFamily: 'Merienda'),
         ),
-        leading: Icon(
+        leading: const Icon(
           Icons.alternate_email,
           color: Colors.purple,
         ),
       ),
     );
-  if (user.getMobile != null)
+  }
+  if (user.getMobile != null) {
     list.add(
       ListTile(
         title: Text(
           user.getMobile.toString(),
-          style: TextStyle(
+          style: const TextStyle(
               color: Colors.deepPurple, fontSize: 20, fontFamily: 'Merienda'),
         ),
-        leading: Icon(
+        leading: const Icon(
           Icons.phone_in_talk_outlined,
           color: Colors.purple,
         ),
       ),
     );
+  }
   return list;
 }

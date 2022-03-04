@@ -7,11 +7,9 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:frontend/Body/BodyGroupButton.dart';
 import 'package:frontend/Body/BodyPageButton.dart';
 import 'package:frontend/Controllers/UserController.dart';
-import 'package:frontend/Model/GroupModel.dart';
 import 'package:frontend/Model/MediaModel.dart';
 import 'package:frontend/Model/PostModel.dart';
 import 'package:frontend/Model/TypeModel.dart';
-import 'package:frontend/Model/PageModel.dart';
 import 'package:frontend/Social/CreateGroup.dart';
 import 'package:frontend/Social/CreatePage.dart';
 import 'package:frontend/Social/Search.dart';
@@ -24,50 +22,51 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Social_Home.dart';
 
 class CreatePost extends StatefulWidget {
-  PostModel postModel;
+  PostModel? postModel;
+
   @override
   _CreatePostState createState() => _CreatePostState();
 }
 
 class _CreatePostState extends State<CreatePost> {
   TypeController typeController = TypeController();
-  PostController postController = PostController();
-  List<TypeModel> list;
-  List<PopupMenuItem> listaa = new List();
-  bool not_loop = true;
-  TextEditingController poctContentController = TextEditingController();
-  ////////////
-  String selectText = " Select Your Post Type..";
-  File _image;
-  List<Image> _images;
-  File _cameraImage;
-  File _video;
-  List<File> _Videos;
-  ImagePicker picker = ImagePicker();
-  List<MediaModel> mediaModels = [];
-
-  String profileId;
-  Future<String> getUserFromCache() async {
-    SharedPreferences cache = await SharedPreferences.getInstance();
-    return cache.getString('id');
-  }
-
   UserController userController = UserController();
+  PostController postController = PostController();
+  List<TypeModel>? list;
+  List<PopupMenuItem> popupMenuItems = [];
+  bool notLoop = true;
+  TextEditingController postContentController = TextEditingController();
+  String selectText = " Select Your Post Type..";
+  File? _image;
+  List<Image>? _images;
+  File? _cameraImage;
+  File? _video;
+  List<File>? _Videos;
+  ImagePicker picker = ImagePicker();
+
+  List<MediaModel> mediaModels = [];
+  String? profileId;
+
+  Future<String> getUserFromCache() async {
+    // SharedPreferences cache = await SharedPreferences.getInstance();
+    // return cache.getString('id');
+    return "1";
+  }
 
   @override
   void initState() {
     super.initState();
-    getUserFromCache().then((idFromChash) {
+    getUserFromCache().then((idFromCash) {
       setState(() {
-        profileId = idFromChash;
-        userController.getUserById(idFromChash).then((value) {
+        profileId = idFromCash;
+        userController.getUserById(idFromCash).then((value) {
           setState(() {
             MyApp.currentUser = value;
           });
         });
       });
     });
-    if (_images == null) _images = [];
+    _images ??= [];
     widget.postModel = PostModel();
     typeController.getAllPostType().then((value) {
       setState(() {
@@ -78,11 +77,11 @@ class _CreatePostState extends State<CreatePost> {
 
   @override
   Widget build(BuildContext context) {
-    if (list != null && not_loop) {
-      for (var i = 0; i < list.length; i++) {
-        listaa.add(malaz(list[i]));
+    if (list != null && notLoop) {
+      for (var i = 0; i < list!.length; i++) {
+        popupMenuItems.add(malaz(list![i]));
       }
-      not_loop = false;
+      notLoop = false;
     }
     return Scaffold(
       appBar: AppBar(
@@ -91,7 +90,7 @@ class _CreatePostState extends State<CreatePost> {
         title: SizedBox(
           height: 40.0,
           child: InkWell(
-            child: Text(
+            child: const Text(
               "Uppenda",
               style: TextStyle(
                   letterSpacing: 4,
@@ -113,15 +112,15 @@ class _CreatePostState extends State<CreatePost> {
               ),
             );
           },
-          icon: Icon(
+          icon: const Icon(
             MdiIcons.homeSearchOutline,
             size: 30,
             color: Colors.purple,
           ),
         ),
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.only(right: 13.0),
+            padding: EdgeInsets.only(right: 13.0),
             child: Icon(
               MdiIcons.messageOutline,
               size: 28,
@@ -130,179 +129,176 @@ class _CreatePostState extends State<CreatePost> {
           ),
         ],
       ),
-      body: Container(
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
-              child: Row(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    color: Color.fromRGBO(233, 207, 236, 1),
-                    child: getlist(),
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  color: const Color.fromRGBO(233, 207, 236, 1),
+                  child: getList(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
+                  child: Text(
+                    selectText,
+                    style: TextStyle(
+                        color: Colors.purple[200], fontFamily: 'Merienda'),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
-                    child: Text(
-                      selectText,
-                      style: TextStyle(
-                          color: Colors.purple[200], fontFamily: 'Merienda'),
-                    ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 200,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(233, 207, 236, 1),
+                    spreadRadius: 4,
+                    blurRadius: 7,
+                    offset: Offset(0, 0),
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromRGBO(233, 207, 236, 1),
-                      spreadRadius: 4,
-                      blurRadius: 7,
-                      offset: Offset(0, 0),
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
-                  child: TextField(
-                    controller: poctContentController,
-                    maxLines: 10,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Write Post Text Here...",
-                      hintStyle: TextStyle(
-                          fontSize: 20,
-                          color: Colors.purple[200],
-                          decorationThickness: 2,
-                          fontFamily: 'Merienda'),
-                    ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
+                child: TextField(
+                  controller: postContentController,
+                  maxLines: 10,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Write Post Text Here...",
+                    hintStyle: TextStyle(
+                        fontSize: 20,
+                        color: Colors.purple[200],
+                        decorationThickness: 2,
+                        fontFamily: 'Merienda'),
                   ),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
-              child: Row(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    color: Color.fromRGBO(233, 207, 236, 1),
-                    child: getlistCameraGallery(),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  color: const Color.fromRGBO(233, 207, 236, 1),
+                  child: getListCameraGallery(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
+                  child: Text(
+                    " To Upload Photo To Your Post..",
+                    style: TextStyle(
+                        color: Colors.purple[200], fontFamily: 'Merienda'),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
-                    child: Text(
-                      " To Upload Photo To Your Post..",
-                      style: TextStyle(
-                          color: Colors.purple[200], fontFamily: 'Merienda'),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
-              child: Row(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    color: Color.fromRGBO(233, 207, 236, 1),
-                    child: getlistCameraGalleryVideo(),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  color: const Color.fromRGBO(233, 207, 236, 1),
+                  child: getListCameraGalleryVideo(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
+                  child: Text(
+                    " To Upload Video To Your Post..",
+                    style: TextStyle(
+                        color: Colors.purple[200], fontFamily: 'Merienda'),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
-                    child: Text(
-                      " To Upload Video To Your Post..",
-                      style: TextStyle(
-                          color: Colors.purple[200], fontFamily: 'Merienda'),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            _images != null || _images.isNotEmpty
-                ? Container(
-                    height: 110.0,
-                    width: 350.0,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _images.length,
-                      itemBuilder: (context, index) {
-                        return _images[index];
-                      },
-                    ),
-                  )
-                : Text("no Images selected"),
-            _Videos != null
-                ? Container(
-                    height: 200.0,
-                    width: 200.0,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _Videos.length,
-                      itemBuilder: (context, index) {
-                        return VideoPlayerWidget2(_Videos[index]) ??
-                            Container();
-                      },
-                    ),
-                  )
-                : Text(""),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(5.0, 8.0, 8.0, 8.0),
-              child: Column(
-                children: [
-                  Container(
-                    width: 60,
-                    height: 40,
-                    color: Color.fromRGBO(233, 207, 236, 1),
-                    child: IconButton(
-                        icon: Icon(
-                          Icons.done_outline_rounded,
-                          size: 30,
-                          color: Colors.purple,
-                        ),
-                        onPressed: () {
-                          widget.postModel.setContent =
-                              poctContentController.text.trim();
-                          widget.postModel.setMedia = mediaModels;
-                          widget.postModel.setCreatedAt = DateTime.now();
-                          postController.addPostOnProfile(widget.postModel);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SocialHome(),
-                            ),
-                          );
-                        }),
+          ),
+          _images != null || _images!.isNotEmpty
+              ? SizedBox(
+                  height: 110.0,
+                  width: 350.0,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _images!.length,
+                    itemBuilder: (context, index) {
+                      return _images![index];
+                    },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(5.0, 8.0, 8.0, 8.0),
-                    child: Text(
-                      " Done",
-                      style: TextStyle(
-                          color: Colors.purple, fontFamily: 'Merienda'),
-                    ),
+                )
+              : const Text("no Images selected"),
+          _Videos != null
+              ? SizedBox(
+                  height: 200.0,
+                  width: 200.0,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _Videos!.length,
+                    itemBuilder: (context, index) {
+                      return VideoPlayerWidget2(_Videos![index]) ?? Container();
+                    },
                   ),
-                ],
-              ),
+                )
+              : const Text(""),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(5.0, 8.0, 8.0, 8.0),
+            child: Column(
+              children: [
+                Container(
+                  width: 60,
+                  height: 40,
+                  color: const Color.fromRGBO(233, 207, 236, 1),
+                  child: IconButton(
+                      icon: const Icon(
+                        Icons.done_outline_rounded,
+                        size: 30,
+                        color: Colors.purple,
+                      ),
+                      onPressed: () {
+                        widget.postModel!.setContent =
+                            postContentController.text.trim();
+                        widget.postModel!.setMedia = mediaModels;
+                        widget.postModel!.setCreatedAt = DateTime.now();
+                        postController.addPostOnProfile(widget.postModel!);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SocialHome(),
+                          ),
+                        );
+                      }),
+                ),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(5.0, 8.0, 8.0, 8.0),
+                  child: Text(
+                    " Done",
+                    style:
+                        TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: Container(
@@ -320,12 +316,12 @@ class _CreatePostState extends State<CreatePost> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Profile(
-                          user_id: profileId,
+                          user_id: profileId!,
                         ),
                       ),
                     );
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     MdiIcons.account,
                     size: 30,
                     color: Colors.purple,
@@ -335,7 +331,7 @@ class _CreatePostState extends State<CreatePost> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 2.0, 0.0),
                 child: IconButton(
-                  icon: Icon(Icons.supervised_user_circle,
+                  icon: const Icon(Icons.supervised_user_circle,
                       color: Colors.purple, size: 30),
                   onPressed: () {
                     showGroupsButton();
@@ -344,7 +340,7 @@ class _CreatePostState extends State<CreatePost> {
               ),
               FloatingActionButton(
                   heroTag: 2,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add_circle_sharp,
                     size: 40,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -354,7 +350,7 @@ class _CreatePostState extends State<CreatePost> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 5.0, 0.0),
                 child: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.description,
                     color: Colors.purple,
                     size: 30,
@@ -367,7 +363,7 @@ class _CreatePostState extends State<CreatePost> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 3.0, 0.0),
                 child: IconButton(
-                  icon: Icon(Icons.home, color: Colors.purple, size: 30),
+                  icon: const Icon(Icons.home, color: Colors.purple, size: 30),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -394,7 +390,7 @@ class _CreatePostState extends State<CreatePost> {
           children: [
             CupertinoActionSheet(
               title: MyApp.currentUser.getGroups.length == 0
-                  ? Text(
+                  ? const Text(
                       "No Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -404,7 +400,7 @@ class _CreatePostState extends State<CreatePost> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -419,7 +415,7 @@ class _CreatePostState extends State<CreatePost> {
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupmodel: MyApp.currentUser.getGroups[index]),
+                        groupModel: MyApp.currentUser.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -428,12 +424,12 @@ class _CreatePostState extends State<CreatePost> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -468,7 +464,7 @@ class _CreatePostState extends State<CreatePost> {
           children: [
             CupertinoActionSheet(
               title: MyApp.currentUser.getPages.length == 0
-                  ? Text(
+                  ? const Text(
                       "No Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -478,7 +474,7 @@ class _CreatePostState extends State<CreatePost> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -502,12 +498,12 @@ class _CreatePostState extends State<CreatePost> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -536,18 +532,18 @@ class _CreatePostState extends State<CreatePost> {
     return PopupMenuItem(
       child: TextButton(
         child: Text(
-          typeWidgetModel.typename,
-          style: TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
+          typeWidgetModel.type!,
+          style: const TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
         ),
         onPressed: () {
           setState(
             () {
-              selectText = typeWidgetModel.getName();
+              selectText = typeWidgetModel.type!;
               TypeModel typeModel = TypeModel();
               typeModel.id = typeWidgetModel.getId();
-              typeModel.typename = typeWidgetModel.getName();
-              widget.postModel.setType = typeModel;
-              print(">>>>>>>  " + typeWidgetModel.getId());
+              typeModel.type = typeWidgetModel.type;
+              widget.postModel!.type = typeModel;
+              // print(">>>>>>>  " + typeWidgetModel.getId());
             },
           );
         },
@@ -555,10 +551,10 @@ class _CreatePostState extends State<CreatePost> {
     );
   }
 
-  getlist() {
+  getList() {
     return PopupMenuButton(
-      itemBuilder: (context) => listaa,
-      child: Icon(
+      itemBuilder: (context) => popupMenuItems,
+      child: const Icon(
         Icons.menu,
         size: 25,
         color: Colors.purple,
@@ -566,142 +562,132 @@ class _CreatePostState extends State<CreatePost> {
     );
   }
 
-  getlistCameraGallery() {
-    return Container(
-      child: PopupMenuButton(
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            child: TextButton(
-              child: Text(
-                "Camera",
-                style: TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
-              ),
-              onPressed: () async {
-                PickedFile pickedFile = await picker.getImage(
-                    source: ImageSource.camera, imageQuality: 50);
-
-                File image = File(pickedFile.path);
-
-                setState(
-                  () {
-                    _cameraImage = image;
-                    if (image != null) {
-                      _images.add(
-                        Image.file(image),
-                      );
-                      MediaModel mediaModel = MediaModel();
-                      mediaModel.setImage = image.path;
-                      mediaModel.setType = "image";
-                      mediaModels.add(mediaModel);
-                    }
-                  },
-                );
-              },
+  getListCameraGallery() {
+    return PopupMenuButton(
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          child: TextButton(
+            child: const Text(
+              "Camera",
+              style: TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
             ),
-          ),
-          PopupMenuItem(
-            child: TextButton(
-              child: Text(
-                "Gallery",
-                style: TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
-              ),
-              onPressed: () async {
-                PickedFile pickedFile = await picker.getImage(
-                    source: ImageSource.gallery, imageQuality: 50);
-                File image;
+            onPressed: () async {
+              PickedFile? pickedFile = await picker.getImage(
+                  source: ImageSource.camera, imageQuality: 50);
 
-                if (pickedFile.path != null) {
-                  image = File(pickedFile.path);
-                  setState(
-                    () {
-                      _image = image;
-                      if (image != null) {
-                        _images.add(
-                          Image.file(image),
-                        );
-                        MediaModel mediaModel = MediaModel();
-                        mediaModel.setImage = image.path;
-                        mediaModel.setType = "image";
-                        mediaModels.add(mediaModel);
-                      }
-                    },
+              File image = File(pickedFile!.path);
+
+              setState(
+                () {
+                  _cameraImage = image;
+                  _images!.add(
+                    Image.file(image),
                   );
-                }
-              },
-            ),
+                  MediaModel mediaModel = MediaModel();
+                  mediaModel.setImage = image.path;
+                  mediaModel.setType = "image";
+                  mediaModels.add(mediaModel);
+                },
+              );
+            },
           ),
-        ],
-        child: Icon(
-          Icons.add_a_photo,
-          size: 25,
-          color: Colors.purple,
         ),
+        PopupMenuItem(
+          child: TextButton(
+            child: const Text(
+              "Gallery",
+              style: TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
+            ),
+            onPressed: () async {
+              PickedFile? pickedFile = await picker.getImage(
+                  source: ImageSource.gallery, imageQuality: 50);
+              File image;
+
+              image = File(pickedFile!.path);
+              setState(
+                () {
+                  _image = image;
+                  _images!.add(
+                    Image.file(image),
+                  );
+                  MediaModel mediaModel = MediaModel();
+                  mediaModel.setImage = image.path;
+                  mediaModel.setType = "image";
+                  mediaModels.add(mediaModel);
+                },
+              );
+            },
+          ),
+        ),
+      ],
+      child: const Icon(
+        Icons.add_a_photo,
+        size: 25,
+        color: Colors.purple,
       ),
     );
   }
 
-  getlistCameraGalleryVideo() {
-    return Container(
-      child: PopupMenuButton(
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            child: TextButton(
-              child: Text(
-                "Camera",
-                style: TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
-              ),
-              onPressed: () async {
-                PickedFile pickedFile =
-                    await picker.getVideo(source: ImageSource.camera);
-
-                _video = File(pickedFile.path);
-                if (_video != null) {
-                  if (_Videos == null) _Videos = [];
-                  setState(
-                    () {
-                      _Videos.add(_video);
-                      MediaModel mediaModel = MediaModel();
-                      mediaModel.setImage = _video.path;
-                      mediaModel.setType = "video";
-                      mediaModels.add(mediaModel);
-                    },
-                  );
-                }
-              },
+  getListCameraGalleryVideo() {
+    return PopupMenuButton(
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          child: TextButton(
+            child: const Text(
+              "Camera",
+              style: TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
             ),
-          ),
-          PopupMenuItem(
-            child: TextButton(
-              child: Text(
-                "Gallery",
-                style: TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
-              ),
-              onPressed: () async {
-                PickedFile pickedFile =
-                    await picker.getVideo(source: ImageSource.gallery);
+            onPressed: () async {
+              PickedFile? pickedFile =
+                  await picker.getVideo(source: ImageSource.camera);
 
-                _video = File(pickedFile.path);
-                if (_video != null) {
-                  if (_Videos == null) _Videos = [];
-                  setState(
-                    () {
-                      _Videos.add(_video);
-                      MediaModel mediaModel = MediaModel();
-                      mediaModel.setImage = _video.path;
-                      mediaModel.setType = "video";
-                      mediaModels.add(mediaModel);
-                    },
-                  );
-                }
-              },
-            ),
+              _video = File(pickedFile!.path);
+              if (_video != null) {
+                _Videos ??= [];
+                setState(
+                  () {
+                    _Videos!.add(_video!);
+                    MediaModel mediaModel = MediaModel();
+                    mediaModel.setImage = _video!.path;
+                    mediaModel.setType = "video";
+                    mediaModels.add(mediaModel);
+                  },
+                );
+              }
+            },
           ),
-        ],
-        child: Icon(
-          Icons.video_collection,
-          size: 25,
-          color: Colors.purple,
         ),
+        PopupMenuItem(
+          child: TextButton(
+            child: const Text(
+              "Gallery",
+              style: TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
+            ),
+            onPressed: () async {
+              PickedFile? pickedFile =
+                  await picker.getVideo(source: ImageSource.gallery);
+
+              _video = File(pickedFile!.path);
+              if (_video != null) {
+                _Videos ??= [];
+                setState(
+                  () {
+                    _Videos!.add(_video!);
+                    MediaModel mediaModel = MediaModel();
+                    mediaModel.setImage = _video!.path;
+                    mediaModel.setType = "video";
+                    mediaModels.add(mediaModel);
+                  },
+                );
+              }
+            },
+          ),
+        ),
+      ],
+      child: const Icon(
+        Icons.video_collection,
+        size: 25,
+        color: Colors.purple,
       ),
     );
   }

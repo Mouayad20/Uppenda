@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -15,7 +14,7 @@ import '../Widgets/Logo.dart';
 import '../Widgets/TextFieldCustom.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key key}) : super(key: key);
+  const SignUp({Key? key}) : super(key: key);
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -24,18 +23,20 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   bool male = false;
   bool female = false;
-  UserController _userController = new UserController();
-  UserModel _userModel;
-  TextEditingController firstNameController = new TextEditingController();
-  TextEditingController lastNameController = new TextEditingController();
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController mobileController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
-  TextEditingController configPasswordController = new TextEditingController();
-  TextEditingController locationController = new TextEditingController();
-  TextEditingController studyLevelController = new TextEditingController();
-  File _image = null;
-  DateTime _dateTime = null;
+  UserController userController = UserController();
+  UserModel? _userModel;
+  TextEditingController firstNameController = TextEditingController();
+  TextEditingController lastNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController configPasswordController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
+  TextEditingController studyLevelController = TextEditingController();
+  File? _image;
+
+  DateTime? _dateTime;
+
   String userIp = "";
   final picker = ImagePicker();
 
@@ -49,7 +50,7 @@ class _SignUpState extends State<SignUp> {
     });
   }
 
-  Future getImagefromCamera() async {
+  Future getImageFromCamera() async {
     final pickedFile = await picker.getImage(
         source: ImageSource.camera, maxHeight: 480, maxWidth: 640);
 
@@ -59,11 +60,11 @@ class _SignUpState extends State<SignUp> {
       } else {
         print('No image selected.');
       }
-      print(' ////////////////////' + _image.path);
+      print(' ////////////////////' + _image!.path);
     });
   }
 
-  Future getImagefromGallery() async {
+  Future getImageFromGallery() async {
     final pickedFile = await picker.getImage(
         source: ImageSource.gallery, maxHeight: 480, maxWidth: 640);
 
@@ -80,22 +81,23 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
-      padding: EdgeInsets.only(top: 0),
-      physics: BouncingScrollPhysics(),
+      padding: const EdgeInsets.only(top: 0),
+      physics: const BouncingScrollPhysics(),
       children: [
         Stack(
           children: [HeaderSignUp(), LogoHeader()],
         ),
         Title(),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             children: [
               Container(
                 child: CircleAvatar(
-                  backgroundImage: _image == null
-                      ? AssetImage("images/profile.png")
-                      : FileImage(_image),
+                  backgroundImage: const AssetImage("images/profile.png"),
+                  // _image != null
+                  //?  AssetImage("images/profile.png")
+                  //: FileImage(_image!),
                   backgroundColor: Colors.purple[100],
                   // minRadius: 50,
                   maxRadius: 80,
@@ -103,12 +105,12 @@ class _SignUpState extends State<SignUp> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: Colors.purple[600],
+                    color: Colors.purple[600]!,
                     width: 4,
                   ),
                 ),
               ),
-              Divider(
+              const Divider(
                 height: 20,
                 color: Colors.purple,
               ),
@@ -116,16 +118,18 @@ class _SignUpState extends State<SignUp> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   FlatButton(
-                    onPressed: getImagefromGallery,
-                    child: Icon(Icons.wallpaper, size: 35, color: Colors.grey),
+                    onPressed: getImageFromGallery,
+                    child: const Icon(Icons.wallpaper,
+                        size: 35, color: Colors.grey),
                   ),
                   FlatButton(
-                    onPressed: getImagefromCamera,
-                    child: Icon(Icons.camera_alt, size: 35, color: Colors.grey),
+                    onPressed: getImageFromCamera,
+                    child: const Icon(Icons.camera_alt,
+                        size: 35, color: Colors.grey),
                   )
                 ],
               ),
-              Divider(
+              const Divider(
                 height: 20,
                 color: Colors.purple,
               ),
@@ -135,28 +139,28 @@ class _SignUpState extends State<SignUp> {
                 texto: 'Fist name',
                 controller: firstNameController,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFieldCustom(
                 icono: Icons.person,
                 type: TextInputType.text,
                 texto: 'Last name',
                 controller: lastNameController,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFieldCustom(
                 icono: Icons.mail_outline,
                 type: TextInputType.emailAddress,
                 texto: 'Email',
                 controller: emailController,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFieldCustom(
                 icono: Icons.phone,
                 type: TextInputType.text,
                 texto: 'Mobile',
                 controller: mobileController,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFieldCustom(
                 icono: Icons.location_on,
                 type: TextInputType.text,
@@ -164,7 +168,7 @@ class _SignUpState extends State<SignUp> {
                 texto: 'Location',
                 controller: locationController,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFieldCustom(
                 icono: Icons.school,
                 type: TextInputType.text,
@@ -172,7 +176,7 @@ class _SignUpState extends State<SignUp> {
                 texto: 'Study level',
                 controller: studyLevelController,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFieldCustom(
                 icono: Icons.visibility_off,
                 type: TextInputType.text,
@@ -180,7 +184,7 @@ class _SignUpState extends State<SignUp> {
                 texto: 'Password',
                 controller: passwordController,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextFieldCustom(
                 icono: Icons.visibility_off,
                 type: TextInputType.text,
@@ -188,11 +192,11 @@ class _SignUpState extends State<SignUp> {
                 texto: 'Confirm Password',
                 controller: configPasswordController,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ),
-        Divider(
+        const Divider(
           height: 20,
           color: Colors.purple,
         ),
@@ -203,12 +207,12 @@ class _SignUpState extends State<SignUp> {
               (_dateTime == null)
                   ? "no selected date"
                   : "selected date :             " +
-                      _dateTime.year.toString() +
+                      _dateTime!.year.toString() +
                       "/" +
-                      _dateTime.month.toString() +
+                      _dateTime!.month.toString() +
                       "/" +
-                      _dateTime.day.toString(),
-              style: TextStyle(
+                      _dateTime!.day.toString(),
+              style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.grey),
@@ -219,50 +223,52 @@ class _SignUpState extends State<SignUp> {
                       showTitleActions: true,
                       minTime: DateTime(1990, 1, 1),
                       maxTime: DateTime.now(), onChanged: (date) {
-                    print('change $date');
+                    // print('change $date');
                   }, onConfirm: (date) {
                     setState(() {
-                      print('confirm $date');
+                      // print('confirm $date');
                       _dateTime = date;
                     });
                   }, currentTime: DateTime.now(), locale: LocaleType.en);
                 },
-                child: Icon(Icons.date_range, size: 35, color: Colors.grey)),
+                child:
+                    const Icon(Icons.date_range, size: 35, color: Colors.grey)),
           ],
         ),
-        Divider(
+        const Divider(
           height: 20,
           color: Colors.purple,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: const [
             Text('male',
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey)),
-            Checkbox(
-              value: male,
-              onChanged: (bool value) {
-                setState(() {
-                  this.male = value;
-                  this.female = !value;
-                });
-              },
-            ),
+            // Checkbox(
+            //   value: male,
+            // onChanged: (bool value) {
+            //   print("Fds");
+            // setState(() {
+            //   this.male = value;
+            //   this.female = !value;
+            // });
+            // },
+            // ),
             SizedBox(
               width: 70,
             ),
-            Checkbox(
-              value: female,
-              onChanged: (bool value) {
-                setState(() {
-                  this.female = value;
-                  this.male = !value;
-                });
-              },
-            ),
+            // Checkbox(
+            //   value: female,
+            //   onChanged: (bool value) {
+            //     setState(() {
+            //       this.female = value;
+            //       this.male = !value;
+            //     });
+            //   },
+            // ),
             Text('female',
                 style: TextStyle(
                     fontSize: 18,
@@ -270,17 +276,17 @@ class _SignUpState extends State<SignUp> {
                     color: Colors.grey)),
           ],
         ),
-        Divider(
+        const Divider(
           height: 20,
           color: Colors.purple,
         ),
         Container(
-          margin: EdgeInsets.all(25),
+          margin: const EdgeInsets.all(25),
           decoration: BoxDecoration(
               color: Colors.purple, borderRadius: BorderRadius.circular(50)),
           child: FlatButton(
               onPressed: () {
-                _userModel = new UserModel(
+                _userModel = UserModel(
                     firstName: firstNameController.text,
                     lastName: lastNameController.text,
                     email: emailController.text,
@@ -293,7 +299,6 @@ class _SignUpState extends State<SignUp> {
                         (male == true && female == false) ? "male" : "female",
                     friends: null,
                     answerModels: null,
-                    chats: null,
                     groups: null,
                     location: locationController.text,
                     messages: null,
@@ -303,22 +308,24 @@ class _SignUpState extends State<SignUp> {
                     savedPost: null,
                     sharedPost: null,
                     studyLevel: studyLevelController.text,
-                    imagePath: _image == null ? null : _image.path);
-                if (firstNameController.text.length != 0 &&
-                    lastNameController.text.length != 0 &&
-                    emailController.text.length != 0 &&
-                    mobileController.text.length != 0 &&
-                    locationController.text.length != 0 &&
-                    studyLevelController.text.length != 0)
+                    imagePath: _image == null ? null : _image!.path);
+                if (firstNameController.text.isNotEmpty &&
+                    lastNameController.text.isNotEmpty &&
+                    emailController.text.isNotEmpty &&
+                    mobileController.text.isNotEmpty &&
+                    locationController.text.isNotEmpty &&
+                    studyLevelController.text.isNotEmpty)
                 // showAlertDialog(context, "complete all fields pleas");
                 {
-                  if (passwordController.text != configPasswordController.text)
+                  if (passwordController.text !=
+                      configPasswordController.text) {
                     showAlertDialog(context, "password doesnot match");
+                  }
                   if (passwordController.text ==
                       configPasswordController.text) {
-                    _userController.addUser(_userModel).then((value) {
+                    userController.addUser(_userModel!).then((value) {
                       if (value['userModel'] != null) {
-                        print("  in singup");
+                        // print("  in singup");
                         setState(() {
                           MyApp.currentUser =
                               UserModel.fromJson(value["userModel"]);
@@ -331,13 +338,14 @@ class _SignUpState extends State<SignUp> {
                         );
                       }
                       // else
-                      //   showAlertDialog(context, "there is no contection");
+                      //   showAlertDialog(context, "there is no connection");
                     });
                   }
-                } else
+                } else {
                   showAlertDialog(context, "complete all fields pleas");
+                }
               },
-              child: Text(
+              child: const Text(
                 'SIGN UP',
                 style: TextStyle(
                   fontFamily: 'Merienda',
@@ -355,7 +363,7 @@ class Title extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(15.0),
       child: Row(
         children: [
           FlatButton(
@@ -364,7 +372,7 @@ class Title extends StatelessWidget {
                 builder: (context) => LogInPage(),
               ),
             ),
-            child: Text(
+            child: const Text(
               'SIGN IN',
               style: TextStyle(
                 fontFamily: 'Merienda',
@@ -374,7 +382,7 @@ class Title extends StatelessWidget {
               ),
             ),
           ),
-          Text(
+          const Text(
             '/',
             style: TextStyle(
               fontFamily: 'Merienda',
@@ -385,10 +393,10 @@ class Title extends StatelessWidget {
           FlatButton(
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => SignUp(),
+                builder: (context) => const SignUp(),
               ),
             ),
-            child: Text(
+            child: const Text(
               'SIGN UP',
               style: TextStyle(
                 fontFamily: 'Merienda',
@@ -416,7 +424,7 @@ void showAlertDialog(BuildContext context, String message) {
   AlertDialog alert = AlertDialog(
     content: Text(
       message,
-      style: TextStyle(
+      style: const TextStyle(
         color: Colors.purple,
       ),
     ),

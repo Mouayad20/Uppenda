@@ -8,9 +8,7 @@ import 'package:frontend/Body/BodyPageButton.dart';
 import 'package:frontend/Body/UserFriend.dart';
 import 'package:frontend/Controllers/PageController.dart';
 import 'package:frontend/Controllers/UserController.dart';
-import 'package:frontend/Model/GroupModel.dart';
 import 'package:frontend/Model/PageModel.dart';
-import 'package:frontend/Model/UserModel.dart';
 import 'package:frontend/Social/CreateGroup.dart';
 import 'package:frontend/Social/Search.dart';
 import 'package:frontend/Social/Social_Home.dart';
@@ -19,7 +17,8 @@ import 'package:frontend/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreatePage extends StatefulWidget {
-  PageModel pageModel;
+  PageModel? pageModel;
+
   // static List<UserModel> listPageUsers = [];
   @override
   _CreatePageState createState() => _CreatePageState();
@@ -27,27 +26,31 @@ class CreatePage extends StatefulWidget {
 
 class _CreatePageState extends State<CreatePage> {
   TextEditingController pageName = TextEditingController();
-  TextEditingController pageDiscription = TextEditingController();
-  PageControler pageControler = PageControler();
+  TextEditingController pageDescription = TextEditingController();
+  PageControler pageController = PageControler();
+
   ////////////////////////
-  File _image;
-  List<Image> _images;
+  File? _image;
+  List<Image>? _images;
   ImagePicker picker = ImagePicker();
 
-  String profileId;
+  String? profileId;
+
   Future<String> getUserFromCache() async {
-    SharedPreferences cache = await SharedPreferences.getInstance();
-    return cache.getString('id');
+    // SharedPreferences cache = await SharedPreferences.getInstance();
+    // return cache.getString('id');
+    return "1";
   }
 
   UserController userController = UserController();
+
   @override
   void initState() {
     super.initState();
-    getUserFromCache().then((idFromChash) {
+    getUserFromCache().then((idFromCash) {
       setState(() {
-        profileId = idFromChash;
-        userController.getUserById(idFromChash).then((value) {
+        profileId = idFromCash;
+        userController.getUserById(idFromCash).then((value) {
           setState(() {
             MyApp.currentUser = value;
           });
@@ -55,7 +58,7 @@ class _CreatePageState extends State<CreatePage> {
       });
     });
     widget.pageModel = PageModel();
-    if (_images == null) _images = [];
+    _images ??= [];
   }
 
   @override
@@ -74,13 +77,13 @@ class _CreatePageState extends State<CreatePage> {
               ),
             );
           },
-          icon: Icon(
+          icon: const Icon(
             MdiIcons.homeSearchOutline,
             size: 30,
             color: Colors.purple,
           ),
         ),
-        title: SizedBox(
+        title: const SizedBox(
           height: 40.0,
           child: Text(
             "Uppenda",
@@ -91,9 +94,9 @@ class _CreatePageState extends State<CreatePage> {
                 fontWeight: FontWeight.w600),
           ),
         ),
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.only(right: 13.0),
+            padding: EdgeInsets.only(right: 13.0),
             child: Icon(
               MdiIcons.messageOutline,
               size: 28,
@@ -112,7 +115,7 @@ class _CreatePageState extends State<CreatePage> {
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white70,
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(15),
                         topRight: Radius.circular(15),
                         bottomLeft: Radius.circular(15),
@@ -120,23 +123,23 @@ class _CreatePageState extends State<CreatePage> {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.purple[100],
+                          color: Colors.purple[100]!,
                           spreadRadius: 4,
                           blurRadius: 0,
-                          offset: Offset(0, 0),
+                          offset: const Offset(0, 0),
                         ),
                       ],
                     ),
                     width: 250,
                     height: 190,
                     child: _image == null
-                        ? Icon(
+                        ? const Icon(
                             Icons.description,
                             size: 80,
                             color: Colors.purple,
                           )
                         : Image(
-                            image: FileImage(_image),
+                            image: FileImage(_image!),
                             fit: BoxFit.fill,
                           ),
                   ),
@@ -144,20 +147,20 @@ class _CreatePageState extends State<CreatePage> {
                     left: 200,
                     top: 140,
                     child: IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.edit,
                         color: Colors.purple,
                       ),
                       onPressed: () async {
-                        PickedFile pickedFile = await picker.getImage(
+                        PickedFile? pickedFile = await picker.getImage(
                             source: ImageSource.gallery, imageQuality: 50);
 
-                        File image = File(pickedFile.path);
+                        File image = File(pickedFile!.path);
 
                         setState(
                           () {
                             _image = image;
-                            widget.pageModel.imgPath = _image.path;
+                            widget.pageModel!.imgPath = _image!.path;
                           },
                         );
                       },
@@ -167,11 +170,11 @@ class _CreatePageState extends State<CreatePage> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 3.0, left: 15, bottom: 6.0),
+          const Padding(
+            padding: EdgeInsets.only(top: 3.0, left: 15, bottom: 6.0),
             child: Text(
               "Page's Name",
               style: TextStyle(
@@ -182,7 +185,7 @@ class _CreatePageState extends State<CreatePage> {
             ),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+            padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
               border: Border.all(color: Colors.purple),
@@ -191,7 +194,7 @@ class _CreatePageState extends State<CreatePage> {
               controller: pageName,
               maxLines: 1,
               textAlign: TextAlign.center,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: "__Page Name__",
                 hintStyle: TextStyle(
@@ -202,11 +205,11 @@ class _CreatePageState extends State<CreatePage> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 3.0, left: 15, bottom: 6.0),
+          const Padding(
+            padding: EdgeInsets.only(top: 3.0, left: 15, bottom: 6.0),
             child: Text(
               "Page's Description",
               style: TextStyle(
@@ -218,16 +221,16 @@ class _CreatePageState extends State<CreatePage> {
           ),
           Container(
             height: 160,
-            padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+            padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
               border: Border.all(color: Colors.purple),
             ),
             child: TextField(
-              controller: pageDiscription,
+              controller: pageDescription,
               maxLines: 5,
               textAlign: TextAlign.center,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: "__Page Description__",
                 hintStyle: TextStyle(
@@ -238,14 +241,14 @@ class _CreatePageState extends State<CreatePage> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: Row(
               children: [
-                Text(
+                const Text(
                   "To add people to this Page",
                   style: TextStyle(
                       fontSize: 15,
@@ -254,13 +257,13 @@ class _CreatePageState extends State<CreatePage> {
                       fontFamily: 'Merienda'),
                 ),
                 IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.add,
                       size: 20,
                       color: Colors.purple,
                     ),
                     onPressed: () {
-                      freinds();
+                      friends();
                     })
               ],
             ),
@@ -271,26 +274,26 @@ class _CreatePageState extends State<CreatePage> {
               child: Container(
                 width: 50,
                 height: 40,
-                color: Color.fromRGBO(233, 207, 236, 1),
+                color: const Color.fromRGBO(233, 207, 236, 1),
                 child: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.done_outline_rounded,
                     size: 30,
                     color: Colors.purple,
                   ),
                   onPressed: () {
-                    widget.pageModel.name = pageName.text.trim();
-                    print("\n\n\n\n\n\t\t\t >>>>   " + pageName.text + "\n\n");
-                    widget.pageModel.setDescription =
-                        pageDiscription.text.trim();
+                    widget.pageModel!.name = pageName.text.trim();
+                    // print("\n\n\n\n\n\t\t\t >>>>   " + pageName.text + "\n\n");
+                    widget.pageModel!.setDescription =
+                        pageDescription.text.trim();
 
-                    widget.pageModel.setMembers = UserFriend.listUsers;
-                    widget.pageModel.setCreatedAt = DateTime.now();
+                    widget.pageModel!.setMembers = UserFriend.listUsers;
+                    widget.pageModel!.setCreatedAt = DateTime.now();
 
-                    pageControler.addPage(
-                        widget.pageModel, MyApp.currentUser.getId);
+                    pageController.addPage(
+                        widget.pageModel!, MyApp.currentUser.getId);
 
-                    UserFriend.listUsers = null;
+                    UserFriend.listUsers = [];
 
                     Navigator.push(
                       context,
@@ -303,7 +306,7 @@ class _CreatePageState extends State<CreatePage> {
               ),
             ),
           ),
-          Center(
+          const Center(
             child: Text(
               " Done",
               style: TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
@@ -327,12 +330,12 @@ class _CreatePageState extends State<CreatePage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Profile(
-                          user_id: profileId,
+                          user_id: profileId!,
                         ),
                       ),
                     );
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     MdiIcons.account,
                     size: 30,
                     color: Colors.purple,
@@ -342,7 +345,7 @@ class _CreatePageState extends State<CreatePage> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 2.0, 0.0),
                 child: IconButton(
-                  icon: Icon(Icons.supervised_user_circle,
+                  icon: const Icon(Icons.supervised_user_circle,
                       color: Colors.purple, size: 30),
                   onPressed: () {
                     showGroupsButton();
@@ -351,7 +354,7 @@ class _CreatePageState extends State<CreatePage> {
               ),
               FloatingActionButton(
                   heroTag: 2,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add_circle_sharp,
                     size: 40,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -361,7 +364,7 @@ class _CreatePageState extends State<CreatePage> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 5.0, 0.0),
                 child: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.description,
                     color: Colors.purple,
                     size: 30,
@@ -372,7 +375,7 @@ class _CreatePageState extends State<CreatePage> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 3.0, 0.0),
                 child: IconButton(
-                  icon: Icon(Icons.home, color: Colors.purple, size: 30),
+                  icon: const Icon(Icons.home, color: Colors.purple, size: 30),
                   onPressed: () {
                     Navigator.pop(
                       context,
@@ -390,14 +393,14 @@ class _CreatePageState extends State<CreatePage> {
     );
   }
 
-  freinds() {
+  friends() {
     showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) => Padding(
         padding: const EdgeInsets.all(8.0),
         child: CupertinoActionSheet(
-          title: MyApp.currentUser.friends.length == 0
-              ? Text(
+          title: MyApp.currentUser.friends!.isEmpty
+              ? const Text(
                   "No friends",
                   style: TextStyle(
                     letterSpacing: 3,
@@ -407,7 +410,7 @@ class _CreatePageState extends State<CreatePage> {
                     fontWeight: FontWeight.w600,
                   ),
                 )
-              : Text(
+              : const Text(
                   "Friends",
                   style: TextStyle(
                     letterSpacing: 3,
@@ -418,10 +421,10 @@ class _CreatePageState extends State<CreatePage> {
                   ),
                 ),
           actions: List.generate(
-            MyApp.currentUser.friends.length,
+            MyApp.currentUser.friends!.length,
             (index) {
               return CupertinoActionSheetAction(
-                child: UserFriend(friend: MyApp.currentUser.friends[index]),
+                child: UserFriend(friend: MyApp.currentUser.friends![index]),
                 onPressed: () {},
               );
             },
@@ -440,7 +443,7 @@ class _CreatePageState extends State<CreatePage> {
           children: [
             CupertinoActionSheet(
               title: MyApp.currentUser.getGroups.length == 0
-                  ? Text(
+                  ? const Text(
                       "No Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -450,7 +453,7 @@ class _CreatePageState extends State<CreatePage> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -465,7 +468,7 @@ class _CreatePageState extends State<CreatePage> {
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupmodel: MyApp.currentUser.getGroups[index]),
+                        groupModel: MyApp.currentUser.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -474,12 +477,12 @@ class _CreatePageState extends State<CreatePage> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -514,7 +517,7 @@ class _CreatePageState extends State<CreatePage> {
           children: [
             CupertinoActionSheet(
               title: MyApp.currentUser.getPages.length == 0
-                  ? Text(
+                  ? const Text(
                       "No Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -524,7 +527,7 @@ class _CreatePageState extends State<CreatePage> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -548,12 +551,12 @@ class _CreatePageState extends State<CreatePage> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),

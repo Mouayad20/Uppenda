@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -24,21 +26,22 @@ import 'MainPage.dart';
 class Page1 extends StatefulWidget {
   String page_id;
 
-  Page1({required this.page_id});
+  Page1({Key? key, required this.page_id}) : super(key: key);
 
   @override
   _Page1State createState() => _Page1State();
 }
+
 /////////
 class _Page1State extends State<Page1> {
-  PageControler _pageController = PageControler();
+  final PageControler _pageController = PageControler();
   PageModel? _pageModel;
   PostController postController = PostController();
 
   String? profileId;
 
   Future<String> getUserFromCache() async {
-    SharedPreferences cache = await SharedPreferences.getInstance();
+    // SharedPreferences cache = await SharedPreferences.getInstance();
     return ""; // cache.getString('id');
   }
 
@@ -47,18 +50,18 @@ class _Page1State extends State<Page1> {
     super.initState();
     getUserFromCache().then((idFromCash) {
       setState(() {
-        profileId = idFromChash;
+        profileId = idFromCash;
       });
     });
     _pageController.getPageById1(widget.page_id).then((value) {
       setState(() {
         _pageModel = value;
-        postController.getAllPostsForPage(_pageModel.getId).then((value) {
+        postController.getAllPostsForPage(_pageModel!.getId).then((value) {
           setState(() {
-            _pageModel.setPostModels = value;
-            print("___________");
-            print(_pageModel.getPostModels.length.toString());
-            print("___________");
+            _pageModel!.setPostModels = value;
+            // print("___________");
+            // print(_pageModel!.getPostModels.length.toString());
+            // print("___________");
           });
         });
       });
@@ -69,8 +72,6 @@ class _Page1State extends State<Page1> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -85,7 +86,7 @@ class _Page1State extends State<Page1> {
               ),
             );
           },
-          icon: Icon(
+          icon: const Icon(
             MdiIcons.homeSearchOutline,
             size: 30,
             color: Colors.purple,
@@ -94,7 +95,7 @@ class _Page1State extends State<Page1> {
         title: SizedBox(
           height: 40.0,
           child: InkWell(
-            child: Text(
+            child: const Text(
               "Uppenda",
               style: TextStyle(
                   letterSpacing: 4,
@@ -118,7 +119,7 @@ class _Page1State extends State<Page1> {
                     ),
                   );
                 },
-                icon: Icon(
+                icon: const Icon(
                   MdiIcons.messageOutline,
                   size: 28,
                   color: Colors.purple,
@@ -127,7 +128,7 @@ class _Page1State extends State<Page1> {
         ],
       ),
       body: _pageModel == null
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : SingleChildScrollView(
@@ -136,10 +137,10 @@ class _Page1State extends State<Page1> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Padding(
-                    padding: EdgeInsets.only(top: 15, bottom: 20),
+                    padding: const EdgeInsets.only(top: 15, bottom: 20),
                     child: Center(
                       child: Text(
-                        _pageModel.getName,
+                        _pageModel!.getName,
                         style: TextStyle(
                           color: Colors.purple,
                           fontFamily: 'Merienda',
@@ -147,8 +148,8 @@ class _Page1State extends State<Page1> {
                           shadows: [
                             Shadow(
                               blurRadius: 5,
-                              color: Colors.purple[100],
-                              offset: Offset(5.0, 5.0),
+                              color: Colors.purple[100]!,
+                              offset: const Offset(5.0, 5.0),
                             ),
                           ],
                         ),
@@ -160,23 +161,23 @@ class _Page1State extends State<Page1> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: _pageModel.getImage == null
-                            ? AssetImage("images/download.jpg")
+                        image: _pageModel!.getImage == null
+                            ? const AssetImage("images/download.jpg")
                             : Image.network(
                                 MyApp.mainURL +
-                                    _pageModel.getImage
+                                    _pageModel!.getImage
                                         .toString()
                                         .replaceAll("\\", "/"),
-                                headers: {
-                                  "Authorization":
-                                      "Bearer " + MyApp.currentUser.getToken
-                                },
+                                // headers: {
+                                //   "Authorization":
+                                //       "Bearer " + MyApp.currentUser.getToken
+                                // },
                               ).image,
                         fit: BoxFit.cover,
                       ),
                       borderRadius: BorderRadius.circular(90),
                       color: Colors.white60,
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           color: Color.fromRGBO(233, 177, 236, 1),
                           spreadRadius: 4,
@@ -189,14 +190,14 @@ class _Page1State extends State<Page1> {
                       ],
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   FutureBuilder<bool>(
-                      future: _pageController.isUserAdmin(_pageModel),
+                      future: _pageController.isUserAdmin(_pageModel!),
                       builder: (context, snapshot) {
-                        if (snapshot.data == null) return SizedBox();
-                        if (snapshot.data)
+                        if (snapshot.data == null) return const SizedBox();
+                        if (snapshot.data != null) {
                           return Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -209,7 +210,7 @@ class _Page1State extends State<Page1> {
                                             BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                         color: Colors.purple,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(40),
@@ -238,13 +239,13 @@ class _Page1State extends State<Page1> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             IconButton(
-                                              icon: Icon(
+                                              icon: const Icon(
                                                 Icons.delete,
                                               ),
                                               iconSize: 25,
                                               onPressed: () {
                                                 _pageController
-                                                    .deletePage(_pageModel);
+                                                    .deletePage(_pageModel!);
                                                 Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
@@ -260,7 +261,7 @@ class _Page1State extends State<Page1> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 3,
                                   ),
                                   Text(
@@ -279,7 +280,7 @@ class _Page1State extends State<Page1> {
                                             BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                           color: Colors.purple,
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(40),
@@ -303,13 +304,13 @@ class _Page1State extends State<Page1> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             IconButton(
-                                              icon: Icon(
+                                              icon: const Icon(
                                                 Icons.supervised_user_circle,
                                               ),
                                               iconSize: 25,
                                               onPressed: () {
                                                 showMembers(context,
-                                                    _pageModel.getMembers);
+                                                    _pageModel!.getMembers);
                                               },
                                               color: Colors.white,
                                             ),
@@ -318,7 +319,7 @@ class _Page1State extends State<Page1> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 3,
                                   ),
                                   Text(
@@ -337,7 +338,7 @@ class _Page1State extends State<Page1> {
                                             BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                           color: Colors.purple,
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(40),
@@ -361,12 +362,12 @@ class _Page1State extends State<Page1> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             IconButton(
-                                              icon: Icon(
+                                              icon: const Icon(
                                                   MdiIcons.informationVariant),
                                               iconSize: 25,
                                               onPressed: () {
                                                 showInformation(
-                                                    context, _pageModel);
+                                                    context, _pageModel!);
                                               },
                                               color: Colors.white,
                                             ),
@@ -375,7 +376,7 @@ class _Page1State extends State<Page1> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 3,
                                   ),
                                   Text(
@@ -388,13 +389,13 @@ class _Page1State extends State<Page1> {
                               ),
                             ],
                           );
-                        else {
+                        } else {
                           return Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
                               followOrUnFollowButton(
-                                  context, _pageModel, _pageController),
+                                  context, _pageModel!, _pageController),
                               Column(
                                 children: [
                                   Card(
@@ -403,7 +404,7 @@ class _Page1State extends State<Page1> {
                                             BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                           color: Colors.purple,
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(40),
@@ -427,13 +428,13 @@ class _Page1State extends State<Page1> {
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
                                             IconButton(
-                                              icon: Icon(
+                                              icon: const Icon(
                                                 Icons.supervised_user_circle,
                                               ),
                                               iconSize: 25,
                                               onPressed: () {
                                                 showMembers(context,
-                                                    _pageModel.getMembers);
+                                                    _pageModel!.getMembers);
                                               },
                                               color: Colors.white,
                                             ),
@@ -442,7 +443,7 @@ class _Page1State extends State<Page1> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 3,
                                   ),
                                   Text(
@@ -461,7 +462,7 @@ class _Page1State extends State<Page1> {
                                             BorderRadius.circular(50)),
                                     color: Colors.purple[200],
                                     child: Container(
-                                      decoration: BoxDecoration(
+                                      decoration: const BoxDecoration(
                                           color: Colors.purple,
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(40),
@@ -495,12 +496,12 @@ class _Page1State extends State<Page1> {
                                 ),
                               ), */
                                             IconButton(
-                                              icon: Icon(
+                                              icon: const Icon(
                                                   MdiIcons.informationVariant),
                                               iconSize: 25,
                                               onPressed: () {
                                                 showInformation(
-                                                    context, _pageModel);
+                                                    context, _pageModel!);
                                               },
                                               color: Colors.white,
                                             ),
@@ -509,7 +510,7 @@ class _Page1State extends State<Page1> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 3,
                                   ),
                                   Text(
@@ -524,10 +525,10 @@ class _Page1State extends State<Page1> {
                           );
                         }
                       }),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
-                  Divider(
+                  const Divider(
                     color: Colors.purple,
                     thickness: 0.7,
                   ),
@@ -536,7 +537,7 @@ class _Page1State extends State<Page1> {
                     child: Container(
                       height: height * 0.80,
                       width: width,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(30),
@@ -559,8 +560,8 @@ class _Page1State extends State<Page1> {
                           right: 8,
                           top: 10,
                         ),
-                        child: _pageModel.getPostModels.length == 0
-                            ? Center(
+                        child: _pageModel!.getPostModels.length == 0
+                            ? const Center(
                                 child: Text(
                                   "There are no posts yet...",
                                   style: TextStyle(
@@ -572,10 +573,10 @@ class _Page1State extends State<Page1> {
                                 ),
                               )
                             : ListView.builder(
-                                itemCount: _pageModel.getPostModels.length,
+                                itemCount: _pageModel!.getPostModels.length,
                                 itemBuilder: (context, i) {
                                   return PostBody(
-                                    post: _pageModel.getPostModels[i],
+                                    post: _pageModel!.getPostModels[i],
                                   );
                                 },
                               ),
@@ -601,12 +602,12 @@ class _Page1State extends State<Page1> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Profile(
-                          user_id: profileId,
+                          user_id: profileId!,
                         ),
                       ),
                     );
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     MdiIcons.account,
                     size: 30,
                     color: Colors.purple,
@@ -616,7 +617,7 @@ class _Page1State extends State<Page1> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 2.0, 0.0),
                 child: IconButton(
-                  icon: Icon(Icons.supervised_user_circle,
+                  icon: const Icon(Icons.supervised_user_circle,
                       color: Colors.purple, size: 30),
                   onPressed: () {
                     showGroupsButton();
@@ -627,7 +628,7 @@ class _Page1State extends State<Page1> {
               ),
               FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add_circle_sharp,
                     size: 40,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -644,7 +645,7 @@ class _Page1State extends State<Page1> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 5.0, 0.0),
                 child: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.description,
                     color: Colors.purple,
                     size: 30,
@@ -657,7 +658,7 @@ class _Page1State extends State<Page1> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 3.0, 0.0),
                 child: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.home,
                     color: Colors.purple,
                     size: 30,
@@ -688,7 +689,7 @@ class _Page1State extends State<Page1> {
           children: [
             CupertinoActionSheet(
               title: MyApp.currentUser.getGroups.length == 0
-                  ? Text(
+                  ? const Text(
                       "No Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -698,7 +699,7 @@ class _Page1State extends State<Page1> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -713,7 +714,7 @@ class _Page1State extends State<Page1> {
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupmodel: MyApp.currentUser.getGroups[index]),
+                        groupModel: MyApp.currentUser.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -722,12 +723,12 @@ class _Page1State extends State<Page1> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -762,7 +763,7 @@ class _Page1State extends State<Page1> {
           children: [
             CupertinoActionSheet(
               title: MyApp.currentUser.getPages.length == 0
-                  ? Text(
+                  ? const Text(
                       "No Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -772,7 +773,7 @@ class _Page1State extends State<Page1> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -796,12 +797,12 @@ class _Page1State extends State<Page1> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -827,9 +828,9 @@ class _Page1State extends State<Page1> {
   }
 
   List posts() {
-    List<Widget> list = List();
-    list.add(SizedBox(height: 0));
-    list.add(Text(
+    List<Widget> list = [];
+    list.add(const SizedBox(height: 0));
+    list.add(const Text(
       'Page Posts',
       textAlign: TextAlign.center,
       style: TextStyle(
@@ -838,19 +839,19 @@ class _Page1State extends State<Page1> {
         fontFamily: 'Merienda',
       ),
     ));
-    list.add(SizedBox(
+    list.add(const SizedBox(
       height: 3,
     ));
-    list.add(Divider(
+    list.add(const Divider(
       thickness: 2.5,
     ));
-    list.add(SizedBox(height: 10));
+    list.add(const SizedBox(height: 10));
     return list;
   }
 
   void showInformation(BuildContext context, PageModel pageModel) {
     Widget cancelButton = TextButton(
-      child: Text(
+      child: const Text(
         "OK",
         style: TextStyle(color: Colors.purple),
       ),
@@ -859,26 +860,27 @@ class _Page1State extends State<Page1> {
       },
     );
     AlertDialog alert = AlertDialog(
-      content: Container(
+      content: SizedBox(
         width: 380,
         child: ListView(children: [
           Column(
             children: [
-              Center(
+              const Center(
                   child: Text(
                 "Description",
                 style: TextStyle(color: Colors.black, fontFamily: 'Merienda'),
               )),
-              Divider(
+              const Divider(
                 color: Colors.purple,
                 thickness: 1,
               ),
               Center(
                   child: Text(
                 pageModel.getDescription,
-                style: TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
+                style: const TextStyle(
+                    color: Colors.purple, fontFamily: 'Merienda'),
               )),
-              Divider(
+              const Divider(
                 color: Colors.purple,
                 thickness: 1,
               ),
@@ -889,24 +891,25 @@ class _Page1State extends State<Page1> {
                     pageModel.getCreatedAt.month.toString() +
                     "/" +
                     pageModel.getCreatedAt.day.toString(),
-                style: TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
+                style: const TextStyle(
+                    color: Colors.purple, fontFamily: 'Merienda'),
               ),
-              Divider(
+              const Divider(
                 color: Colors.purple,
                 thickness: 1,
               ),
               Row(
                 children: [
-                  Text(
+                  const Text(
                     "To Update Group:",
                     style: TextStyle(color: Colors.purple),
                   ),
                   IconButton(
-                      icon: Icon(Icons.edit, color: Colors.purple),
+                      icon: const Icon(Icons.edit, color: Colors.purple),
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) =>
-                                UpdatePage(pageModel: _pageModel)));
+                                UpdatePage(pageModel: _pageModel!)));
                       }),
                 ],
               ),
@@ -914,7 +917,7 @@ class _Page1State extends State<Page1> {
           ),
         ]),
       ),
-      actions: [
+      actions: const [
         // cancelButton,
       ],
     );
@@ -927,17 +930,17 @@ class _Page1State extends State<Page1> {
   }
 
   void showMembers(BuildContext context, List<UserModel> members) {
-    List<Widget> usersInfo = List();
+    List<Widget> usersInfo = [];
     for (int i = 0; i < members.length; i++) {
       usersInfo.add(UserInfo(
         userModel: members.elementAt(i),
       ));
-      usersInfo.add(SizedBox(
+      usersInfo.add(const SizedBox(
         height: 10,
       ));
     }
     Widget cancelButton = TextButton(
-      child: Text(
+      child: const Text(
         "OK",
         style: TextStyle(color: Colors.purple),
       ),
@@ -946,12 +949,12 @@ class _Page1State extends State<Page1> {
       },
     );
     AlertDialog alert = AlertDialog(
-      content: Container(
+      content: SizedBox(
           width: 350,
           child: ListView(
             children: usersInfo,
           )),
-      actions: [
+      actions: const [
         // cancelButton,
       ],
     );
@@ -966,11 +969,9 @@ class _Page1State extends State<Page1> {
   Future<bool> amIMemberAtThisPage(PageModel pageModel) async {
     SharedPreferences cache = await SharedPreferences.getInstance();
     bool amIn = false;
-    if (pageModel != null) {
-      pageModel.getMembers.forEach((element) {
-        if (element.getId == cache.getString('id')) amIn = true;
-      });
-    }
+    pageModel.getMembers.forEach((element) {
+      if (element.getId == cache.getString('id')) amIn = true;
+    });
     return amIn;
   }
 
@@ -980,7 +981,7 @@ class _Page1State extends State<Page1> {
         future: amIMemberAtThisPage(pageModel),
         builder: (context, snapshot) {
           if (snapshot.data == null) {
-            return Container(
+            return const SizedBox(
               width: 0,
               height: 0,
             );
@@ -993,7 +994,7 @@ class _Page1State extends State<Page1> {
                       borderRadius: BorderRadius.circular(50)),
                   color: Colors.purple[200],
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Colors.purple,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(40),
@@ -1014,14 +1015,14 @@ class _Page1State extends State<Page1> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.thumb_up_alt_rounded,
                             ),
                             iconSize: 25,
                             onPressed: () {
                               pageController.followThisPage(
                                   MyApp.currentUser.getId, pageModel.getId);
-                              SnackBar mysnackbar = SnackBar(
+                              SnackBar mySnackBar = const SnackBar(
                                   duration: Duration(seconds: 1),
                                   backgroundColor:
                                       Color.fromRGBO(233, 207, 236, 1),
@@ -1032,7 +1033,8 @@ class _Page1State extends State<Page1> {
                                         fontSize: 14,
                                         color: Colors.purple),
                                   ));
-                              Scaffold.of(context).showSnackBar(mysnackbar);
+                              ScaffoldMessenger.maybeOf(context)!
+                                  .showSnackBar(mySnackBar);
                             },
                             color: Colors.white,
                           ),
@@ -1041,7 +1043,7 @@ class _Page1State extends State<Page1> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 3,
                 ),
                 Text(
@@ -1060,7 +1062,7 @@ class _Page1State extends State<Page1> {
                       borderRadius: BorderRadius.circular(50)),
                   color: Colors.purple[200],
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: Colors.purple,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(40),
@@ -1081,7 +1083,7 @@ class _Page1State extends State<Page1> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.thumb_up_alt_rounded,
                             ),
                             iconSize: 25,
@@ -1102,7 +1104,7 @@ class _Page1State extends State<Page1> {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 3,
                 ),
                 Text(
@@ -1112,8 +1114,9 @@ class _Page1State extends State<Page1> {
                 ),
               ],
             );
-          } else
-            return null;
+          } else {
+            return Container();
+          }
         });
   }
 }

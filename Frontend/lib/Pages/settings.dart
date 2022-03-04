@@ -6,15 +6,16 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  double height1;
+  double? height1;
   bool isSwitched = false;
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     height1 = MediaQuery.of(context).size.height;
     return Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
               Colors.purple,
@@ -38,12 +39,12 @@ class _SettingsState extends State<Settings> {
                             onPressed: () {
                               Navigator.of(context).pushNamed('profile');
                             },
-                            child: Icon(
+                            child: const Icon(
                               Icons.chevron_left,
                               color: Colors.white,
                               size: 22,
                             )),
-                        CircleAvatar(
+                        const CircleAvatar(
                           maxRadius: 60,
                           backgroundColor: Colors.transparent,
                           child: Text(
@@ -60,7 +61,7 @@ class _SettingsState extends State<Settings> {
                             onPressed: () {
                               Navigator.of(context).pushNamed('profile');
                             },
-                            child: Icon(
+                            child: const Icon(
                               Icons.home,
                               color: Colors.white,
                               size: 22,
@@ -69,13 +70,13 @@ class _SettingsState extends State<Settings> {
                     ),
                   ]))),
           Card(
-              margin: EdgeInsets.only(left: 14, right: 14, bottom: 10),
-              shape: new RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(50)),
+              margin: const EdgeInsets.only(left: 14, right: 14, bottom: 10),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50)),
               //child: SafeArea(
               child: Container(
                   height: ((3 * height) / 4) + ((height / 4) - 145),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
@@ -84,17 +85,16 @@ class _SettingsState extends State<Settings> {
                         topRight: Radius.circular(30),
                       )),
                   child: ListView(
-                    children: setting_element(),
+                    children: settingElement(),
                   ))),
         ]));
   }
 
-  List<Widget> setting_element() {
-    bool isSwitched = false;
-    List<Widget> list = List();
+  List<Widget> settingElement() {
+    List<Widget> list = [];
 
     list.add(ListTile(
-      title: Text(
+      title: const Text(
         "Show Friends",
         style: TextStyle(
             color: Colors.deepPurple,
@@ -102,7 +102,7 @@ class _SettingsState extends State<Settings> {
             fontWeight: FontWeight.bold,
             fontFamily: 'Merienda'),
       ),
-      trailing: Icon(
+      trailing: const Icon(
         Icons.people,
         color: Colors.deepPurple,
       ),
@@ -110,7 +110,7 @@ class _SettingsState extends State<Settings> {
     ));
 
     list.add(
-      Divider(
+      const Divider(
         color: Colors.deepPurple,
         thickness: 0.6,
       ),
@@ -118,7 +118,7 @@ class _SettingsState extends State<Settings> {
 
     list.add(
       ListTile(
-        title: Text(
+        title: const Text(
           "Show Pages",
           style: TextStyle(
             color: Colors.deepPurple,
@@ -126,7 +126,7 @@ class _SettingsState extends State<Settings> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        trailing: Icon(
+        trailing: const Icon(
           Icons.description,
           color: Colors.deepPurple,
         ),
@@ -137,7 +137,7 @@ class _SettingsState extends State<Settings> {
     );
 
     list.add(
-      Divider(
+      const Divider(
         color: Colors.deepPurple,
         thickness: 0.6,
       ),
@@ -145,7 +145,7 @@ class _SettingsState extends State<Settings> {
 
     list.add(
       ListTile(
-        title: Text(
+        title: const Text(
           "Show Groups",
           style: TextStyle(
             color: Colors.deepPurple,
@@ -153,7 +153,7 @@ class _SettingsState extends State<Settings> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        trailing: Icon(
+        trailing: const Icon(
           Icons.supervised_user_circle,
           color: Colors.deepPurple,
         ),
@@ -161,14 +161,14 @@ class _SettingsState extends State<Settings> {
       ),
     );
     list.add(
-      Divider(
+      const Divider(
         color: Colors.deepPurple,
         thickness: 0.6,
       ),
     );
 
     list.add(
-      ListTile(
+      const ListTile(
         title: Text(
           " Sign Out ",
           style: TextStyle(
@@ -183,7 +183,7 @@ class _SettingsState extends State<Settings> {
       ),
     );
     list.add(
-      Divider(
+      const Divider(
         color: Colors.deepPurple,
         thickness: 0.8,
       ),

@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:frontend/Model/GroupModel.dart';
 import 'package:frontend/Model/PageModel.dart';
-//import 'package:image_picker/image_picker.dart';
 
-class pdfwidget extends StatefulWidget {
+class pdfWidget extends StatefulWidget {
   PageModel pageModel;
-  pdfwidget({this.pageModel});
+
+  pdfWidget({Key? key, required this.pageModel}) : super(key: key);
 
   @override
-  _pdfwidgetState createState() => _pdfwidgetState();
+  _pdfWidgetState createState() => _pdfWidgetState();
 }
 
-class _pdfwidgetState extends State<pdfwidget> {
+class _pdfWidgetState extends State<pdfWidget> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Text(widget.pageModel.getId),
-          Text(widget.pageModel.getName),
-          Text(widget.pageModel.getDescription),
-          Text(widget.pageModel.getCreatedAt),
-          Text(widget.pageModel.getImage),
-        ],
-      ),
+    return Column(
+      children: [
+        Text(widget.pageModel.getId),
+        Text(widget.pageModel.getName),
+        Text(widget.pageModel.getDescription),
+        Text(widget.pageModel.getCreatedAt),
+        Text(widget.pageModel.getImage),
+      ],
     );
   }
 }

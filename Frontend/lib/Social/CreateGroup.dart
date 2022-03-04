@@ -9,18 +9,16 @@ import 'package:frontend/Body/UserFriend.dart';
 import 'package:frontend/Controllers/GroupController.dart';
 import 'package:frontend/Controllers/UserController.dart';
 import 'package:frontend/Model/GroupModel.dart';
-import 'package:frontend/Model/PageModel.dart';
-import 'package:frontend/Model/UserModel.dart';
 import 'package:frontend/Pages/profile.dart';
 import 'package:frontend/Social/CreatePage.dart';
 import 'package:frontend/Social/Search.dart';
 import 'package:frontend/Social/Social_Home.dart';
-import 'package:frontend/Pages/profile.dart';
 import 'package:frontend/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateGroup extends StatefulWidget {
-  GroupModel groupModel;
+  GroupModel? groupModel;
+
   // static List<UserModel> listGroupUsers = [];
   @override
   _CreateGroupState createState() => _CreateGroupState();
@@ -28,17 +26,20 @@ class CreateGroup extends StatefulWidget {
 
 class _CreateGroupState extends State<CreateGroup> {
   TextEditingController groupName = TextEditingController();
-  TextEditingController groupDiscription = TextEditingController();
+  TextEditingController groupDescription = TextEditingController();
   GroupController groupController = GroupController();
+
   //////////////////
-  File _image;
-  List<Image> _images;
+  File? _image;
+  List<Image>? _images;
   ImagePicker picker = ImagePicker();
 
-  String profileId;
+  String? profileId;
+
   Future<String> getUserFromCache() async {
-    SharedPreferences cache = await SharedPreferences.getInstance();
-    return cache.getString('id');
+    // SharedPreferences cache = await SharedPreferences.getInstance();
+    // return cache.getString('id');
+    return "1";
   }
 
   UserController userController = UserController();
@@ -46,10 +47,10 @@ class _CreateGroupState extends State<CreateGroup> {
   @override
   void initState() {
     super.initState();
-    getUserFromCache().then((idFromChash) {
+    getUserFromCache().then((idFromCash) {
       setState(() {
-        profileId = idFromChash;
-        userController.getUserById(idFromChash).then((value) {
+        profileId = idFromCash;
+        userController.getUserById(idFromCash).then((value) {
           setState(() {
             MyApp.currentUser = value;
           });
@@ -58,7 +59,7 @@ class _CreateGroupState extends State<CreateGroup> {
     });
 
     widget.groupModel = GroupModel();
-    if (_images == null) _images = [];
+    _images ??= [];
   }
 
   @override
@@ -77,13 +78,13 @@ class _CreateGroupState extends State<CreateGroup> {
               ),
             );
           },
-          icon: Icon(
+          icon: const Icon(
             MdiIcons.homeSearchOutline,
             size: 30,
             color: Colors.purple,
           ),
         ),
-        title: SizedBox(
+        title: const SizedBox(
           height: 40.0,
           child: Text(
             "Uppenda",
@@ -94,9 +95,9 @@ class _CreateGroupState extends State<CreateGroup> {
                 fontWeight: FontWeight.w600),
           ),
         ),
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.only(right: 13.0),
+            padding: EdgeInsets.only(right: 13.0),
             child: Icon(
               MdiIcons.messageOutline,
               size: 28,
@@ -115,7 +116,7 @@ class _CreateGroupState extends State<CreateGroup> {
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white70,
-                      borderRadius: BorderRadius.only(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(15),
                         topRight: Radius.circular(15),
                         bottomLeft: Radius.circular(15),
@@ -123,23 +124,23 @@ class _CreateGroupState extends State<CreateGroup> {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.purple[100],
+                          color: Colors.purple[100]!,
                           spreadRadius: 4,
                           blurRadius: 0,
-                          offset: Offset(0, 0),
+                          offset: const Offset(0, 0),
                         ),
                       ],
                     ),
                     width: 250,
                     height: 190,
                     child: _image == null
-                        ? Icon(
+                        ? const Icon(
                             Icons.group,
                             size: 80,
                             color: Colors.purple,
                           )
                         : Image(
-                            image: FileImage(_image),
+                            image: FileImage(_image!),
                             fit: BoxFit.fill,
                           ),
                   ),
@@ -147,20 +148,20 @@ class _CreateGroupState extends State<CreateGroup> {
                     left: 200,
                     top: 140,
                     child: IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.edit,
                         color: Colors.purple,
                       ),
                       onPressed: () async {
-                        PickedFile pickedFile = await picker.getImage(
+                        PickedFile? pickedFile = await picker.getImage(
                             source: ImageSource.gallery, imageQuality: 50);
 
-                        File image = File(pickedFile.path);
+                        File image = File(pickedFile!.path);
                         setState(
                           () {
                             _image = image;
 
-                            widget.groupModel.imgPath = _image.path;
+                            widget.groupModel!.imgPath = _image!.path;
                           },
                         );
                       },
@@ -170,11 +171,11 @@ class _CreateGroupState extends State<CreateGroup> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 3.0, left: 15, bottom: 6.0),
+          const Padding(
+            padding: EdgeInsets.only(top: 3.0, left: 15, bottom: 6.0),
             child: Text(
               "Group's Name",
               style: TextStyle(
@@ -185,7 +186,7 @@ class _CreateGroupState extends State<CreateGroup> {
             ),
           ),
           Container(
-            padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+            padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
               border: Border.all(color: Colors.purple),
@@ -194,7 +195,7 @@ class _CreateGroupState extends State<CreateGroup> {
               controller: groupName,
               maxLines: 1,
               textAlign: TextAlign.center,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: "__Group Name__",
                 hintStyle: TextStyle(
@@ -205,11 +206,11 @@ class _CreateGroupState extends State<CreateGroup> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 3.0, left: 15, bottom: 6.0),
+          const Padding(
+            padding: EdgeInsets.only(top: 3.0, left: 15, bottom: 6.0),
             child: Text(
               "Group's Description",
               style: TextStyle(
@@ -221,16 +222,16 @@ class _CreateGroupState extends State<CreateGroup> {
           ),
           Container(
             height: 160,
-            padding: EdgeInsets.fromLTRB(10, 2, 10, 2),
+            padding: const EdgeInsets.fromLTRB(10, 2, 10, 2),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
               border: Border.all(color: Colors.purple),
             ),
             child: TextField(
-              controller: groupDiscription,
+              controller: groupDescription,
               maxLines: 5,
               textAlign: TextAlign.center,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: "__Group Description__",
                 hintStyle: TextStyle(
@@ -241,14 +242,14 @@ class _CreateGroupState extends State<CreateGroup> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 5,
           ),
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: Row(
               children: [
-                Text(
+                const Text(
                   "To add people to this group",
                   style: TextStyle(
                       fontSize: 15,
@@ -257,7 +258,7 @@ class _CreateGroupState extends State<CreateGroup> {
                       fontFamily: 'Merienda'),
                 ),
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.add,
                     size: 20,
                     color: Colors.purple,
@@ -275,36 +276,36 @@ class _CreateGroupState extends State<CreateGroup> {
               child: Container(
                 width: 50,
                 height: 40,
-                color: Color.fromRGBO(233, 207, 236, 1),
+                color: const Color.fromRGBO(233, 207, 236, 1),
                 child: IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.done_outline_rounded,
                       size: 30,
                       color: Colors.purple,
                     ),
                     onPressed: () {
-                      widget.groupModel.setName = groupName.text.trim();
-                      widget.groupModel.setDescription =
-                          groupDiscription.text.trim();
-                      widget.groupModel.setMembers = UserFriend.listUsers;
-                      widget.groupModel.setCreatedAt = DateTime.now();
-                      print("\n______________________\n");
-                      print("name       " + widget.groupModel.getName);
-                      print("desa       " + widget.groupModel.getDescription);
-                      print("image      " + widget.groupModel.getImage);
-                      print("size      " +
-                          widget.groupModel.getMembers.length.toString());
-                      for (var i = 0;
-                          i < widget.groupModel.getMembers.length;
-                          i++) {
-                        print("memb       " +
-                            widget.groupModel.getMembers[i].getId);
-                      }
-                      print("\n______________________\n");
+                      widget.groupModel!.setName = groupName.text.trim();
+                      widget.groupModel!.setDescription =
+                          groupDescription.text.trim();
+                      widget.groupModel!.setMembers = UserFriend.listUsers;
+                      widget.groupModel!.setCreatedAt = DateTime.now();
+                      // print("\n______________________\n");
+                      // print("name       " + widget.groupModel.getName);
+                      // print("desa       " + widget.groupModel.getDescription);
+                      // print("image      " + widget.groupModel.getImage);
+                      // print("size      " +
+                      //     widget.groupModel.getMembers.length.toString());
+                      // for (var i = 0;
+                      //     i < widget.groupModel!.getMembers.length;
+                      //     i++) {
+                      //   print("memb       " +
+                      //       widget.groupModel!.getMembers[i].getId);
+                      // }
+                      // print("\n______________________\n");
 
                       groupController.addGroup(
-                          widget.groupModel, MyApp.currentUser.getId);
-                      UserFriend.listUsers = null;
+                          widget.groupModel!, MyApp.currentUser.getId);
+                      UserFriend.listUsers = [];
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -315,7 +316,7 @@ class _CreateGroupState extends State<CreateGroup> {
               ),
             ),
           ),
-          Center(
+          const Center(
             child: Text(
               " Done",
               style: TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
@@ -339,12 +340,12 @@ class _CreateGroupState extends State<CreateGroup> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Profile(
-                          user_id: profileId,
+                          user_id: profileId!,
                         ),
                       ),
                     );
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     MdiIcons.account,
                     size: 30,
                     color: Colors.purple,
@@ -354,14 +355,14 @@ class _CreateGroupState extends State<CreateGroup> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 2.0, 0.0),
                 child: IconButton(
-                  icon: Icon(Icons.supervised_user_circle,
+                  icon: const Icon(Icons.supervised_user_circle,
                       color: Colors.purple, size: 30),
                   onPressed: () {},
                 ),
               ),
               FloatingActionButton(
                   heroTag: 2,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add_circle_sharp,
                     size: 40,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -371,7 +372,7 @@ class _CreateGroupState extends State<CreateGroup> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 5.0, 0.0),
                 child: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.description,
                     color: Colors.purple,
                     size: 30,
@@ -384,7 +385,7 @@ class _CreateGroupState extends State<CreateGroup> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 3.0, 0.0),
                 child: IconButton(
-                  icon: Icon(Icons.home, color: Colors.purple, size: 30),
+                  icon: const Icon(Icons.home, color: Colors.purple, size: 30),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -408,8 +409,8 @@ class _CreateGroupState extends State<CreateGroup> {
       builder: (BuildContext context) => Padding(
         padding: const EdgeInsets.all(8.0),
         child: CupertinoActionSheet(
-          title: MyApp.currentUser.friends.length == 0
-              ? Text(
+          title: MyApp.currentUser.friends!.isEmpty
+              ? const Text(
                   "No friends",
                   style: TextStyle(
                     letterSpacing: 3,
@@ -419,7 +420,7 @@ class _CreateGroupState extends State<CreateGroup> {
                     fontWeight: FontWeight.w600,
                   ),
                 )
-              : Text(
+              : const Text(
                   "Friends",
                   style: TextStyle(
                     letterSpacing: 3,
@@ -430,11 +431,11 @@ class _CreateGroupState extends State<CreateGroup> {
                   ),
                 ),
           actions: List.generate(
-            MyApp.currentUser.friends.length,
+            MyApp.currentUser.friends!.length,
             (index) {
               return CupertinoActionSheetAction(
                 child: UserFriend(
-                  friend: MyApp.currentUser.friends[index],
+                  friend: MyApp.currentUser.friends![index],
                 ),
                 onPressed: () {},
               );
@@ -454,7 +455,7 @@ class _CreateGroupState extends State<CreateGroup> {
           children: [
             CupertinoActionSheet(
               title: MyApp.currentUser.getGroups.length == 0
-                  ? Text(
+                  ? const Text(
                       "No Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -464,7 +465,7 @@ class _CreateGroupState extends State<CreateGroup> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -479,7 +480,7 @@ class _CreateGroupState extends State<CreateGroup> {
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupmodel: MyApp.currentUser.getGroups[index]),
+                        groupModel: MyApp.currentUser.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -488,12 +489,12 @@ class _CreateGroupState extends State<CreateGroup> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -528,7 +529,7 @@ class _CreateGroupState extends State<CreateGroup> {
           children: [
             CupertinoActionSheet(
               title: MyApp.currentUser.getPages.length == 0
-                  ? Text(
+                  ? const Text(
                       "No Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -538,7 +539,7 @@ class _CreateGroupState extends State<CreateGroup> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -562,12 +563,12 @@ class _CreateGroupState extends State<CreateGroup> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),
