@@ -211,13 +211,13 @@ class _ProfileState extends State<Profile> {
                                                           color: Colors.grey,
                                                           onPressed: () {
                                                             getBottomSheetFriend(
-                                                              MyApp.currentUser
+                                                              MyApp.currentUser!
                                                                   .getFriends,
                                                             );
                                                           },
                                                         )
                                                       : _isMyFriend(
-                                                              MyApp.currentUser
+                                                              MyApp.currentUser!
                                                                   .getFriends,
                                                               userModel!.getId)
                                                           ? IconButton(
@@ -231,7 +231,7 @@ class _ProfileState extends State<Profile> {
                                                                 userController
                                                                     .unFriend(
                                                                   MyApp
-                                                                      .currentUser
+                                                                      .currentUser!
                                                                       .getId,
                                                                   userModel!
                                                                       .getId,
@@ -246,7 +246,7 @@ class _ProfileState extends State<Profile> {
                                                               onPressed: () {
                                                                 userController.addFriend(
                                                                     MyApp
-                                                                        .currentUser
+                                                                        .currentUser!
                                                                         .getId,
                                                                     userModel!
                                                                         .getId);
@@ -289,7 +289,7 @@ class _ProfileState extends State<Profile> {
                                                     // headers: {
                                                     //   "Authorization":
                                                     //       "Bearer " +
-                                                    //           MyApp.currentUser
+                                                    //           MyApp.currentUser!
                                                     //               .getToken
                                                     // },
                                                   ),

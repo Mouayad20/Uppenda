@@ -98,7 +98,7 @@ class PostBodyState extends State<PostBody> {
         );
       });
     }
-    if (MyApp.currentUser.getId == widget.post.getUserModel.getId) {
+    if (MyApp.currentUser!.getId == widget.post.getUserModel.getId) {
       popList.add(
         PopupMenuItem(
           child: InkWell(
@@ -133,9 +133,9 @@ class PostBodyState extends State<PostBody> {
         ),
       );
     }
-    if (MyApp.currentUser.getId != widget.post.getUserModel.getId &&
+    if (MyApp.currentUser!.getId != widget.post.getUserModel.getId &&
         widget.post.getGroupModel != null &&
-        MyApp.currentUser.getId != widget.post.getGroupModel.admin.id &&
+        MyApp.currentUser!.getId != widget.post.getGroupModel.admin.id &&
         _meIn(widget.post.getGroupModel.getMembers)) {
       popList.add(
         PopupMenuItem(
@@ -146,15 +146,15 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               groupController.leaveGroup(
-                  MyApp.currentUser.getId, widget.post.getGroupModel.getId);
+                  MyApp.currentUser!.getId, widget.post.getGroupModel.getId);
             },
           ),
         ),
       );
     }
-    if (MyApp.currentUser.getId != widget.post.getUserModel.getId &&
+    if (MyApp.currentUser!.getId != widget.post.getUserModel.getId &&
         widget.post.getGroupModel != null &&
-        MyApp.currentUser.getId != widget.post.getGroupModel.admin.id &&
+        MyApp.currentUser!.getId != widget.post.getGroupModel.admin.id &&
         !_meIn(widget.post.getGroupModel.getMembers)) {
       popList.add(
         PopupMenuItem(
@@ -165,14 +165,14 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               groupController.joinToGroup(
-                  MyApp.currentUser.getId, widget.post.getGroupModel.getId);
+                  MyApp.currentUser!.getId, widget.post.getGroupModel.getId);
             },
           ),
         ),
       );
     }
 
-    if (MyApp.currentUser.getId != widget.post.getUserModel.getId &&
+    if (MyApp.currentUser!.getId != widget.post.getUserModel.getId &&
         widget.post.getPageModel != null &&
         _meIn(widget.post.getPageModel.getMembers)) {
       popList.add(
@@ -184,13 +184,13 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               pageController.unFollowToThisPage(
-                  MyApp.currentUser.getId, widget.post.getPageModel.getId);
+                  MyApp.currentUser!.getId, widget.post.getPageModel.getId);
             },
           ),
         ),
       );
     }
-    if (MyApp.currentUser.getId != widget.post.getUserModel.getId &&
+    if (MyApp.currentUser!.getId != widget.post.getUserModel.getId &&
         widget.post.getPageModel != null &&
         !_meIn(widget.post.getPageModel.getMembers)) {
       popList.add(
@@ -202,17 +202,17 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               pageController.followThisPage(
-                  MyApp.currentUser.getId, widget.post.getPageModel.getId);
+                  MyApp.currentUser!.getId, widget.post.getPageModel.getId);
             },
           ),
         ),
       );
     }
     if ((_isMyFriend(
-                MyApp.currentUser.getFriends, widget.post.getUserModel.getId) &&
+                MyApp.currentUser!.getFriends, widget.post.getUserModel.getId) &&
             widget.post.getGroupModel != null) ||
         (_isMyFriend(
-                MyApp.currentUser.getFriends, widget.post.getUserModel.getId) &&
+                MyApp.currentUser!.getFriends, widget.post.getUserModel.getId) &&
             widget.post.getGroupModel == null &&
             widget.post.getPageModel == null)) {
       popList.add(
@@ -224,7 +224,7 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               userController.unFriend(
-                  MyApp.currentUser.getId, widget.post.getUserModel.getId);
+                  MyApp.currentUser!.getId, widget.post.getUserModel.getId);
             },
           ),
         ),
@@ -232,10 +232,10 @@ class PostBodyState extends State<PostBody> {
     }
 
     if (!_isMyFriend(
-            MyApp.currentUser.getFriends, widget.post.getUserModel.getId) &&
+            MyApp.currentUser!.getFriends, widget.post.getUserModel.getId) &&
         widget.post.getGroupModel == null &&
         widget.post.getPageModel == null &&
-        MyApp.currentUser.getId != widget.post.getUserModel.getId) {
+        MyApp.currentUser!.getId != widget.post.getUserModel.getId) {
       popList.add(
         PopupMenuItem(
           child: InkWell(
@@ -245,17 +245,17 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               userController.addFriend(
-                  MyApp.currentUser.getId, widget.post.getUserModel.getId);
+                  MyApp.currentUser!.getId, widget.post.getUserModel.getId);
             },
           ),
         ),
       );
     }
     if (!_isMyFriend(
-            MyApp.currentUser.getFriends, widget.post.getUserModel.getId) &&
+            MyApp.currentUser!.getFriends, widget.post.getUserModel.getId) &&
         widget.post.getGroupModel != null &&
         widget.post.getPageModel == null &&
-        MyApp.currentUser.getId != widget.post.getUserModel.getId) {
+        MyApp.currentUser!.getId != widget.post.getUserModel.getId) {
       popList.add(
         PopupMenuItem(
           child: InkWell(
@@ -265,7 +265,7 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               userController.addFriend(
-                  MyApp.currentUser.getId, widget.post.getUserModel.getId);
+                  MyApp.currentUser!.getId, widget.post.getUserModel.getId);
             },
           ),
         ),
@@ -281,7 +281,7 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               userController.unSavePost(
-                  MyApp.currentUser.getId, widget.post.getId);
+                  MyApp.currentUser!.getId, widget.post.getId);
             },
           ),
         ),
@@ -296,7 +296,7 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               userController.savePost(
-                  MyApp.currentUser.getId, widget.post.getId);
+                  MyApp.currentUser!.getId, widget.post.getId);
             },
           ),
         ),
@@ -357,7 +357,7 @@ class PostBodyState extends State<PostBody> {
                                                     .replaceAll("\\", "/"),
                                             // headers: {
                                             //   "Authorization": "Bearer " +
-                                            //       MyApp.currentUser.getToken
+                                            //       MyApp.currentUser!.getToken
                                             // },
                                           ).image,
                                         ),
@@ -386,7 +386,7 @@ class PostBodyState extends State<PostBody> {
                                                   .replaceAll("\\", "/"),
                                           // headers: {
                                           //   "Authorization": "Bearer " +
-                                          //       MyApp.currentUser.getToken
+                                          //       MyApp.currentUser!.getToken
                                           // },
                                         ).image,
                                       )
@@ -458,7 +458,7 @@ class PostBodyState extends State<PostBody> {
                                                   .replaceAll("\\", "/"),
                                           // headers: {
                                           //   "Authorization": "Bearer " +
-                                          //       MyApp.currentUser.getToken
+                                          //       MyApp.currentUser!.getToken
                                           // },
                                         ).image,
                                       )
@@ -528,7 +528,7 @@ class PostBodyState extends State<PostBody> {
                                                       .replaceAll("\\", "/"),
                                               // headers: {
                                               //   "Authorization": "Bearer " +
-                                              //       MyApp.currentUser.getToken
+                                              //       MyApp.currentUser!.getToken
                                               // },
                                             ).image,
                                           )
@@ -646,7 +646,7 @@ class PostBodyState extends State<PostBody> {
                                           reactionController
                                               .reaction(
                                                   widget.post.getId,
-                                                  MyApp.currentUser.getId,
+                                                  MyApp.currentUser!.getId,
                                                   reactionModels[i].getId())
                                               .then(
                                             (value) {
@@ -842,7 +842,7 @@ class PostBodyState extends State<PostBody> {
                         commentModel.setContent = commentContent.text.trim();
                         commentModel.setCreatedAt = DateTime.now().toString();
                         commentController.addComment(commentModel,
-                            MyApp.currentUser.getId, widget.post.getId);
+                            MyApp.currentUser!.getId, widget.post.getId);
                         FocusScope.of(context).unfocus();
                         int a = int.parse(numComments) + 1;
                         numComments = a.toString();
@@ -940,7 +940,7 @@ class PostBodyState extends State<PostBody> {
       onPressed: () {
         _isSharedBefor(widget.post.getParticipants)
             ? userController
-                .unSharePost(MyApp.currentUser.getId, widget.post.getId)
+                .unSharePost(MyApp.currentUser!.getId, widget.post.getId)
                 .then((value) {
                 setState(() {
                   int a = int.parse(numShares) - 1;
@@ -948,7 +948,7 @@ class PostBodyState extends State<PostBody> {
                 });
               })
             : userController
-                .sharePost(MyApp.currentUser.getId, widget.post.getId)
+                .sharePost(MyApp.currentUser!.getId, widget.post.getId)
                 .then((value) {
                 setState(() {
                   int a = int.parse(numShares) + 1;
@@ -1093,7 +1093,7 @@ class PostBodyState extends State<PostBody> {
 
   ReactionModel? checkIfLike(List<ReactionModel> list) {
     for (var item in list) {
-      if (item.getUserModel.getId == MyApp.currentUser.id) return item;
+      if (item.getUserModel.getId == MyApp.currentUser!.id) return item;
     }
     return null;
   }
@@ -1127,7 +1127,7 @@ class PostBodyState extends State<PostBody> {
                   });
                 });
                 reactionController
-                    .reaction(widget.post.getId, MyApp.currentUser.getId,
+                    .reaction(widget.post.getId, MyApp.currentUser!.getId,
                         reactionsModel.getId())
                     .then((value) {
                   setState(() {
@@ -1145,7 +1145,7 @@ class PostBodyState extends State<PostBody> {
                   size: 30,
                 );
                 reactionController
-                    .reaction(widget.post.getId, MyApp.currentUser.getId,
+                    .reaction(widget.post.getId, MyApp.currentUser!.getId,
                         reactionsModel.getId())
                     .then((value) {
                   setState(() {
@@ -1174,7 +1174,7 @@ class PostBodyState extends State<PostBody> {
   bool _isSavedBefore(List<UserModel> list) {
     bool isSaved = false;
     for (var userModel in list) {
-      if (userModel.getId == MyApp.currentUser.getId) isSaved = true;
+      if (userModel.getId == MyApp.currentUser!.getId) isSaved = true;
     }
     return isSaved;
   }
@@ -1182,7 +1182,7 @@ class PostBodyState extends State<PostBody> {
   bool _isSharedBefor(List<UserModel> list) {
     bool isShared = false;
     for (var userModel in list) {
-      if (userModel.getId == MyApp.currentUser.getId) isShared = true;
+      if (userModel.getId == MyApp.currentUser!.getId) isShared = true;
     }
     return isShared;
   }
@@ -1198,7 +1198,7 @@ class PostBodyState extends State<PostBody> {
   bool _meIn(List<UserModel> list) {
     bool inn = false;
     for (var userModel in list) {
-      if (userModel.getId == MyApp.currentUser.getId) inn = true;
+      if (userModel.getId == MyApp.currentUser!.getId) inn = true;
     }
     return inn;
   }
@@ -1235,7 +1235,7 @@ class PostBodyState extends State<PostBody> {
             (index) {
               return CupertinoActionSheetAction(
                 child: ShareBody(
-                    participantsmodel: widget.post.getParticipants[index]),
+                    participantModel: widget.post.getParticipants[index]),
                 onPressed: () {},
               );
             },
@@ -1261,7 +1261,7 @@ class PostBodyState extends State<PostBody> {
                           .toString()
                           .replaceAll("\\", "/"),
                   // headers: {
-                  //   "Authorization": "Bearer " + MyApp.currentUser.getToken
+                  //   "Authorization": "Bearer " + MyApp.currentUser!.getToken
                   // },
                 ).image,
                 fit: BoxFit.cover,

@@ -3,8 +3,9 @@ import 'package:frontend/Model/UserModel.dart';
 import 'package:frontend/main.dart';
 
 class ShareBody extends StatefulWidget {
-  UserModel participantsmodel;
-  ShareBody({this.participantsmodel});
+  UserModel participantModel;
+
+  ShareBody({Key? key, required this.participantModel}) : super(key: key);
 
   @override
   _ShareBodyState createState() => _ShareBodyState();
@@ -18,42 +19,42 @@ class _ShareBodyState extends State<ShareBody> {
       height: 35,
       child: Row(
         children: [
-          if (widget.participantsmodel.getImage == null)
+          if (widget.participantModel.getImage == null)
             Container(
               height: 30.0,
               width: 30.0,
               color: Colors.transparent,
-              child: CircleAvatar(
+              child: const CircleAvatar(
                 backgroundColor: Color.fromRGBO(233, 207, 236, 1),
                 foregroundColor: Colors.purple,
                 child: Icon(Icons.person),
               ),
             ),
-          if (widget.participantsmodel.imagePath != null)
+          if (widget.participantModel.imagePath != null)
             Container(
               height: 30.0,
               width: 30.0,
               color: Colors.transparent,
               child: CircleAvatar(
-                backgroundColor: Color.fromRGBO(233, 207, 236, 1),
+                backgroundColor: const Color.fromRGBO(233, 207, 236, 1),
                 backgroundImage: Image.network(
                   MyApp.mainURL +
-                      widget.participantsmodel.imagePath
+                      widget.participantModel.imagePath
                           .toString()
                           .replaceAll("\\", "/"),
-                  headers: {
-                    "Authorization": "Bearer " + MyApp.currentUser.getToken
-                  },
+                  // headers: {
+                  //   "Authorization": "Bearer " + MyApp.currentUser.getToken
+                  // },
                 ).image,
               ),
             ),
           Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 4.0),
             child: Text(
-              widget.participantsmodel.getFirstName +
+              widget.participantModel.getFirstName +
                   ' ' +
-                  widget.participantsmodel.getLastName,
-              style: TextStyle(
+                  widget.participantModel.getLastName,
+              style: const TextStyle(
                 fontSize: 15,
                 color: Colors.purple,
                 fontFamily: 'Merienda',

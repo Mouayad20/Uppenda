@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BottomBar extends StatefulWidget implements PreferredSizeWidget {
-  BottomBar({Key key}) : preferredSize = Size.fromHeight(kToolbarHeight), super(key: key);
+  const BottomBar({Key? key})
+      : preferredSize = const Size.fromHeight(kToolbarHeight),
+        super(key: key);
 
   @override
   final Size preferredSize; // default is 56.0
@@ -11,8 +12,7 @@ class BottomBar extends StatefulWidget implements PreferredSizeWidget {
   _BottomBarState createState() => _BottomBarState();
 }
 
-class _BottomBarState extends State<BottomBar>{
-
+class _BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,7 +28,7 @@ class _BottomBarState extends State<BottomBar>{
                 onPressed: () {
                   Navigator.pushNamed(context, "Profile");
                 },
-                icon: Icon(
+                icon: const Icon(
                   Icons.account_box,
                   size: 30,
                   color: Colors.purple,
@@ -38,7 +38,7 @@ class _BottomBarState extends State<BottomBar>{
             Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 5.0, 2.0, 0.0),
               child: IconButton(
-                icon: Icon(Icons.supervised_user_circle,
+                icon: const Icon(Icons.supervised_user_circle,
                     color: Colors.purple, size: 30),
                 onPressed: () {
                   Navigator.pushNamed(context, "Group");
@@ -46,16 +46,14 @@ class _BottomBarState extends State<BottomBar>{
               ),
             ),
             FloatingActionButton(
-                child: Icon(Icons.add_circle_sharp,
-                    size: 40,
-                    color: Color.fromRGBO(233, 207, 236, 1)),
-                onPressed: () {
-                },
+                child: const Icon(Icons.add_circle_sharp,
+                    size: 40, color: Color.fromRGBO(233, 207, 236, 1)),
+                onPressed: () {},
                 backgroundColor: Colors.purple),
             Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 5.0, 5.0, 0.0),
               child: IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.description,
                   color: Colors.purple,
                   size: 30,
@@ -68,8 +66,7 @@ class _BottomBarState extends State<BottomBar>{
             Padding(
               padding: const EdgeInsets.fromLTRB(0.0, 5.0, 3.0, 0.0),
               child: IconButton(
-                icon:
-                Icon(Icons.home, color: Colors.purple, size: 30),
+                icon: const Icon(Icons.home, color: Colors.purple, size: 30),
                 onPressed: () {
                   Navigator.pushNamed(context, "Home");
                 },

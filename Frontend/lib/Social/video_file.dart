@@ -5,17 +5,16 @@ import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget2 extends StatefulWidget {
   var video;
-  VideoPlayerWidget2(var video) {
-    this.video = video;
-  }
+
+  VideoPlayerWidget2(this.video, {Key? key}) : super(key: key);
 
   @override
   _VideoPlayerWidget2State createState() => _VideoPlayerWidget2State();
 }
 
 class _VideoPlayerWidget2State extends State<VideoPlayerWidget2> {
-  VideoPlayerController _controller;
-  Future<void> _initializeVideoPlayerFuture;
+  VideoPlayerController? _controller;
+  Future<void>? _initializeVideoPlayerFuture;
 
   @override
   void initState() {
@@ -24,23 +23,23 @@ class _VideoPlayerWidget2State extends State<VideoPlayerWidget2> {
             ? VideoPlayerController.file(widget.video)
             : VideoPlayerController.asset(widget.video)
         : null;
-    _initializeVideoPlayerFuture = _controller.initialize();
+    _initializeVideoPlayerFuture = _controller!.initialize();
 
-    _controller.setLooping(true);
+    _controller!.setLooping(true);
 
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 200.0,
       width: 200.0,
       child: Stack(
@@ -50,7 +49,7 @@ class _VideoPlayerWidget2State extends State<VideoPlayerWidget2> {
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
-            child: Container(
+            child: SizedBox(
               height: 200.0,
               width: 200.0,
               child: FutureBuilder(
@@ -58,11 +57,11 @@ class _VideoPlayerWidget2State extends State<VideoPlayerWidget2> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     return AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
+                      aspectRatio: _controller!.value.aspectRatio,
+                      child: VideoPlayer(_controller!),
                     );
                   } else {
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
@@ -78,16 +77,16 @@ class _VideoPlayerWidget2State extends State<VideoPlayerWidget2> {
               onPressed: () {
                 setState(
                   () {
-                    if (_controller.value.isPlaying) {
-                      _controller.pause();
+                    if (_controller!.value.isPlaying) {
+                      _controller!.pause();
                     } else {
-                      _controller.play();
+                      _controller!.play();
                     }
                   },
                 );
               },
               child: Icon(
-                _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
               ),
             ),
           ),

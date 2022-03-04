@@ -62,7 +62,7 @@ class _BodyGroupButtonState extends State<BodyGroupButton> {
                     ),
                   ),
                 ),
-              if (widget.groupModel.getAdmin.id == MyApp.currentUser.id)
+              if (widget.groupModel.getAdmin.id == MyApp.currentUser!.id)
                 Row(
                   children: [
                     TextButton(
@@ -125,7 +125,7 @@ class _BodyGroupButtonState extends State<BodyGroupButton> {
                     ),
                   ],
                 ),
-              if (widget.groupModel.getAdmin.id != MyApp.currentUser.id)
+              if (widget.groupModel.getAdmin.id != MyApp.currentUser!.id)
                 Padding(
                   padding: const EdgeInsets.only(top: 0.0, left: 3.0),
                   child: Row(

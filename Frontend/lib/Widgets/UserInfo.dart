@@ -6,7 +6,9 @@ import '../main.dart';
 
 class UserInfo extends StatelessWidget {
   UserModel userModel;
-  UserInfo({this.userModel});
+
+  UserInfo({Key? key, required this.userModel}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -17,14 +19,14 @@ class UserInfo extends StatelessWidget {
             Container(
               child: CircleAvatar(
                 backgroundImage: userModel.getImage == null
-                    ? AssetImage("images/download.jpg")
+                    ? const AssetImage("images/download.jpg")
                     : Image.network(
                         MyApp.mainURL +
                             userModel.getImage.toString().replaceAll("\\", "/"),
-                        headers: {
-                          "Authorization":
-                              "Bearer " + MyApp.currentUser.getToken
-                        },
+                        // headers: {
+                        //   "Authorization":
+                        //       "Bearer " + MyApp.currentUser.getToken
+                        // },
                       ).image,
                 backgroundColor: Colors.purple[100],
                 // minRadius: 50,
@@ -33,17 +35,17 @@ class UserInfo extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Colors.purple[600],
+                  color: Colors.purple[600]!,
                   width: 2,
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 5,
             ),
             Text(
               userModel.getFirstName + " " + userModel.getLastName,
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.w700,
                 color: Colors.purple,
                 fontSize: 13,
@@ -53,7 +55,7 @@ class UserInfo extends StatelessWidget {
           ],
         ),
         IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.close,
             color: Colors.purple,
           ),

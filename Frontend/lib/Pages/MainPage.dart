@@ -28,19 +28,19 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void initState() {
-    chatController.getAllChatByUID(MyApp.currentUser.id!).then((value) {
+    chatController.getAllChatByUID(MyApp.currentUser!.id!).then((value) {
       setState(() {
         chatsList = value;
-        listUsers = MyApp.currentUser.getFriends;
+        listUsers = MyApp.currentUser!.getFriends;
         if (chatsList.isNotEmpty) {
-          for (var i = 0; i < MyApp.currentUser.getFriends.length; i++) {
+          for (var i = 0; i < MyApp.currentUser!.getFriends.length; i++) {
             for (var j = 0; j < chatsList.length; j++) {
               print("for");
-              if (MyApp.currentUser.getFriends[i].getId ==
+              if (MyApp.currentUser!.getFriends[i].getId ==
                   chatsList[j].getUser2.getId) {
                 print("iffffffffffff");
                 setState(() {
-                  listUsers.remove(MyApp.currentUser.getFriends[i]);
+                  listUsers.remove(MyApp.currentUser!.getFriends[i]);
                 });
               }
             }
@@ -173,7 +173,7 @@ class _ChatPageState extends State<ChatPage> {
                                       .replaceAll("\\", "/"),
                               // headers: {
                               //   "Authorization":
-                              //       "Bearer " + MyApp.currentUser.getToken
+                              //       "Bearer " + MyApp.currentUser!.getToken
                               // },
                             ).image,
                           ),
@@ -192,7 +192,7 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                         onPressed: () {
                           List<UserModel> list = [];
-                          list.add(MyApp.currentUser);
+                          list.add(MyApp.currentUser!);
                           list.add(listUsers[index]);
                           ChatModel chatModel = ChatModel();
                           chatModel.setUser2 = listUsers[index];

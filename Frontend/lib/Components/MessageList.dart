@@ -30,7 +30,7 @@ class MessageList extends StatelessWidget {
               final MessageModel message = MessageModel.fromJson(list[index]);
               // print("\n________________________\n");
               // print("\n" + message.content);
-              final bool isMe = message.getSender.id == MyApp.currentUser.id;
+              final bool isMe = message.getSender.id == MyApp.currentUser!.id;
               final bool isSameUser = prevUserId == message.getSender.id;
               prevUserId = int.parse(message.getSender.id.toString());
               return MessageBubble(

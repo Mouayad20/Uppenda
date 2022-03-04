@@ -33,17 +33,17 @@ class LogInPage extends StatelessWidget {
           child: Column(
             children: [
               TextFieldCustom(
-                icono: Icons.mail_outline,
+                icon: Icons.mail_outline,
                 type: TextInputType.emailAddress,
-                texto: 'Email',
+                text: 'Email',
                 controller: emailController,
               ),
               const SizedBox(height: 20),
               TextFieldCustom(
-                icono: Icons.visibility_off,
+                icon: Icons.visibility_off,
                 type: TextInputType.text,
                 pass: true,
-                texto: 'Password',
+                text: 'Password',
                 controller: passwordController,
               ),
             ],

@@ -96,7 +96,7 @@ class GroupController {
     SharedPreferences cache = await SharedPreferences.getInstance();
     print(groupModel.getName);
     print(cache.getString('id'));
-    return MyApp.currentUser.getId == groupModel.getAdmin.getId;
+    return MyApp.currentUser!.getId == groupModel.getAdmin.getId;
   }
 
   void leaveGroup(String u_id, String g_id) async {

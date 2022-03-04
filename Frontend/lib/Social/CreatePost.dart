@@ -389,7 +389,7 @@ class _CreatePostState extends State<CreatePost> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser.getGroups.length == 0
+              title: MyApp.currentUser!.getGroups.length == 0
                   ? const Text(
                       "No Groups",
                       style: TextStyle(
@@ -411,11 +411,11 @@ class _CreatePostState extends State<CreatePost> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser.getGroups.length,
+                MyApp.currentUser!.getGroups.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupModel: MyApp.currentUser.getGroups[index]),
+                        groupModel: MyApp.currentUser!.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -463,7 +463,7 @@ class _CreatePostState extends State<CreatePost> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser.getPages.length == 0
+              title: MyApp.currentUser!.getPages.length == 0
                   ? const Text(
                       "No Pages",
                       style: TextStyle(
@@ -485,11 +485,11 @@ class _CreatePostState extends State<CreatePost> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser.getPages.length,
+                MyApp.currentUser!.getPages.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyPageButton(
-                        pageModel: MyApp.currentUser.getPages[index]),
+                        pageModel: MyApp.currentUser!.getPages[index]),
                     onPressed: () {},
                   );
                 },

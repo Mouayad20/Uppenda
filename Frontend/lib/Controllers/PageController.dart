@@ -100,7 +100,7 @@ class PageControler {
     SharedPreferences cache = await SharedPreferences.getInstance();
     // print(cache.getString('id'));
     // print(pageModel.getAdmin().getFirstName);
-    return MyApp.currentUser.getId == pageModel.getAdmin.getId;
+    return MyApp.currentUser!.getId == pageModel.getAdmin.getId;
   }
 
   void unFollowToThisPage(String u_id, String page_id) async {

@@ -291,7 +291,7 @@ class _CreatePageState extends State<CreatePage> {
                     widget.pageModel!.setCreatedAt = DateTime.now();
 
                     pageController.addPage(
-                        widget.pageModel!, MyApp.currentUser.getId);
+                        widget.pageModel!, MyApp.currentUser!.getId);
 
                     UserFriend.listUsers = [];
 
@@ -399,7 +399,7 @@ class _CreatePageState extends State<CreatePage> {
       builder: (BuildContext context) => Padding(
         padding: const EdgeInsets.all(8.0),
         child: CupertinoActionSheet(
-          title: MyApp.currentUser.friends!.isEmpty
+          title: MyApp.currentUser!.friends!.isEmpty
               ? const Text(
                   "No friends",
                   style: TextStyle(
@@ -421,10 +421,10 @@ class _CreatePageState extends State<CreatePage> {
                   ),
                 ),
           actions: List.generate(
-            MyApp.currentUser.friends!.length,
+            MyApp.currentUser!.friends!.length,
             (index) {
               return CupertinoActionSheetAction(
-                child: UserFriend(friend: MyApp.currentUser.friends![index]),
+                child: UserFriend(friend: MyApp.currentUser!.friends![index]),
                 onPressed: () {},
               );
             },
@@ -442,7 +442,7 @@ class _CreatePageState extends State<CreatePage> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser.getGroups.length == 0
+              title: MyApp.currentUser!.getGroups.length == 0
                   ? const Text(
                       "No Groups",
                       style: TextStyle(
@@ -464,11 +464,11 @@ class _CreatePageState extends State<CreatePage> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser.getGroups.length,
+                MyApp.currentUser!.getGroups.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupModel: MyApp.currentUser.getGroups[index]),
+                        groupModel: MyApp.currentUser!.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -516,7 +516,7 @@ class _CreatePageState extends State<CreatePage> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser.getPages.length == 0
+              title: MyApp.currentUser!.getPages.length == 0
                   ? const Text(
                       "No Pages",
                       style: TextStyle(
@@ -538,11 +538,11 @@ class _CreatePageState extends State<CreatePage> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser.getPages.length,
+                MyApp.currentUser!.getPages.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyPageButton(
-                        pageModel: MyApp.currentUser.getPages[index]),
+                        pageModel: MyApp.currentUser!.getPages[index]),
                     onPressed: () {},
                   );
                 },

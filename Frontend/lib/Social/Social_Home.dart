@@ -23,12 +23,12 @@ class SocialHome extends StatefulWidget {
 class _SocialHomeState extends State<SocialHome> {
   UserController userController = UserController();
   PostController postController = PostController();
-  List<PostModel> postModels;
+  List<PostModel>? postModels;
 
   @override
   void initState() {
     super.initState();
-    postController.getSummery(MyApp.currentUser.getId).then((value) {
+    postController.getSummery(MyApp.currentUser!.getId).then((value) {
       setState(() {
         postModels = value;
       });
@@ -51,7 +51,7 @@ class _SocialHomeState extends State<SocialHome> {
               ),
             );
           },
-          icon: Icon(
+          icon: const Icon(
             MdiIcons.homeSearchOutline,
             size: 30,
             color: Colors.purple,
@@ -60,7 +60,7 @@ class _SocialHomeState extends State<SocialHome> {
         title: SizedBox(
           height: 40.0,
           child: InkWell(
-            child: Text(
+            child: const Text(
               "Uppenda",
               style: TextStyle(
                   letterSpacing: 4,
@@ -84,7 +84,7 @@ class _SocialHomeState extends State<SocialHome> {
                     ),
                   );
                 },
-                icon: Icon(
+                icon: const Icon(
                   MdiIcons.messageOutline,
                   size: 28,
                   color: Colors.purple,
@@ -93,14 +93,14 @@ class _SocialHomeState extends State<SocialHome> {
         ],
       ),
       body: postModels == null
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : ListView.builder(
-              itemCount: postModels.length,
+              itemCount: postModels!.length,
               itemBuilder: (context, i) {
                 return PostBody(
-                  post: postModels[i],
+                  post: postModels![i],
                 );
               },
             ),
@@ -120,12 +120,12 @@ class _SocialHomeState extends State<SocialHome> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Profile(
-                          user_id: MyApp.currentUser.getId,
+                          user_id: MyApp.currentUser!.getId,
                         ),
                       ),
                     );
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     MdiIcons.account,
                     size: 30,
                     color: Colors.purple,
@@ -135,7 +135,7 @@ class _SocialHomeState extends State<SocialHome> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 2.0, 0.0),
                 child: IconButton(
-                  icon: Icon(Icons.supervised_user_circle,
+                  icon: const Icon(Icons.supervised_user_circle,
                       color: Colors.purple, size: 30),
                   onPressed: () {
                     showGroupsButton();
@@ -146,7 +146,7 @@ class _SocialHomeState extends State<SocialHome> {
               ),
               FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add_circle_sharp,
                     size: 40,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -163,7 +163,7 @@ class _SocialHomeState extends State<SocialHome> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 5.0, 0.0),
                 child: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.description,
                     color: Colors.purple,
                     size: 30,
@@ -176,7 +176,7 @@ class _SocialHomeState extends State<SocialHome> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 3.0, 0.0),
                 child: IconButton(
-                  icon: Icon(Icons.home, color: Colors.purple, size: 30),
+                  icon: const Icon(Icons.home, color: Colors.purple, size: 30),
                   onPressed: () {},
                 ),
               ),
@@ -195,8 +195,8 @@ class _SocialHomeState extends State<SocialHome> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser.getGroups.length == 0
-                  ? Text(
+              title: MyApp.currentUser!.getGroups.length == 0
+                  ? const Text(
                       "No Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -206,7 +206,7 @@ class _SocialHomeState extends State<SocialHome> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -217,11 +217,11 @@ class _SocialHomeState extends State<SocialHome> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser.getGroups.length,
+                MyApp.currentUser!.getGroups.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupmodel: MyApp.currentUser.getGroups[index]),
+                        groupModel: MyApp.currentUser!.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -230,12 +230,12 @@ class _SocialHomeState extends State<SocialHome> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -269,8 +269,8 @@ class _SocialHomeState extends State<SocialHome> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser.getPages.length == 0
-                  ? Text(
+              title: MyApp.currentUser!.getPages.length == 0
+                  ? const Text(
                       "No Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -280,7 +280,7 @@ class _SocialHomeState extends State<SocialHome> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -291,11 +291,11 @@ class _SocialHomeState extends State<SocialHome> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser.getPages.length,
+                MyApp.currentUser!.getPages.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyPageButton(
-                        pageModel: MyApp.currentUser.getPages[index]),
+                        pageModel: MyApp.currentUser!.getPages[index]),
                     onPressed: () {},
                   );
                 },
@@ -304,12 +304,12 @@ class _SocialHomeState extends State<SocialHome> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),

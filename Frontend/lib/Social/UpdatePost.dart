@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -7,29 +6,25 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:frontend/Body/BodyGroupButton.dart';
 import 'package:frontend/Body/BodyPageButton.dart';
 import 'package:frontend/Model/CommentModel.dart';
-import 'package:frontend/Model/GroupModel.dart';
 import 'package:frontend/Model/PostModel.dart';
 import 'package:frontend/Model/ReactionModel.dart';
 import 'package:frontend/Model/TypeModel.dart';
-import 'package:frontend/Model/PageModel.dart';
 import 'package:frontend/Pages/profile.dart';
 import 'package:frontend/Social/CreateGroup.dart';
 import 'package:frontend/Social/CreatePage.dart';
 import 'package:frontend/Social/Search.dart';
-import 'package:frontend/Social/video_file.dart';
 import 'package:frontend/Controllers/CommentController.dart';
 import 'package:frontend/Controllers/PostController.dart';
 import 'package:frontend/Controllers/ReactionController.dart';
 import 'package:frontend/Controllers/TypeController.dart';
 import 'package:frontend/Controllers/UserController.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 import 'Social_Home.dart';
 
 class UpdatePost extends StatefulWidget {
   PostModel postModel;
 
-  UpdatePost({this.postModel});
+  UpdatePost({Key? key, required this.postModel}) : super(key: key);
 
   @override
   _UpdatePostState createState() => _UpdatePostState();
@@ -45,41 +40,38 @@ class _UpdatePostState extends State<UpdatePost> {
   List<Column> reactionsWidget = [];
   TypeModel typeModel = TypeModel();
   CommentModel commentModel = CommentModel();
-  bool not_loop = true;
-  //////////////////
-  String selectText;
-  List<dynamic> photovideo;
-  File _image;
-  List<Image> _images;
-  File _cameraImage;
-  File _video;
-  List<File> _Videos;
+  bool notLoop = true;
+  String? selectText;
+  List<dynamic>? photoVideo;
+  List<Image>? _images;
   ImagePicker picker = ImagePicker();
-  List<TypeModel> list;
-  List<PopupMenuItem> listaa = [];
+  List<TypeModel> list = [];
+  List<PopupMenuItem> popMenuItems = [];
   final myController = TextEditingController();
 
-  String profileId;
+  String? profileId;
+
   Future<String> getUserFromCache() async {
-    SharedPreferences cache = await SharedPreferences.getInstance();
-    return cache.getString('id');
+    // SharedPreferences cache = await SharedPreferences.getInstance();
+    // return cache.getString('id');
+    return "1";
   }
 
   @override
   void initState() {
     super.initState();
-    getUserFromCache().then((idFromChash) {
+    getUserFromCache().then((idFromCash) {
       setState(() {
-        profileId = idFromChash;
-        userController.getUserById(idFromChash).then((value) {
+        profileId = idFromCash;
+        userController.getUserById(idFromCash).then((value) {
           setState(() {
             MyApp.currentUser = value;
           });
         });
       });
     });
-    if (_images == null) _images = [];
-    if (photovideo == null) photovideo = [];
+    _images ??= [];
+    photoVideo ??= [];
     typeController.getAllPostType().then((value) {
       setState(() {
         list = value;
@@ -87,9 +79,9 @@ class _UpdatePostState extends State<UpdatePost> {
     });
 
     myController.addListener(_printLatestValue);
-    myController.text = widget.postModel.content;
-    selectText = widget.postModel.type.typename;
-    typeModel = widget.postModel.type;
+    myController.text = widget.postModel.content!;
+    selectText = widget.postModel.type!.type;
+    typeModel = widget.postModel.type!;
   }
 
   @override
@@ -104,11 +96,11 @@ class _UpdatePostState extends State<UpdatePost> {
 
   @override
   Widget build(BuildContext context) {
-    if (list != null && not_loop) {
+    if (notLoop) {
       for (var i = 0; i < list.length; i++) {
-        listaa.add(malaz(list[i]));
+        popMenuItems.add(malaz(list[i]));
       }
-      not_loop = false;
+      notLoop = false;
     }
     return Scaffold(
       appBar: AppBar(
@@ -124,13 +116,13 @@ class _UpdatePostState extends State<UpdatePost> {
               ),
             );
           },
-          icon: Icon(
+          icon: const Icon(
             MdiIcons.homeSearchOutline,
             size: 30,
             color: Colors.purple,
           ),
         ),
-        title: SizedBox(
+        title: const SizedBox(
           height: 40.0,
           child: Text(
             "Uppenda",
@@ -141,9 +133,9 @@ class _UpdatePostState extends State<UpdatePost> {
                 fontWeight: FontWeight.w600),
           ),
         ),
-        actions: [
+        actions: const [
           Padding(
-            padding: const EdgeInsets.only(right: 13.0),
+            padding: EdgeInsets.only(right: 13.0),
             child: Icon(
               MdiIcons.messageOutline,
               size: 28,
@@ -152,110 +144,105 @@ class _UpdatePostState extends State<UpdatePost> {
           ),
         ],
       ),
-      body: Container(
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
-              child: Row(
-                children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    color: Color.fromRGBO(233, 207, 236, 1),
-                    child: getlist(),
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
+            child: Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  color: const Color.fromRGBO(233, 207, 236, 1),
+                  child: getList(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
+                  child: Text(
+                    selectText!,
+                    style: TextStyle(
+                        color: Colors.purple[200], fontFamily: 'Merienda'),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12.0, 8.0, 8.0, 8.0),
-                    child: Text(
-                      selectText,
-                      style: TextStyle(
-                          color: Colors.purple[200], fontFamily: 'Merienda'),
-                    ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 200,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  topRight: Radius.circular(10),
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromRGBO(233, 207, 236, 1),
+                    spreadRadius: 4,
+                    blurRadius: 7,
+                    offset: Offset(0, 0),
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromRGBO(233, 207, 236, 1),
-                      spreadRadius: 4,
-                      blurRadius: 7,
-                      offset: Offset(0, 0),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
+                child: ListView(
+                  children: [
+                    TextField(
+                      controller: myController,
+                      textInputAction: TextInputAction.newline,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      onChanged: (text) {},
                     ),
                   ],
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
-                  child: ListView(
-                    children: [
-                      TextField(
-                        controller: myController,
-                        textInputAction: TextInputAction.newline,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        onChanged: (text) {},
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(5.0, 38.0, 8.0, 8.0),
+            child: Column(
+              children: [
+                Container(
+                  width: 60,
+                  height: 40,
+                  color: const Color.fromRGBO(233, 207, 236, 1),
+                  child: IconButton(
+                      icon: const Icon(
+                        Icons.done_outline_rounded,
+                        size: 30,
+                        color: Colors.purple,
                       ),
-                    ],
+                      onPressed: () {
+                        widget.postModel.setContent = myController.text.trim();
+                        widget.postModel.setType = typeModel;
+                        // print("_______________");
+                        // print(widget.postModel.type.id);
+                        // print(widget.postModel.type.typename);
+                        // print("_______________");
+                        postController.updatePost(widget.postModel);
+                        Navigator.pop(
+                          context,
+                        );
+                      }),
+                ),
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(5.0, 8.0, 8.0, 8.0),
+                  child: Text(
+                    " Done",
+                    style:
+                        TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
                   ),
                 ),
-              ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(5.0, 38.0, 8.0, 8.0),
-              child: Column(
-                children: [
-                  Container(
-                    width: 60,
-                    height: 40,
-                    color: Color.fromRGBO(233, 207, 236, 1),
-                    child: IconButton(
-                        icon: Icon(
-                          Icons.done_outline_rounded,
-                          size: 30,
-                          color: Colors.purple,
-                        ),
-                        onPressed: () {
-                          widget.postModel.setContent =
-                              myController.text.trim();
-                          if (typeModel != null) {
-                            widget.postModel.setType = typeModel;
-                            print("_______________");
-                            print(widget.postModel.type.id);
-                            print(widget.postModel.type.typename);
-                            print("_______________");
-                          }
-                          postController.updatePost(widget.postModel);
-                          Navigator.pop(
-                            context,
-                          );
-                        }),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(5.0, 8.0, 8.0, 8.0),
-                    child: Text(
-                      " Done",
-                      style: TextStyle(
-                          color: Colors.purple, fontFamily: 'Merienda'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: Container(
@@ -273,12 +260,12 @@ class _UpdatePostState extends State<UpdatePost> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Profile(
-                          user_id: profileId,
+                          user_id: profileId!,
                         ),
                       ),
                     );
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     MdiIcons.account,
                     size: 30,
                     color: Colors.purple,
@@ -288,7 +275,7 @@ class _UpdatePostState extends State<UpdatePost> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 2.0, 0.0),
                 child: IconButton(
-                  icon: Icon(Icons.supervised_user_circle,
+                  icon: const Icon(Icons.supervised_user_circle,
                       color: Colors.purple, size: 30),
                   onPressed: () {
                     showGroupsButton();
@@ -297,7 +284,7 @@ class _UpdatePostState extends State<UpdatePost> {
               ),
               FloatingActionButton(
                   heroTag: 2,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add_circle_sharp,
                     size: 40,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -307,7 +294,7 @@ class _UpdatePostState extends State<UpdatePost> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 5.0, 0.0),
                 child: IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.description,
                     color: Colors.purple,
                     size: 30,
@@ -320,7 +307,7 @@ class _UpdatePostState extends State<UpdatePost> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(0.0, 5.0, 3.0, 0.0),
                 child: IconButton(
-                  icon: Icon(Icons.home, color: Colors.purple, size: 30),
+                  icon: const Icon(Icons.home, color: Colors.purple, size: 30),
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -346,8 +333,8 @@ class _UpdatePostState extends State<UpdatePost> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser.getGroups.length == 0
-                  ? Text(
+              title: MyApp.currentUser!.getGroups.length == 0
+                  ? const Text(
                       "No Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -357,7 +344,7 @@ class _UpdatePostState extends State<UpdatePost> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -368,11 +355,11 @@ class _UpdatePostState extends State<UpdatePost> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser.getGroups.length,
+                MyApp.currentUser!.getGroups.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupmodel: MyApp.currentUser.getGroups[index]),
+                        groupModel: MyApp.currentUser!.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -381,12 +368,12 @@ class _UpdatePostState extends State<UpdatePost> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -420,8 +407,8 @@ class _UpdatePostState extends State<UpdatePost> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser.getPages.length == 0
-                  ? Text(
+              title: MyApp.currentUser!.getPages.length == 0
+                  ? const Text(
                       "No Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -431,7 +418,7 @@ class _UpdatePostState extends State<UpdatePost> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -442,11 +429,11 @@ class _UpdatePostState extends State<UpdatePost> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser.getPages.length,
+                MyApp.currentUser!.getPages.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyPageButton(
-                        pageModel: MyApp.currentUser.getPages[index]),
+                        pageModel: MyApp.currentUser!.getPages[index]),
                     onPressed: () {},
                   );
                 },
@@ -455,12 +442,12 @@ class _UpdatePostState extends State<UpdatePost> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -489,15 +476,15 @@ class _UpdatePostState extends State<UpdatePost> {
     return PopupMenuItem(
       child: TextButton(
         child: Text(
-          typeWidgetModel.typename,
-          style: TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
+          typeWidgetModel.type!,
+          style: const TextStyle(color: Colors.purple, fontFamily: 'Merienda'),
         ),
         onPressed: () {
           setState(
             () {
-              selectText = typeWidgetModel.getName();
+              selectText = typeWidgetModel.type;
               typeModel.id = typeWidgetModel.getId();
-              typeModel.typename = typeWidgetModel.getName();
+              typeModel.type = typeWidgetModel.type;
             },
           );
         },
@@ -505,10 +492,10 @@ class _UpdatePostState extends State<UpdatePost> {
     );
   }
 
-  getlist() {
+  getList() {
     return PopupMenuButton(
-      itemBuilder: (context) => listaa,
-      child: Icon(
+      itemBuilder: (context) => popMenuItems,
+      child: const Icon(
         Icons.menu,
         size: 25,
         color: Colors.purple,

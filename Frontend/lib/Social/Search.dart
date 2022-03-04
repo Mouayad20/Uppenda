@@ -16,8 +16,7 @@ import 'package:frontend/Social/GroupsSearch.dart';
 import 'package:frontend/Social/PagesSearch.dart';
 import 'package:frontend/Social/PeopleSearch.dart';
 import 'package:frontend/Social/Social_Home.dart';
-import 'package:frontend/pages/profile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:frontend/Pages/profile.dart';
 
 import '../main.dart';
 
@@ -37,19 +36,20 @@ class SearchState extends State<Search> {
   List<GroupModel> groups = [];
   bool typing = false;
 
-  String profileId;
+  String? profileId;
   Future<String> getUserFromCache() async {
-    SharedPreferences cache = await SharedPreferences.getInstance();
-    return cache.getString('id');
+    // SharedPreferences cache = await SharedPreferences.getInstance();
+    // return cache.getString('id');
+    return "1";
   }
 
   @override
   void initState() {
     super.initState();
-    getUserFromCache().then((idFromChash) {
+    getUserFromCache().then((idFromCash) {
       setState(() {
-        profileId = idFromChash;
-        userController.getUserById(idFromChash).then((value) {
+        profileId = idFromCash;
+        userController.getUserById(idFromCash).then((value) {
           setState(() {
             MyApp.currentUser = value;
           });
@@ -66,46 +66,40 @@ class SearchState extends State<Search> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           backgroundColor: Colors.white,
-          title: TextBox(),
-          bottom: TabBar(
+          title: textBox(),
+          bottom: const TabBar(
             isScrollable: true,
             indicatorColor: Colors.purple,
             indicatorWeight: 3.0,
             tabs: [
               Tab(
-                child: Container(
-                  child: Text(
-                    'People',
-                    style: TextStyle(
-                        color: Colors.purple,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w200,
-                        fontFamily: 'Merienda'),
-                  ),
+                child: Text(
+                  'People',
+                  style: TextStyle(
+                      color: Colors.purple,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w200,
+                      fontFamily: 'Merienda'),
                 ),
               ),
               Tab(
-                child: Container(
-                  child: Text(
-                    'Pages',
-                    style: TextStyle(
-                        color: Colors.purple,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w200,
-                        fontFamily: 'Merienda'),
-                  ),
+                child: Text(
+                  'Pages',
+                  style: TextStyle(
+                      color: Colors.purple,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w200,
+                      fontFamily: 'Merienda'),
                 ),
               ),
               Tab(
-                child: Container(
-                  child: Text(
-                    'Groups',
-                    style: TextStyle(
-                        color: Colors.purple,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.w200,
-                        fontFamily: 'Merienda'),
-                  ),
+                child: Text(
+                  'Groups',
+                  style: TextStyle(
+                      color: Colors.purple,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w200,
+                      fontFamily: 'Merienda'),
                 ),
               ),
             ],
@@ -114,18 +108,18 @@ class SearchState extends State<Search> {
         body: TabBarView(
           children: [
             users.isEmpty
-                ? Center(
+                ? const Center(
                     child: Text("No pages in this name",
                         style: TextStyle(fontFamily: 'Merienda')),
                   )
                 : ListView.builder(
                     itemCount: users.length,
                     itemBuilder: (context, i) {
-                      return PeopleSearch(usermodel: users[i]);
+                      return PeopleSearch(userModel: users[i]);
                     },
                   ),
             pages.isEmpty
-                ? Center(
+                ? const Center(
                     child: Text(
                       "No pages in this name",
                       style: TextStyle(fontFamily: 'Merienda'),
@@ -135,12 +129,12 @@ class SearchState extends State<Search> {
                     itemCount: pages.length,
                     itemBuilder: (context, i) {
                       return PagesSearch(
-                        pagemodel: pages[i],
+                        pageModel: pages[i],
                       );
                     },
                   ),
             groups.isEmpty
-                ? Center(
+                ? const Center(
                     child: Text(
                       "No groups in this name",
                       style: TextStyle(fontFamily: 'Merienda'),
@@ -150,7 +144,7 @@ class SearchState extends State<Search> {
                     itemCount: groups.length,
                     itemBuilder: (context, i) {
                       return GroupsSearch(
-                        groupmodel: groups[i],
+                        groupModel: groups[i],
                       );
                     },
                   ),
@@ -172,12 +166,12 @@ class SearchState extends State<Search> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => Profile(
-                            user_id: profileId,
+                            user_id: profileId!,
                           ),
                         ),
                       );
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       MdiIcons.account,
                       size: 30,
                       color: Colors.purple,
@@ -187,7 +181,7 @@ class SearchState extends State<Search> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0.0, 5.0, 2.0, 0.0),
                   child: IconButton(
-                    icon: Icon(Icons.supervised_user_circle,
+                    icon: const Icon(Icons.supervised_user_circle,
                         color: Colors.purple, size: 30),
                     onPressed: () {
                       showGroupsButton();
@@ -196,7 +190,7 @@ class SearchState extends State<Search> {
                 ),
                 FloatingActionButton(
                     heroTag: 1,
-                    child: Icon(
+                    child: const Icon(
                       Icons.add_circle_sharp,
                       size: 40,
                       color: Color.fromRGBO(233, 207, 236, 1),
@@ -213,7 +207,7 @@ class SearchState extends State<Search> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0.0, 5.0, 5.0, 0.0),
                   child: IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.description,
                       color: Colors.purple,
                       size: 30,
@@ -226,7 +220,7 @@ class SearchState extends State<Search> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0.0, 5.0, 3.0, 0.0),
                   child: IconButton(
-                    icon: Icon(Icons.home, color: Colors.purple, size: 30),
+                    icon: const Icon(Icons.home, color: Colors.purple, size: 30),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -253,8 +247,8 @@ class SearchState extends State<Search> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser.getGroups.length == 0
-                  ? Text(
+              title: MyApp.currentUser!.getGroups.length == 0
+                  ? const Text(
                       "No Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -264,7 +258,7 @@ class SearchState extends State<Search> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Groups",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -275,11 +269,11 @@ class SearchState extends State<Search> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser.getGroups.length,
+                MyApp.currentUser!.getGroups.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupmodel: MyApp.currentUser.getGroups[index]),
+                        groupModel: MyApp.currentUser!.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -288,12 +282,12 @@ class SearchState extends State<Search> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -327,8 +321,8 @@ class SearchState extends State<Search> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser.getPages.length == 0
-                  ? Text(
+              title: MyApp.currentUser!.getPages.length == 0
+                  ? const Text(
                       "No Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -338,7 +332,7 @@ class SearchState extends State<Search> {
                         fontWeight: FontWeight.w600,
                       ),
                     )
-                  : Text(
+                  : const Text(
                       "Pages",
                       style: TextStyle(
                         letterSpacing: 3,
@@ -349,11 +343,11 @@ class SearchState extends State<Search> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser.getPages.length,
+                MyApp.currentUser!.getPages.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyPageButton(
-                        pageModel: MyApp.currentUser.getPages[index]),
+                        pageModel: MyApp.currentUser!.getPages[index]),
                     onPressed: () {},
                   );
                 },
@@ -362,12 +356,12 @@ class SearchState extends State<Search> {
             Positioned(
               top: 50,
               left: 50,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: FloatingActionButton(
                   heroTag: 3,
-                  child: Icon(
+                  child: const Icon(
                     Icons.add,
                     size: 25,
                     color: Color.fromRGBO(233, 207, 236, 1),
@@ -392,13 +386,13 @@ class SearchState extends State<Search> {
     );
   }
 
-  Widget TextBox() {
+  Widget textBox() {
     return Row(
       children: [
         Container(
           width: 280,
           height: 45,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10),
@@ -419,7 +413,7 @@ class SearchState extends State<Search> {
             padding: const EdgeInsets.only(left: 5),
             child: TextField(
               controller: textSearch,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: 'Search..',
                 hintStyle: TextStyle(
@@ -432,7 +426,7 @@ class SearchState extends State<Search> {
           ),
         ),
         IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.search,
             color: Color.fromRGBO(233, 207, 236, 1),
             size: 25,

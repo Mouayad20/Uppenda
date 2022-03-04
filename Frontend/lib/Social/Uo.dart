@@ -1,31 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:ppp/Model/GroupModel.dart';
-import 'package:ppp/Model/PageModel.dart';
-import 'package:ppp/Model/UserModel.dart';
-//import 'package:image_picker/image_picker.dart';
+import 'package:frontend/Model/UserModel.dart';
 
-class Usewidget extends StatefulWidget {
+class UseWidget extends StatefulWidget {
   UserModel pageModel;
-  Usewidget({this.pageModel});
+
+  UseWidget({Key? key, required this.pageModel}) : super(key: key);
 
   @override
-  _UsewidgetState createState() => _UsewidgetState();
+  _UseWidgetState createState() => _UseWidgetState();
 }
 
-class _UsewidgetState extends State<Usewidget> {
+class _UseWidgetState extends State<UseWidget> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Text(widget.pageModel.getId),
-          Text(widget.pageModel.getFirstName),
-          Text(widget.pageModel.getLastName),
-          Text(widget.pageModel.getCreatedAt.toString()),
-          Text(widget.pageModel.getImage),
-        ],
-      ),
+    return Column(
+      children: [
+        Text(widget.pageModel.getId),
+        Text(widget.pageModel.getFirstName),
+        Text(widget.pageModel.getLastName),
+        Text(widget.pageModel.getCreatedAt.toString()),
+        Text(widget.pageModel.getImage),
+      ],
     );
   }
 }

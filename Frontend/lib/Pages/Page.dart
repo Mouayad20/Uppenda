@@ -170,7 +170,7 @@ class _Page1State extends State<Page1> {
                                         .replaceAll("\\", "/"),
                                 // headers: {
                                 //   "Authorization":
-                                //       "Bearer " + MyApp.currentUser.getToken
+                                //       "Bearer " + MyApp.currentUser!.getToken
                                 // },
                               ).image,
                         fit: BoxFit.cover,
@@ -688,7 +688,7 @@ class _Page1State extends State<Page1> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser.getGroups.length == 0
+              title: MyApp.currentUser!.getGroups.length == 0
                   ? const Text(
                       "No Groups",
                       style: TextStyle(
@@ -710,11 +710,11 @@ class _Page1State extends State<Page1> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser.getGroups.length,
+                MyApp.currentUser!.getGroups.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupModel: MyApp.currentUser.getGroups[index]),
+                        groupModel: MyApp.currentUser!.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -762,7 +762,7 @@ class _Page1State extends State<Page1> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser.getPages.length == 0
+              title: MyApp.currentUser!.getPages.length == 0
                   ? const Text(
                       "No Pages",
                       style: TextStyle(
@@ -784,11 +784,11 @@ class _Page1State extends State<Page1> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser.getPages.length,
+                MyApp.currentUser!.getPages.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyPageButton(
-                        pageModel: MyApp.currentUser.getPages[index]),
+                        pageModel: MyApp.currentUser!.getPages[index]),
                     onPressed: () {},
                   );
                 },
@@ -1021,7 +1021,7 @@ class _Page1State extends State<Page1> {
                             iconSize: 25,
                             onPressed: () {
                               pageController.followThisPage(
-                                  MyApp.currentUser.getId, pageModel.getId);
+                                  MyApp.currentUser!.getId, pageModel.getId);
                               SnackBar mySnackBar = const SnackBar(
                                   duration: Duration(seconds: 1),
                                   backgroundColor:
@@ -1089,7 +1089,7 @@ class _Page1State extends State<Page1> {
                             iconSize: 25,
                             onPressed: () {
                               pageController.unFollowToThisPage(
-                                  MyApp.currentUser.getId, pageModel.getId);
+                                  MyApp.currentUser!.getId, pageModel.getId);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

@@ -163,7 +163,7 @@ class PostController {
   }
 
   Future<PostModel> updatePost(PostModel postModel) async {
-    int u_id = int.parse(MyApp.currentUser.getId);
+    int u_id = int.parse(MyApp.currentUser!.getId);
     var response = await http.post(Uri.parse(currentUri + "/update"),
         body: json.encode(postModel.toJson()),
         headers: {

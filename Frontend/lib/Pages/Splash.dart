@@ -94,11 +94,11 @@ class _SecondScreenState extends State<SecondScreen> {
                 mimo = true;
                 NetworkInterface.list().then((value2) {
                   setState(() {
-                    MyApp.currentUser.setIp =
+                    MyApp.currentUser!.setIp =
                         "/" + value2.first.addresses.first.address;
-                    MyApp.currentUser.setOnLine = true;
+                    MyApp.currentUser!.setOnLine = true;
                     userController
-                        .updateUser(MyApp.currentUser, false)
+                        .updateUser(MyApp.currentUser!, false)
                         .then((value3) {
                       setState(() {
                         MyApp.currentUser = value3;

@@ -63,7 +63,7 @@ class _BodyPageButtonState extends State<BodyPageButton> {
                     ),
                   ),
                 ),
-              if (widget.pageModel.admin!.id == MyApp.currentUser.id)
+              if (widget.pageModel.admin!.id == MyApp.currentUser!.id)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 0.0, left: 3.0),
                   child: Row(
@@ -129,7 +129,7 @@ class _BodyPageButtonState extends State<BodyPageButton> {
                     ],
                   ),
                 ),
-              if (widget.pageModel.admin!.id != MyApp.currentUser.id)
+              if (widget.pageModel.admin!.id != MyApp.currentUser!.id)
                 Padding(
                   padding: const EdgeInsets.only(top: 0.0, left: 3.0),
                   child: Row(

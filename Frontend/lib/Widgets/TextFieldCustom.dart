@@ -1,34 +1,40 @@
 import 'package:flutter/material.dart';
 
-class TextFieldCustom extends StatelessWidget{
-  final IconData icono;
+class TextFieldCustom extends StatelessWidget {
+  final IconData icon;
   final TextInputType type;
   final bool pass;
-  final String texto;
+  final String text;
   final TextEditingController controller;
-  const TextFieldCustom({this.icono, this.type, this.pass=false, this.texto,this.controller});
+
+  const TextFieldCustom(
+      {Key? key,
+       required this.icon,
+       required this.type,
+      this.pass = false,
+       required this.text,
+       required this.controller})
+      : super(key: key);
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return TextField(
       controller: controller,
       keyboardType: type,
-      obscureText:pass,
-      decoration:InputDecoration(
-        hintText: texto,
-        filled:true,
-        fillColor:Color.fromRGBO(233, 207, 236, 1.0),
-        prefixIcon: Icon(icono,color:Colors.grey),
+      obscureText: pass,
+      decoration: InputDecoration(
+        hintText: text,
+        filled: true,
+        fillColor: const Color.fromRGBO(233, 207, 236, 1.0),
+        prefixIcon: Icon(icon, color: Colors.grey),
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xffEBDCFA)),
-          borderRadius: BorderRadius.circular(50)
-        ),
+            borderSide: const BorderSide(color: Color(0xffEBDCFA)),
+            borderRadius: BorderRadius.circular(50)),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Color(0xffEBDCFA)),
+          borderSide: const BorderSide(color: Color(0xffEBDCFA)),
           borderRadius: BorderRadius.circular(50),
-        )
-
-      )
+        ),
+      ),
     );
   }
 }

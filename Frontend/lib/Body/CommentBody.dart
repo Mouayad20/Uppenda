@@ -255,7 +255,7 @@ class _CommentBodyState extends State<CommentBody> {
   }
 
   getList() {
-    if (MyApp.currentUser.id == widget.commentModel.getUserModel.id) {
+    if (MyApp.currentUser!.id == widget.commentModel.getUserModel.id) {
       return PopupMenuButton(
         itemBuilder: (context) => [
           PopupMenuItem(

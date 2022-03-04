@@ -9,7 +9,7 @@ void main() {
 class MyApp extends StatelessWidget {
   static String ip = '192.168.43.251:8080';
   static var mainURL = "http://" + ip;
-  static UserModel currentUser = null;
+  static UserModel? currentUser ;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
