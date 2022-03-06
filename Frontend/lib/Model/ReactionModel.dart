@@ -1,5 +1,6 @@
 import 'package:frontend/main.dart';
 
+import '../Global/Global.dart';
 import 'PostModel.dart';
 import 'ReactionTypeModel.dart';
 import 'UserModel.dart';
@@ -76,7 +77,7 @@ class ReactionModel {
     ),
     ReactionModel(
       id: "4",
-      userModel: MyApp.currentUser,
+      userModel: currentUser,
       reactionTypeModel: ReactionTypeModel(
           id: "1", reactionType: "Love", colorName: "0xFFFB71C1C"),
     ),

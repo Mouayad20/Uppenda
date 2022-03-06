@@ -1,6 +1,7 @@
 import 'package:frontend/Model/MessageModel.dart';
 import 'package:flutter/material.dart';
 
+import '../Global/Global.dart';
 import '../main.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -81,7 +82,7 @@ class MessageBubble extends StatelessWidget {
                           child: CircleAvatar(
                             radius: 15,
                             backgroundImage: Image.network(
-                              MyApp.mainURL +
+                              mainURL +
                                   message.getSender.getImage
                                       .toString()
                                       .replaceAll("\\", "/"),
@@ -110,7 +111,7 @@ class MessageBubble extends StatelessWidget {
                           child: CircleAvatar(
                             radius: 15,
                             backgroundImage: Image.network(
-                              MyApp.mainURL +
+                              mainURL +
                                   message.getSender.getImage
                                       .toString()
                                       .replaceAll("\\", "/"),

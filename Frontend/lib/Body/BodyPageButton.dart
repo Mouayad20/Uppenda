@@ -5,6 +5,8 @@ import 'package:frontend/Model/PageModel.dart';
 import 'package:frontend/Pages/Page.dart';
 import 'package:frontend/main.dart';
 
+import '../Global/Global.dart';
+
 class BodyPageButton extends StatefulWidget {
   PageModel pageModel;
   BodyPageButton({Key? key, required this.pageModel}) : super(key: key);
@@ -35,13 +37,13 @@ class _BodyPageButtonState extends State<BodyPageButton> {
                     child: CircleAvatar(
                       backgroundColor: const Color.fromRGBO(233, 207, 236, 1),
                       backgroundImage: Image.network(
-                        MyApp.mainURL +
+                        mainURL +
                             widget.pageModel.getImage
                                 .toString()
                                 .replaceAll("\\", "/"),
                         // headers: {
                         //   "Authorization":
-                        //       "Bearer " + MyApp.currentUser.getToken
+                        //       "Bearer " + currentUser.getToken
                         // },
                       ).image,
                     ),
@@ -63,7 +65,7 @@ class _BodyPageButtonState extends State<BodyPageButton> {
                     ),
                   ),
                 ),
-              if (widget.pageModel.admin!.id == MyApp.currentUser!.id)
+              if (widget.pageModel.admin!.id == currentUser!.id)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 0.0, left: 3.0),
                   child: Row(
@@ -129,7 +131,7 @@ class _BodyPageButtonState extends State<BodyPageButton> {
                     ],
                   ),
                 ),
-              if (widget.pageModel.admin!.id != MyApp.currentUser!.id)
+              if (widget.pageModel.admin!.id != currentUser!.id)
                 Padding(
                   padding: const EdgeInsets.only(top: 0.0, left: 3.0),
                   child: Row(

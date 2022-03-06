@@ -5,6 +5,7 @@ import 'package:frontend/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
+import '../Global/Global.dart';
 import 'UploadController.dart';
 
 class PostController {
@@ -12,7 +13,7 @@ class PostController {
   List<PostModel>? postModels;
   UploadController uploadController = UploadController();
 
-  String currentUri = MyApp.mainURL + "/post";
+  String currentUri = mainURL + "/post";
 
   void clearCache() async {
     SharedPreferences cache = await SharedPreferences.getInstance();
@@ -163,12 +164,12 @@ class PostController {
   }
 
   Future<PostModel> updatePost(PostModel postModel) async {
-    int u_id = int.parse(MyApp.currentUser!.getId);
+    int u_id = int.parse(currentUser!.getId);
     var response = await http.post(Uri.parse(currentUri + "/update"),
         body: json.encode(postModel.toJson()),
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": "Bearer " + MyApp.currentUser.getToken
+          // "Authorization": "Bearer " + currentUser.getToken
         });
     print("\n************************\n");
     print(response.body);
@@ -181,7 +182,7 @@ class PostController {
     var response =
         await http.delete(Uri.parse(currentUri + "/delete/$p"), headers: {
       "Content-Type": "application/json",
-      // "Authorization": "Bearer " + MyApp.currentUser.getToken
+      // "Authorization": "Bearer " + currentUser.getToken
     });
 
     print("\n***************\n");

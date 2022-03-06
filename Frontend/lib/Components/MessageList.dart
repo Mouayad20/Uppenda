@@ -1,8 +1,9 @@
 // ignore_for_file: unrelated_type_equality_checks
-//////////////////////////////////
+
 import 'package:frontend/Model/MessageModel.dart';
 import 'package:flutter/material.dart';
 
+import '../Global/Global.dart';
 import '../main.dart';
 import 'MessageBubble.dart';
 
@@ -30,7 +31,7 @@ class MessageList extends StatelessWidget {
               final MessageModel message = MessageModel.fromJson(list[index]);
               // print("\n________________________\n");
               // print("\n" + message.content);
-              final bool isMe = message.getSender.id == MyApp.currentUser!.id;
+              final bool isMe = message.getSender.id == currentUser!.id;
               final bool isSameUser = prevUserId == message.getSender.id;
               prevUserId = int.parse(message.getSender.id.toString());
               return MessageBubble(

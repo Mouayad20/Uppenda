@@ -1,6 +1,7 @@
 import 'package:frontend/Model/UserModel.dart';
 import 'package:frontend/main.dart';
 
+import '../Global/Global.dart';
 import 'PostModel.dart';
 
 class CommentModel {
@@ -71,7 +72,7 @@ class CommentModel {
   static List<CommentModel> comments = [
     CommentModel(
       id: "1",
-      userModel: MyApp.currentUser,
+      userModel: currentUser,
       imagePath: 'images/photo1.jpg',
       content:
           " My name is ghalia sabbagh , I have one sisterhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh and three brothers , I live in Damascus , I am studying IT",
@@ -87,13 +88,13 @@ class CommentModel {
     ),
     CommentModel(
         id: "3",
-        userModel: MyApp.currentUser,
+        userModel: currentUser,
         imagePath: null,
         content: "can i help you \n can i help you \n can i help you \n ",
         createdAt: "1/1/2001"),
     CommentModel(
       id: "4",
-      userModel: MyApp.currentUser,
+      userModel: currentUser,
       imagePath: 'images/photo1.jpg',
       content: null,
       createdAt: "1/1/2001",

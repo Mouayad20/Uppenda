@@ -1,9 +1,5 @@
-//import 'dart:js';
-//import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:frontend/Body/BodyGroupButton.dart';
 import 'package:frontend/Body/BodyPageButton.dart';
 import 'package:frontend/Body/PostBody.dart';
@@ -19,18 +15,16 @@ import 'package:frontend/Social/UpdateGroup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:frontend/Model/GroupModel.dart';
 import 'package:frontend/Model/UserModel.dart';
-import 'package:frontend/Widgets/BottomBar.dart';
-import 'package:frontend/Widgets/TopBar.dart';
 import 'package:frontend/Widgets/UserInfo.dart';
 
+import '../Global/Global.dart';
 import '../main.dart';
 import 'MainPage.dart';
-//import 'package:carousel_pro/carousel_pro.dart';
 
 class Group1 extends StatefulWidget {
-  String group_id;
+  final String groupId;
 
-  Group1({Key? key, required this.group_id}) : super(key: key);
+  const Group1({Key? key, required this.groupId}) : super(key: key);
 
   @override
   _Group1State createState() => _Group1State();
@@ -57,7 +51,7 @@ class _Group1State extends State<Group1> {
       });
     });
 
-    _groupController.getGroupById1(widget.group_id.toString()).then((value) {
+    _groupController.getGroupById1(widget.groupId.toString()).then((value) {
       setState(() {
         _groupModel = value;
         postController.getAllPostsForGroup(_groupModel!.getId).then((value) {
@@ -92,7 +86,8 @@ class _Group1State extends State<Group1> {
             );
           },
           icon: const Icon(
-            MdiIcons.homeSearchOutline,
+            Icons.cake_rounded,
+            // MdiIcons.homeSearchOutline,
             size: 30,
             color: Colors.purple,
           ),
@@ -131,7 +126,8 @@ class _Group1State extends State<Group1> {
                   );
                 },
                 icon: const Icon(
-                  MdiIcons.messageOutline,
+                  Icons.cake_rounded,
+                  // MdiIcons.messageOutline,
                   size: 28,
                   color: Colors.purple,
                 )),
@@ -173,13 +169,13 @@ class _Group1State extends State<Group1> {
                           image: _groupModel!.getImage == null
                               ? const AssetImage("images/download.jpg")
                               : Image.network(
-                                  MyApp.mainURL +
+                                  mainURL +
                                       _groupModel!.getImage
                                           .toString()
                                           .replaceAll("\\", "/"),
                                   // headers: {
                                   //   "Authorization":
-                                  //       "Bearer " + MyApp.currentUser.getToken
+                                  //       "Bearer " + currentUser.getToken
                                   // },
                                 ).image,
                           fit: BoxFit.cover,
@@ -362,7 +358,9 @@ class _Group1State extends State<Group1> {
                                           children: [
                                             IconButton(
                                               icon: const Icon(
-                                                  MdiIcons.informationVariant),
+                                                Icons.cake_rounded,
+                                                // MdiIcons.informationVariant,
+                                              ),
                                               iconSize: 25,
                                               onPressed: () {
                                                 showInformation(
@@ -486,7 +484,9 @@ class _Group1State extends State<Group1> {
                                           children: [
                                             IconButton(
                                               icon: const Icon(
-                                                  MdiIcons.informationVariant),
+                                                Icons.cake_rounded,
+                                                // MdiIcons.informationVariant,
+                                              ),
                                               iconSize: 25,
                                               onPressed: () {
                                                 showInformation(
@@ -592,7 +592,8 @@ class _Group1State extends State<Group1> {
                     );
                   },
                   icon: const Icon(
-                    MdiIcons.account,
+                    Icons.cake_rounded,
+                    // MdiIcons.account,
                     size: 30,
                     color: Colors.purple,
                   ),
@@ -666,7 +667,7 @@ class _Group1State extends State<Group1> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser!.getGroups.length == 0
+              title: currentUser!.getGroups.length == 0
                   ? const Text(
                       "No Groups",
                       style: TextStyle(
@@ -688,11 +689,11 @@ class _Group1State extends State<Group1> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser!.getGroups.length,
+                currentUser!.getGroups.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupModel: MyApp.currentUser!.getGroups[index]),
+                        groupModel: currentUser!.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -740,7 +741,7 @@ class _Group1State extends State<Group1> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser!.getPages.length == 0
+              title: currentUser!.getPages.length == 0
                   ? const Text(
                       "No Pages",
                       style: TextStyle(
@@ -762,11 +763,11 @@ class _Group1State extends State<Group1> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser!.getPages.length,
+                currentUser!.getPages.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyPageButton(
-                        pageModel: MyApp.currentUser!.getPages[index]),
+                        pageModel: currentUser!.getPages[index]),
                     onPressed: () {},
                   );
                 },
@@ -988,7 +989,7 @@ class _Group1State extends State<Group1> {
                             iconSize: 25,
                             onPressed: () {
                               groupController.joinToGroup(
-                                  MyApp.currentUser!.getId, groupModel.getId);
+                                  currentUser!.getId, groupModel.getId);
                               SnackBar mysnackbar = const SnackBar(
                                   duration: Duration(seconds: 1),
                                   backgroundColor:
@@ -1055,7 +1056,7 @@ class _Group1State extends State<Group1> {
                             iconSize: 25,
                             onPressed: () {
                               groupController.leaveGroup(
-                                MyApp.currentUser!.getId,
+                                currentUser!.getId,
                                 groupModel.getId,
                               );
                               Navigator.push(

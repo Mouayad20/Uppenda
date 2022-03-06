@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:frontend/Body/BodyGroupButton.dart';
 import 'package:frontend/Body/BodyPageButton.dart';
 import 'package:frontend/Controllers/UserController.dart';
@@ -14,15 +13,16 @@ import 'package:frontend/Social/CreateGroup.dart';
 import 'package:frontend/Social/CreatePage.dart';
 import 'package:frontend/Social/Search.dart';
 import 'package:frontend/Pages/profile.dart';
-import 'package:frontend/Social/video_file.dart';
 import 'package:frontend/Controllers/PostController.dart';
 import 'package:frontend/Controllers/TypeController.dart';
 import 'package:frontend/main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../Global/Global.dart';
 import 'Social_Home.dart';
 
 class CreatePost extends StatefulWidget {
   PostModel? postModel;
+
+  CreatePost({Key? key, this.postModel}) : super(key: key);
 
   @override
   _CreatePostState createState() => _CreatePostState();
@@ -61,7 +61,7 @@ class _CreatePostState extends State<CreatePost> {
         profileId = idFromCash;
         userController.getUserById(idFromCash).then((value) {
           setState(() {
-            MyApp.currentUser = value;
+            currentUser = value;
           });
         });
       });
@@ -113,7 +113,8 @@ class _CreatePostState extends State<CreatePost> {
             );
           },
           icon: const Icon(
-            MdiIcons.homeSearchOutline,
+            Icons.cake_rounded,
+            // MdiIcons.homeSearchOutline,
             size: 30,
             color: Colors.purple,
           ),
@@ -122,7 +123,8 @@ class _CreatePostState extends State<CreatePost> {
           Padding(
             padding: EdgeInsets.only(right: 13.0),
             child: Icon(
-              MdiIcons.messageOutline,
+              Icons.cake_rounded,
+              // MdiIcons.messageOutline,
               size: 28,
               color: Colors.purple,
             ),
@@ -241,7 +243,8 @@ class _CreatePostState extends State<CreatePost> {
                     scrollDirection: Axis.horizontal,
                     itemCount: _images!.length,
                     itemBuilder: (context, index) {
-                      return _images![index];
+                      // return _images![index];
+                      return Container();
                     },
                   ),
                 )
@@ -254,7 +257,9 @@ class _CreatePostState extends State<CreatePost> {
                     scrollDirection: Axis.horizontal,
                     itemCount: _Videos!.length,
                     itemBuilder: (context, index) {
-                      return VideoPlayerWidget2(_Videos![index]) ?? Container();
+                      return const CircularProgressIndicator();
+                      // _Videos != null
+                      //     ? VideoPlayerWidget2(_Videos![index])
                     },
                   ),
                 )
@@ -322,7 +327,8 @@ class _CreatePostState extends State<CreatePost> {
                     );
                   },
                   icon: const Icon(
-                    MdiIcons.account,
+                    Icons.cake_rounded,
+                    // MdiIcons.account,
                     size: 30,
                     color: Colors.purple,
                   ),
@@ -389,7 +395,7 @@ class _CreatePostState extends State<CreatePost> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser!.getGroups.length == 0
+              title: currentUser!.getGroups.length == 0
                   ? const Text(
                       "No Groups",
                       style: TextStyle(
@@ -411,11 +417,11 @@ class _CreatePostState extends State<CreatePost> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser!.getGroups.length,
+                currentUser!.getGroups.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupModel: MyApp.currentUser!.getGroups[index]),
+                        groupModel: currentUser!.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -463,7 +469,7 @@ class _CreatePostState extends State<CreatePost> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser!.getPages.length == 0
+              title: currentUser!.getPages.length == 0
                   ? const Text(
                       "No Pages",
                       style: TextStyle(
@@ -485,11 +491,11 @@ class _CreatePostState extends State<CreatePost> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser!.getPages.length,
+                currentUser!.getPages.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyPageButton(
-                        pageModel: MyApp.currentUser!.getPages[index]),
+                        pageModel: currentUser!.getPages[index]),
                     onPressed: () {},
                   );
                 },

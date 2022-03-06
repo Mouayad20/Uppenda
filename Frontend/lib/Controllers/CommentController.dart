@@ -2,13 +2,14 @@ import 'package:http/http.dart' as http;
 import 'package:frontend/Model/CommentModel.dart';
 import 'dart:convert';
 
+import '../Global/Global.dart';
 import '../main.dart';
 import 'UploadController.dart';
 
 class CommentController {
   CommentModel commentModel = CommentModel();
   UploadController uploadController = UploadController();
-  String currentUri = MyApp.mainURL + "/comment";
+  String currentUri = mainURL + "/comment";
 
   Future<CommentModel> addComment(
       CommentModel commentModel, String u_id, String p_id) async {

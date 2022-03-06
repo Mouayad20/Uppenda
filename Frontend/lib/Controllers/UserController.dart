@@ -5,12 +5,13 @@ import 'package:frontend/Controllers/UploadController.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
+import '../Global/Global.dart';
 import '../main.dart';
 
 class UserController {
   UserModel? userModel;
   UploadController uploadController = UploadController();
-  String currentUri = MyApp.mainURL + "/users";
+  String currentUri = mainURL + "/users";
 
   Future<List<UserModel>> search(String word) async {
     var response = await http.get(
@@ -100,7 +101,7 @@ class UserController {
     int p = int.parse(p_id);
     final response = await http.get(
       Uri.parse(currentUri + '/unSavePost/userId=$u,postId=$p'),
-      // headers: {"Authorization": "Bearer " + MyApp.currentUser.getToken},
+      // headers: {"Authorization": "Bearer " + currentUser.getToken},
     );
     print("\n***************\n");
     print(response.body);
@@ -114,7 +115,7 @@ class UserController {
         body: json.encode(userModel.toJson()),
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": "Bearer " + MyApp.currentUser.getToken
+          // "Authorization": "Bearer " + currentUser.getToken
         });
     userModel = UserModel.fromJson(json.decode(response.body));
 
@@ -128,7 +129,7 @@ class UserController {
       Uri.parse(currentUri + "/addFriend/userId=$m,friendId=$f"),
       headers: {
         "Content-Type": "application/json",
-        // "Authorization": "Bearer " + MyApp.currentUser.getToken
+        // "Authorization": "Bearer " + currentUser.getToken
       },
     );
 
@@ -148,7 +149,7 @@ class UserController {
       Uri.parse(currentUri + "/unFriend/userId=$m,friendId=$f"),
       headers: {
         "Content-Type": "application/json",
-        // "Authorization": "Bearer " + MyApp.currentUser.getToken
+        // "Authorization": "Bearer " + currentUser.getToken
       },
     );
 
@@ -179,7 +180,7 @@ class UserController {
     clearCache();
     saveUserAndTokenInCache(test);
     userModel = UserModel.fromJson(test['userModel']);
-    MyApp.currentUser = UserModel.fromJson(test["userModel"]);
+    currentUser = UserModel.fromJson(test["userModel"]);
 
     // if (userModel.getImage != null) {
     //   uploadController.uploadFile(userModel, "users");
@@ -197,7 +198,7 @@ class UserController {
     var t = await http.post(uri,
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": "Bearer " + MyApp.currentUser.getToken
+          // "Authorization": "Bearer " + currentUser.getToken
         },
         body: json.encode(map));
     clearCache();
@@ -216,7 +217,7 @@ class UserController {
     print("body is : " + t.body);
     print("token is: " + test['token'].toString());
     print("userModel is: " + test['userModel'].toString());
-    MyApp.currentUser = UserModel.fromJson(test["userModel"]);
+    currentUser = UserModel.fromJson(test["userModel"]);
     clearCache();
     saveUserAndTokenInCache(test);
     return json.decode(t.body);

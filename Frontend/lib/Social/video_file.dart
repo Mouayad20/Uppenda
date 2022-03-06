@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget2 extends StatefulWidget {
-  var video;
+  dynamic video;
 
   VideoPlayerWidget2(this.video, {Key? key}) : super(key: key);
 

@@ -1,4 +1,3 @@
-import 'package:frontend/Model/ChatModel.dart';
 import 'package:flutter/material.dart';
 
 import 'ChatBlock.dart';

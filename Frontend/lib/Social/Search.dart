@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:frontend/Body/BodyGroupButton.dart';
 import 'package:frontend/Body/BodyPageButton.dart';
 import 'package:frontend/Controllers/GroupController.dart';
@@ -18,6 +17,7 @@ import 'package:frontend/Social/PeopleSearch.dart';
 import 'package:frontend/Social/Social_Home.dart';
 import 'package:frontend/Pages/profile.dart';
 
+import '../Global/Global.dart';
 import '../main.dart';
 
 class Search extends StatefulWidget {
@@ -51,7 +51,7 @@ class SearchState extends State<Search> {
         profileId = idFromCash;
         userController.getUserById(idFromCash).then((value) {
           setState(() {
-            MyApp.currentUser = value;
+            currentUser = value;
           });
         });
       });
@@ -172,7 +172,8 @@ class SearchState extends State<Search> {
                       );
                     },
                     icon: const Icon(
-                      MdiIcons.account,
+                      Icons.cake_rounded,
+                      // MdiIcons.account,
                       size: 30,
                       color: Colors.purple,
                     ),
@@ -247,7 +248,7 @@ class SearchState extends State<Search> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser!.getGroups.length == 0
+              title: currentUser!.getGroups.length == 0
                   ? const Text(
                       "No Groups",
                       style: TextStyle(
@@ -269,11 +270,11 @@ class SearchState extends State<Search> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser!.getGroups.length,
+                currentUser!.getGroups.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupModel: MyApp.currentUser!.getGroups[index]),
+                        groupModel: currentUser!.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -321,7 +322,7 @@ class SearchState extends State<Search> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser!.getPages.length == 0
+              title: currentUser!.getPages.length == 0
                   ? const Text(
                       "No Pages",
                       style: TextStyle(
@@ -343,11 +344,11 @@ class SearchState extends State<Search> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser!.getPages.length,
+                currentUser!.getPages.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyPageButton(
-                        pageModel: MyApp.currentUser!.getPages[index]),
+                        pageModel: currentUser!.getPages[index]),
                     onPressed: () {},
                   );
                 },

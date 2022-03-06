@@ -1,8 +1,5 @@
 // ignore_for_file: avoid_print, unnecessary_null_comparison
-
-import 'dart:io';
-import 'dart:ui';
-
+import "dart:io";
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,7 +7,6 @@ import 'package:frontend/Controllers/UserController.dart';
 import 'package:frontend/Model/UserModel.dart';
 import 'package:frontend/Pages/profile.dart';
 import 'package:frontend/Social/Social_Home.dart';
-import 'package:frontend/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfile extends StatefulWidget {

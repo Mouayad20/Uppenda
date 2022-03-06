@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:frontend/Body/CommentBody.dart';
 import 'package:frontend/Controllers/GroupController.dart';
 import 'package:frontend/Controllers/PageController.dart';
@@ -24,6 +23,7 @@ import 'package:frontend/Controllers/ReactionController.dart';
 import 'package:frontend/Controllers/UserController.dart';
 import 'package:frontend/main.dart';
 import 'package:readmore/readmore.dart';
+import '../Global/Global.dart';
 import 'LikeBody.dart';
 
 class PostBody extends StatefulWidget {
@@ -83,7 +83,8 @@ class PostBodyState extends State<PostBody> {
     if (likeModel == null) {
       setState(() {
         reaction = const Icon(
-          MdiIcons.heartOutline,
+          Icons.cake_rounded,
+          // MdiIcons.heartOutline,
           color: Colors.purple,
           size: 30,
         );
@@ -91,14 +92,15 @@ class PostBodyState extends State<PostBody> {
     } else {
       setState(() {
         reaction = Icon(
-          MdiIcons.heart,
+          Icons.cake_rounded,
+          // MdiIcons.heart,
           color: Color(int.parse(
               likeModel.getReactionTypeModel.getColorName.toString())),
           size: 30,
         );
       });
     }
-    if (MyApp.currentUser!.getId == widget.post.getUserModel.getId) {
+    if (currentUser!.getId == widget.post.getUserModel.getId) {
       popList.add(
         PopupMenuItem(
           child: InkWell(
@@ -110,9 +112,10 @@ class PostBodyState extends State<PostBody> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => UpdatePost(
-                    postModel: widget.post,
-                  ),
+                  builder: (context) =>
+                      UpdatePost(
+                        postModel: widget.post,
+                      ),
                 ),
               );
             },
@@ -133,9 +136,9 @@ class PostBodyState extends State<PostBody> {
         ),
       );
     }
-    if (MyApp.currentUser!.getId != widget.post.getUserModel.getId &&
+    if (currentUser!.getId != widget.post.getUserModel.getId &&
         widget.post.getGroupModel != null &&
-        MyApp.currentUser!.getId != widget.post.getGroupModel.admin.id &&
+        currentUser!.getId != widget.post.getGroupModel.admin.id &&
         _meIn(widget.post.getGroupModel.getMembers)) {
       popList.add(
         PopupMenuItem(
@@ -146,15 +149,15 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               groupController.leaveGroup(
-                  MyApp.currentUser!.getId, widget.post.getGroupModel.getId);
+                  currentUser!.getId, widget.post.getGroupModel.getId);
             },
           ),
         ),
       );
     }
-    if (MyApp.currentUser!.getId != widget.post.getUserModel.getId &&
+    if (currentUser!.getId != widget.post.getUserModel.getId &&
         widget.post.getGroupModel != null &&
-        MyApp.currentUser!.getId != widget.post.getGroupModel.admin.id &&
+        currentUser!.getId != widget.post.getGroupModel.admin.id &&
         !_meIn(widget.post.getGroupModel.getMembers)) {
       popList.add(
         PopupMenuItem(
@@ -165,14 +168,14 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               groupController.joinToGroup(
-                  MyApp.currentUser!.getId, widget.post.getGroupModel.getId);
+                  currentUser!.getId, widget.post.getGroupModel.getId);
             },
           ),
         ),
       );
     }
 
-    if (MyApp.currentUser!.getId != widget.post.getUserModel.getId &&
+    if (currentUser!.getId != widget.post.getUserModel.getId &&
         widget.post.getPageModel != null &&
         _meIn(widget.post.getPageModel.getMembers)) {
       popList.add(
@@ -184,13 +187,13 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               pageController.unFollowToThisPage(
-                  MyApp.currentUser!.getId, widget.post.getPageModel.getId);
+                  currentUser!.getId, widget.post.getPageModel.getId);
             },
           ),
         ),
       );
     }
-    if (MyApp.currentUser!.getId != widget.post.getUserModel.getId &&
+    if (currentUser!.getId != widget.post.getUserModel.getId &&
         widget.post.getPageModel != null &&
         !_meIn(widget.post.getPageModel.getMembers)) {
       popList.add(
@@ -202,17 +205,17 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               pageController.followThisPage(
-                  MyApp.currentUser!.getId, widget.post.getPageModel.getId);
+                  currentUser!.getId, widget.post.getPageModel.getId);
             },
           ),
         ),
       );
     }
     if ((_isMyFriend(
-                MyApp.currentUser!.getFriends, widget.post.getUserModel.getId) &&
-            widget.post.getGroupModel != null) ||
+        currentUser!.getFriends, widget.post.getUserModel.getId) &&
+        widget.post.getGroupModel != null) ||
         (_isMyFriend(
-                MyApp.currentUser!.getFriends, widget.post.getUserModel.getId) &&
+            currentUser!.getFriends, widget.post.getUserModel.getId) &&
             widget.post.getGroupModel == null &&
             widget.post.getPageModel == null)) {
       popList.add(
@@ -224,7 +227,7 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               userController.unFriend(
-                  MyApp.currentUser!.getId, widget.post.getUserModel.getId);
+                  currentUser!.getId, widget.post.getUserModel.getId);
             },
           ),
         ),
@@ -232,10 +235,10 @@ class PostBodyState extends State<PostBody> {
     }
 
     if (!_isMyFriend(
-            MyApp.currentUser!.getFriends, widget.post.getUserModel.getId) &&
+        currentUser!.getFriends, widget.post.getUserModel.getId) &&
         widget.post.getGroupModel == null &&
         widget.post.getPageModel == null &&
-        MyApp.currentUser!.getId != widget.post.getUserModel.getId) {
+        currentUser!.getId != widget.post.getUserModel.getId) {
       popList.add(
         PopupMenuItem(
           child: InkWell(
@@ -245,17 +248,17 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               userController.addFriend(
-                  MyApp.currentUser!.getId, widget.post.getUserModel.getId);
+                  currentUser!.getId, widget.post.getUserModel.getId);
             },
           ),
         ),
       );
     }
     if (!_isMyFriend(
-            MyApp.currentUser!.getFriends, widget.post.getUserModel.getId) &&
+        currentUser!.getFriends, widget.post.getUserModel.getId) &&
         widget.post.getGroupModel != null &&
         widget.post.getPageModel == null &&
-        MyApp.currentUser!.getId != widget.post.getUserModel.getId) {
+        currentUser!.getId != widget.post.getUserModel.getId) {
       popList.add(
         PopupMenuItem(
           child: InkWell(
@@ -265,7 +268,7 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               userController.addFriend(
-                  MyApp.currentUser!.getId, widget.post.getUserModel.getId);
+                  currentUser!.getId, widget.post.getUserModel.getId);
             },
           ),
         ),
@@ -281,7 +284,7 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               userController.unSavePost(
-                  MyApp.currentUser!.getId, widget.post.getId);
+                  currentUser!.getId, widget.post.getId);
             },
           ),
         ),
@@ -296,7 +299,7 @@ class PostBodyState extends State<PostBody> {
             ),
             onTap: () {
               userController.savePost(
-                  MyApp.currentUser!.getId, widget.post.getId);
+                  currentUser!.getId, widget.post.getId);
             },
           ),
         ),
@@ -336,280 +339,289 @@ class PostBodyState extends State<PostBody> {
           children: [
             widget.post.pageModel == null && widget.post.groupModel == null
                 ? Padding(
-                    padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            widget.post.getUserModel.getOnLine
-                                ? widget.post.getUserModel.getImage != null
-                                    ? CircleAvatar(
-                                        radius: 27,
-                                        backgroundColor: Colors.green,
-                                        child: CircleAvatar(
-                                          radius: 25,
-                                          backgroundImage: Image.network(
-                                            MyApp.mainURL +
-                                                widget
-                                                    .post.getUserModel.getImage
-                                                    .toString()
-                                                    .replaceAll("\\", "/"),
-                                            // headers: {
-                                            //   "Authorization": "Bearer " +
-                                            //       MyApp.currentUser!.getToken
-                                            // },
-                                          ).image,
-                                        ),
-                                      )
-                                    : const CircleAvatar(
-                                        radius: 27,
-                                        backgroundColor: Colors.green,
-                                        child: CircleAvatar(
-                                          radius: 25,
-                                          backgroundColor:
-                                              Color.fromRGBO(233, 207, 236, 1),
-                                          foregroundColor: Colors.purple,
-                                          child: Icon(
-                                            Icons.person,
-                                            size: 30,
-                                          ),
-                                        ),
-                                      )
-                                : widget.post.getUserModel.getImage != null
-                                    ? CircleAvatar(
-                                        radius: 25,
-                                        backgroundImage: Image.network(
-                                          MyApp.mainURL +
-                                              widget.post.getUserModel.getImage
-                                                  .toString()
-                                                  .replaceAll("\\", "/"),
-                                          // headers: {
-                                          //   "Authorization": "Bearer " +
-                                          //       MyApp.currentUser!.getToken
-                                          // },
-                                        ).image,
-                                      )
-                                    : const CircleAvatar(
-                                        radius: 25,
-                                        backgroundColor:
-                                            Color.fromRGBO(233, 207, 236, 1),
-                                        foregroundColor: Colors.purple,
-                                        child: Icon(
-                                          Icons.person,
-                                          size: 30,
-                                        ),
-                                      ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SizedBox(
-                                width: 200,
-                                child: InkWell(
-                                  child: Text(
-                                    widget.post.getUserModel.getFirstName +
-                                        ' ' +
-                                        widget.post.getUserModel.getLastName,
-                                    overflow: TextOverflow.clip,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.purple,
-                                      fontSize: 13,
-                                      fontFamily: 'Merienda',
-                                    ),
-                                  ),
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return Profile(
-                                            user_id:
-                                                widget.post.getUserModel.getId,
-                                          );
-                                        },
-                                      ),
+              padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      widget.post.getUserModel.getOnLine
+                          ? widget.post.getUserModel.getImage != null
+                          ? CircleAvatar(
+                        radius: 27,
+                        backgroundColor: Colors.green,
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundImage: Image
+                              .network(
+                            mainURL +
+                                widget
+                                    .post.getUserModel.getImage
+                                    .toString()
+                                    .replaceAll("\\", "/"),
+                            // headers: {
+                            //   "Authorization": "Bearer " +
+                            //       currentUser!.getToken
+                            // },
+                          )
+                              .image,
+                        ),
+                      )
+                          : const CircleAvatar(
+                        radius: 27,
+                        backgroundColor: Colors.green,
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor:
+                          Color.fromRGBO(233, 207, 236, 1),
+                          foregroundColor: Colors.purple,
+                          child: Icon(
+                            Icons.person,
+                            size: 30,
+                          ),
+                        ),
+                      )
+                          : widget.post.getUserModel.getImage != null
+                          ? CircleAvatar(
+                        radius: 25,
+                        backgroundImage: Image
+                            .network(
+                          mainURL +
+                              widget.post.getUserModel.getImage
+                                  .toString()
+                                  .replaceAll("\\", "/"),
+                          // headers: {
+                          //   "Authorization": "Bearer " +
+                          //       currentUser!.getToken
+                          // },
+                        )
+                            .image,
+                      )
+                          : const CircleAvatar(
+                        radius: 25,
+                        backgroundColor:
+                        Color.fromRGBO(233, 207, 236, 1),
+                        foregroundColor: Colors.purple,
+                        child: Icon(
+                          Icons.person,
+                          size: 30,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: 200,
+                          child: InkWell(
+                            child: Text(
+                              widget.post.getUserModel.getFirstName +
+                                  ' ' +
+                                  widget.post.getUserModel.getLastName,
+                              overflow: TextOverflow.clip,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w700,
+                                color: Colors.purple,
+                                fontSize: 13,
+                                fontFamily: 'Merienda',
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return Profile(
+                                      user_id:
+                                      widget.post.getUserModel.getId,
                                     );
                                   },
                                 ),
-                              ),
-                            ),
-                          ],
+                              );
+                            },
+                          ),
                         ),
-                        getList(),
-                      ],
-                    ),
-                  )
+                      ),
+                    ],
+                  ),
+                  getList(),
+                ],
+              ),
+            )
                 : widget.post.pageModel != null &&
-                        widget.post.groupModel == null
-                    ? Padding(
-                        padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                widget.post.getPageModel.getImage != null
-                                    ? CircleAvatar(
-                                        radius: 25,
-                                        backgroundImage: Image.network(
-                                          MyApp.mainURL +
-                                              widget.post.getPageModel.getImage
-                                                  .toString()
-                                                  .replaceAll("\\", "/"),
-                                          // headers: {
-                                          //   "Authorization": "Bearer " +
-                                          //       MyApp.currentUser!.getToken
-                                          // },
-                                        ).image,
-                                      )
-                                    : const CircleAvatar(
-                                        radius: 25,
-                                        backgroundColor:
-                                            Color.fromRGBO(233, 207, 236, 1),
-                                        foregroundColor: Colors.purple,
-                                        child: Icon(
-                                          Icons.description,
-                                          size: 30,
-                                        ),
-                                      ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SizedBox(
-                                    width: 200,
-                                    child: InkWell(
-                                      child: Text(
-                                        widget.post.getPageModel.getName,
-                                        overflow: TextOverflow.clip,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.purple,
-                                            fontSize: 13,
-                                            fontFamily: 'Merienda'),
-                                      ),
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return Page1(
-                                                page_id: widget
-                                                    .post.getPageModel.getId,
-                                              );
-                                            },
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            getList(),
-                          ],
-                        ),
+                widget.post.groupModel == null
+                ? Padding(
+              padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      widget.post.getPageModel.getImage != null
+                          ? CircleAvatar(
+                        radius: 25,
+                        backgroundImage: Image
+                            .network(
+                          mainURL +
+                              widget.post.getPageModel.getImage
+                                  .toString()
+                                  .replaceAll("\\", "/"),
+                          // headers: {
+                          //   "Authorization": "Bearer " +
+                          //       currentUser!.getToken
+                          // },
+                        )
+                            .image,
                       )
-                    : widget.post.groupModel != null &&
-                            widget.post.pageModel == null
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 8.0, left: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    widget.post.getGroupModel.getImage != null
-                                        ? CircleAvatar(
-                                            radius: 25,
-                                            backgroundImage: Image.network(
-                                              MyApp.mainURL +
-                                                  widget.post.getGroupModel
-                                                      .getImage
-                                                      .toString()
-                                                      .replaceAll("\\", "/"),
-                                              // headers: {
-                                              //   "Authorization": "Bearer " +
-                                              //       MyApp.currentUser!.getToken
-                                              // },
-                                            ).image,
-                                          )
-                                        : const CircleAvatar(
-                                            radius: 25,
-                                            backgroundColor: Color.fromRGBO(
-                                                233, 207, 236, 1),
-                                            foregroundColor: Colors.purple,
-                                            child: Icon(
-                                              Icons.supervised_user_circle,
-                                              size: 30,
-                                            ),
-                                          ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 3.0),
-                                      child: InkWell(
-                                        child: Text(
-                                          widget.post.getUserModel
-                                                  .getFirstName +
-                                              ' ' +
-                                              widget.post.getUserModel
-                                                  .getLastName,
-                                          overflow: TextOverflow.clip,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.purple,
-                                            fontFamily: 'Merienda',
-                                            fontSize: 13,
-                                          ),
-                                        ),
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) {
-                                                return Profile(
-                                                  user_id: widget
-                                                      .post.getUserModel.getId,
-                                                );
-                                              },
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    const Icon(
-                                      MdiIcons.arrowRightDropCircle,
-                                      size: 15,
-                                      color: Colors.grey,
-                                    ),
-                                    InkWell(
-                                      child: Text(
-                                        widget.post.getGroupModel.getName,
-                                        overflow: TextOverflow.clip,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            color: Colors.purple,
-                                            fontSize: 13,
-                                            fontFamily: 'Merienda'),
-                                      ),
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return Group1(
-                                                group_id: widget
-                                                    .post.getGroupModel.getId,
-                                              );
-                                            },
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                getList(),
-                              ],
+                          : const CircleAvatar(
+                        radius: 25,
+                        backgroundColor:
+                        Color.fromRGBO(233, 207, 236, 1),
+                        foregroundColor: Colors.purple,
+                        child: Icon(
+                          Icons.description,
+                          size: 30,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: 200,
+                          child: InkWell(
+                            child: Text(
+                              widget.post.getPageModel.getName,
+                              overflow: TextOverflow.clip,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.purple,
+                                  fontSize: 13,
+                                  fontFamily: 'Merienda'),
                             ),
-                          )
-                        : Container(),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return Page1(
+                                      page_id: widget
+                                          .post.getPageModel.getId,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  getList(),
+                ],
+              ),
+            )
+                : widget.post.groupModel != null &&
+                widget.post.pageModel == null
+                ? Padding(
+              padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      widget.post.getGroupModel.getImage != null
+                          ? CircleAvatar(
+                        radius: 25,
+                        backgroundImage: Image
+                            .network(
+                          mainURL +
+                              widget.post.getGroupModel
+                                  .getImage
+                                  .toString()
+                                  .replaceAll("\\", "/"),
+                          // headers: {
+                          //   "Authorization": "Bearer " +
+                          //       currentUser!.getToken
+                          // },
+                        )
+                            .image,
+                      )
+                          : const CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Color.fromRGBO(
+                            233, 207, 236, 1),
+                        foregroundColor: Colors.purple,
+                        child: Icon(
+                          Icons.supervised_user_circle,
+                          size: 30,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 3.0),
+                        child: InkWell(
+                          child: Text(
+                            widget.post.getUserModel
+                                .getFirstName +
+                                ' ' +
+                                widget.post.getUserModel
+                                    .getLastName,
+                            overflow: TextOverflow.clip,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: Colors.purple,
+                              fontFamily: 'Merienda',
+                              fontSize: 13,
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return Profile(
+                                    user_id: widget
+                                        .post.getUserModel.getId,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const Icon(
+                        Icons.cake_rounded,
+                        // MdiIcons.arrowRightDropCircle,
+                        size: 15,
+                        color: Colors.grey,
+                      ),
+                      InkWell(
+                        child: Text(
+                          widget.post.getGroupModel.getName,
+                          overflow: TextOverflow.clip,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: Colors.purple,
+                              fontSize: 13,
+                              fontFamily: 'Merienda'),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return Group1(
+                                  groupId: widget
+                                      .post.getGroupModel.getId,
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  getList(),
+                ],
+              ),
+            )
+                : Container(),
             const Divider(color: Colors.purple, thickness: 0.5),
             Container(child: getBodyOfPost()),
             Padding(
@@ -622,36 +634,37 @@ class PostBodyState extends State<PostBody> {
                     children: [
                       Padding(
                         padding:
-                            const EdgeInsets.only(right: 0, left: 0, top: 10),
+                        const EdgeInsets.only(right: 0, left: 0, top: 10),
                         child: Column(
                           children: [
                             InkWell(
                               child: reaction,
                               onTap: () {
                                 setState(
-                                  () {
-                                    if (reaction!.icon ==
-                                        MdiIcons.heartOutline) {
+                                      () {
+                                    if (reaction!.icon == Icons.cake_rounded
+                                    /*MdiIcons.heartOutline*/) {
                                       reaction = const Icon(
-                                        MdiIcons.heart,
+                                        Icons.cake_rounded,
+                                        // MdiIcons.heart,
                                         color: Colors.purple,
                                         size: 30,
                                       );
                                       for (var i = 0;
-                                          i < reactionModels.length;
-                                          i++) {
+                                      i < reactionModels.length;
+                                      i++) {
                                         if (reactionModels[i]
-                                                .reactionTypeModel ==
+                                            .reactionTypeModel ==
                                             "Like") {
                                           reactionController
                                               .reaction(
-                                                  widget.post.getId,
-                                                  MyApp.currentUser!.getId,
-                                                  reactionModels[i].getId())
+                                              widget.post.getId,
+                                              currentUser!.getId,
+                                              reactionModels[i].getId())
                                               .then(
-                                            (value) {
+                                                (value) {
                                               setState(
-                                                () {
+                                                    () {
                                                   likeModel = value!;
                                                   int a =
                                                       int.parse(numLikes) + 1;
@@ -664,7 +677,8 @@ class PostBodyState extends State<PostBody> {
                                       }
                                     } else {
                                       reaction = const Icon(
-                                        MdiIcons.heartOutline,
+                                        Icons.cake_rounded,
+                                        // MdiIcons.heartOutline,
                                         color: Colors.purple,
                                         size: 30,
                                       );
@@ -718,9 +732,10 @@ class PostBodyState extends State<PostBody> {
                               },
                               icon: const Padding(
                                 padding:
-                                    EdgeInsets.fromLTRB(3.0, 0.0, 5.0, 5.0),
+                                EdgeInsets.fromLTRB(3.0, 0.0, 5.0, 5.0),
                                 child: Icon(
-                                  MdiIcons.commentMultipleOutline,
+                                  Icons.cake_rounded,
+                                  // MdiIcons.commentMultipleOutline,
                                   size: 30,
                                   color: Colors.purple,
                                 ),
@@ -745,9 +760,9 @@ class PostBodyState extends State<PostBody> {
                               showAlertDialog(context);
                             },
                             icon: Icon(
-                                _isSharedBefor(widget.post.getParticipants)
-                                    ? MdiIcons.share
-                                    : MdiIcons.shareOutline,
+                                _isSharedBefore(widget.post.getParticipants)
+                                    ? Icons.cake_rounded /*MdiIcons.share*/
+                                    : Icons.cake_rounded, /*MdiIcons.shareOutline,*/
                                 size: 33,
                                 color: Colors.purple),
                           ),
@@ -822,7 +837,7 @@ class PostBodyState extends State<PostBody> {
                   ),
                   getListCameraGallery(),
                   IconButton(
-                    icon: const Icon(MdiIcons.send,
+                    icon: const Icon(Icons.cake_rounded /*MdiIcons.send*/,
                         size: 27, color: Colors.purple),
                     onPressed: () {
                       SnackBar mySnackBar = const SnackBar(
@@ -842,7 +857,7 @@ class PostBodyState extends State<PostBody> {
                         commentModel.setContent = commentContent.text.trim();
                         commentModel.setCreatedAt = DateTime.now().toString();
                         commentController.addComment(commentModel,
-                            MyApp.currentUser!.getId, widget.post.getId);
+                            currentUser!.getId, widget.post.getId);
                         FocusScope.of(context).unfocus();
                         int a = int.parse(numComments) + 1;
                         numComments = a.toString();
@@ -862,7 +877,8 @@ class PostBodyState extends State<PostBody> {
 
   getListCameraGallery() {
     return PopupMenuButton(
-      itemBuilder: (context) => [
+      itemBuilder: (context) =>
+      [
         PopupMenuItem(
           child: TextButton(
             child: const Text(
@@ -874,7 +890,7 @@ class PostBodyState extends State<PostBody> {
                   source: ImageSource.camera, imageQuality: 50);
               File image = File(pickedFile!.path);
               setState(
-                () {
+                    () {
                   _image = image;
                   commentModel.setImage = _image!.path;
                 },
@@ -894,7 +910,7 @@ class PostBodyState extends State<PostBody> {
 
               File image = File(pickedFile!.path);
               setState(
-                () {
+                    () {
                   _image = image;
                   commentModel.setImage = _image!.path;
                 },
@@ -905,18 +921,18 @@ class PostBodyState extends State<PostBody> {
       ],
       child: _image == null
           ? const Icon(
-              Icons.image,
-              size: 27,
-              color: Colors.purple,
-            )
+        Icons.image,
+        size: 27,
+        color: Colors.purple,
+      )
           : SizedBox(
-              height: 21.0,
-              width: 21.0,
-              child: Image(
-                image: FileImage(_image!),
-                fit: BoxFit.fill,
-              ),
-            ),
+        height: 21.0,
+        width: 21.0,
+        child: Image(
+          image: FileImage(_image!),
+          fit: BoxFit.fill,
+        ),
+      ),
     );
   }
 
@@ -927,7 +943,9 @@ class PostBodyState extends State<PostBody> {
         style: TextStyle(color: Color.fromRGBO(233, 207, 236, 1)),
       ),
       onPressed: () {
-        Navigator.of(context).pop;
+        Navigator
+            .of(context)
+            .pop;
       },
     );
     Widget continueButton = TextButton(
@@ -938,30 +956,30 @@ class PostBodyState extends State<PostBody> {
         ),
       ),
       onPressed: () {
-        _isSharedBefor(widget.post.getParticipants)
+        _isSharedBefore(widget.post.getParticipants)
             ? userController
-                .unSharePost(MyApp.currentUser!.getId, widget.post.getId)
-                .then((value) {
-                setState(() {
-                  int a = int.parse(numShares) - 1;
-                  numLikes = a.toString();
-                });
-              })
+            .unSharePost(currentUser!.getId, widget.post.getId)
+            .then((value) {
+          setState(() {
+            int a = int.parse(numShares) - 1;
+            numLikes = a.toString();
+          });
+        })
             : userController
-                .sharePost(MyApp.currentUser!.getId, widget.post.getId)
-                .then((value) {
-                setState(() {
-                  int a = int.parse(numShares) + 1;
-                  numLikes = a.toString();
-                });
-              });
+            .sharePost(currentUser!.getId, widget.post.getId)
+            .then((value) {
+          setState(() {
+            int a = int.parse(numShares) + 1;
+            numLikes = a.toString();
+          });
+        });
         Navigator.pop(context);
       },
     );
 
     AlertDialog alert = AlertDialog(
       content: Text(
-        _isSharedBefor(widget.post.getParticipants)
+        _isSharedBefore(widget.post.getParticipants)
             ? "Would you like to Unshare post on your profile?"
             : "Would you like to share post on your profile?",
         style: const TextStyle(
@@ -985,84 +1003,86 @@ class PostBodyState extends State<PostBody> {
   getBottomSheet() {
     showCupertinoModalPopup(
       context: context,
-      builder: (BuildContext context) => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: CupertinoActionSheet(
-          title: widget.post.getCommentModels.isEmpty
-              ? const Text(
-                  "No Comments yet",
-                  style: TextStyle(
-                    letterSpacing: 2,
-                    color: Colors.purple,
-                    fontSize: 30,
-                    fontFamily: 'DancingScript',
-                    fontWeight: FontWeight.w600,
-                  ),
-                )
-              : const Text(
-                  "Comments",
-                  style: TextStyle(
-                    letterSpacing: 2,
-                    color: Colors.purple,
-                    fontSize: 30,
-                    fontFamily: 'DancingScript',
-                    fontWeight: FontWeight.w600,
-                  ),
+      builder: (BuildContext context) =>
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CupertinoActionSheet(
+              title: widget.post.getCommentModels.isEmpty
+                  ? const Text(
+                "No Comments yet",
+                style: TextStyle(
+                  letterSpacing: 2,
+                  color: Colors.purple,
+                  fontSize: 30,
+                  fontFamily: 'DancingScript',
+                  fontWeight: FontWeight.w600,
                 ),
-          actions: List.generate(
-            widget.post.getCommentModels.length,
-            (index) {
-              return CupertinoActionSheetAction(
-                child: CommentBody(
-                    commentModel: widget.post.getCommentModels[index]),
-                onPressed: () {},
-              );
-            },
+              )
+                  : const Text(
+                "Comments",
+                style: TextStyle(
+                  letterSpacing: 2,
+                  color: Colors.purple,
+                  fontSize: 30,
+                  fontFamily: 'DancingScript',
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              actions: List.generate(
+                widget.post.getCommentModels.length,
+                    (index) {
+                  return CupertinoActionSheetAction(
+                    child: CommentBody(
+                        commentModel: widget.post.getCommentModels[index]),
+                    onPressed: () {},
+                  );
+                },
+              ),
+            ),
           ),
-        ),
-      ),
     );
   }
 
   getButtomSheetLike() {
     showCupertinoModalPopup(
       context: context,
-      builder: (BuildContext context) => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: CupertinoActionSheet(
-          title: widget.post.getReactionModels.isEmpty
-              ? const Text(
-                  "No Reactions yet",
-                  style: TextStyle(
-                    letterSpacing: 3,
-                    color: Colors.purple,
-                    fontSize: 30,
-                    fontFamily: 'DancingScript',
-                    fontWeight: FontWeight.w600,
-                  ),
-                )
-              : const Text(
-                  "Reactions",
-                  style: TextStyle(
-                    letterSpacing: 2,
-                    color: Colors.purple,
-                    fontSize: 30,
-                    fontFamily: 'DancingScript',
-                    fontWeight: FontWeight.w600,
-                  ),
+      builder: (BuildContext context) =>
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CupertinoActionSheet(
+              title: widget.post.getReactionModels.isEmpty
+                  ? const Text(
+                "No Reactions yet",
+                style: TextStyle(
+                  letterSpacing: 3,
+                  color: Colors.purple,
+                  fontSize: 30,
+                  fontFamily: 'DancingScript',
+                  fontWeight: FontWeight.w600,
                 ),
-          actions: List.generate(
-            widget.post.getReactionModels.length,
-            (index) {
-              return CupertinoActionSheetAction(
-                child: LikeBody(
-                    reactionModel: widget.post.getReactionModels[index]),
-                onPressed: () {},
-              );
-            },
+              )
+                  : const Text(
+                "Reactions",
+                style: TextStyle(
+                  letterSpacing: 2,
+                  color: Colors.purple,
+                  fontSize: 30,
+                  fontFamily: 'DancingScript',
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              actions: List.generate(
+                widget.post.getReactionModels.length,
+                    (index) {
+                  return CupertinoActionSheetAction(
+                    child: LikeBody(
+                        reactionModel: widget.post.getReactionModels[index]),
+                    onPressed: () {},
+                  );
+                },
+              ),
+            ),
           ),
-        ),
-      ),
     );
   }
 
@@ -1093,29 +1113,31 @@ class PostBodyState extends State<PostBody> {
 
   ReactionModel? checkIfLike(List<ReactionModel> list) {
     for (var item in list) {
-      if (item.getUserModel.getId == MyApp.currentUser!.id) return item;
+      if (item.getUserModel.getId == currentUser!.id) return item;
     }
     return null;
   }
 
-  Column reactionsModelToWidget(
-      ReactionModel reactionsModel, BuildContext context) {
+  Column reactionsModelToWidget(ReactionModel reactionsModel,
+      BuildContext context) {
     return Column(
       children: [
         IconButton(
           icon: Icon(
-            MdiIcons.heart,
+            Icons.cake_rounded,
+            // MdiIcons.heart,
             color:
-                Color(int.parse(reactionsModel.getReactionTypeModel.colorName)),
+            Color(int.parse(reactionsModel.getReactionTypeModel.colorName)),
           ),
           iconSize: 22,
           ///// malaz ////
           onPressed: () {
             // print(" >>>>>> " + reactionsModel.reactionTypeModel);
             setState(() {
-              if (reaction!.icon == MdiIcons.heart) {
+              if (reaction!.icon == Icons.cake_rounded/*MdiIcons.heart*/) {
                 reaction = Icon(
-                  MdiIcons.heart,
+                  Icons.cake_rounded,
+                  // MdiIcons.heart,
                   color: Color(
                       int.parse(reactionsModel.getReactionTypeModel.colorName)),
                   size: 30,
@@ -1127,8 +1149,8 @@ class PostBodyState extends State<PostBody> {
                   });
                 });
                 reactionController
-                    .reaction(widget.post.getId, MyApp.currentUser!.getId,
-                        reactionsModel.getId())
+                    .reaction(widget.post.getId, currentUser!.getId,
+                    reactionsModel.getId())
                     .then((value) {
                   setState(() {
                     likeModel = value!;
@@ -1137,16 +1159,17 @@ class PostBodyState extends State<PostBody> {
                   });
                 });
               }
-              if (reaction!.icon == MdiIcons.heartOutline) {
+              if (reaction!.icon ==Icons.cake_rounded /*MdiIcons.heartOutline*/) {
                 reaction = Icon(
-                  MdiIcons.heart,
+                  Icons.cake_rounded,
+                  // MdiIcons.heart,
                   color: Color(
                       int.parse(reactionsModel.getReactionTypeModel.colorName)),
                   size: 30,
                 );
                 reactionController
-                    .reaction(widget.post.getId, MyApp.currentUser!.getId,
-                        reactionsModel.getId())
+                    .reaction(widget.post.getId, currentUser!.getId,
+                    reactionsModel.getId())
                     .then((value) {
                   setState(() {
                     int a = int.parse(numLikes) + 1;
@@ -1162,7 +1185,7 @@ class PostBodyState extends State<PostBody> {
           reactionsModel.getReactionTypeModel.getName(),
           style: TextStyle(
             color:
-                Color(int.parse(reactionsModel.getReactionTypeModel.colorName)),
+            Color(int.parse(reactionsModel.getReactionTypeModel.colorName)),
             fontFamily: 'Merienda',
             fontSize: 10,
           ),
@@ -1174,15 +1197,15 @@ class PostBodyState extends State<PostBody> {
   bool _isSavedBefore(List<UserModel> list) {
     bool isSaved = false;
     for (var userModel in list) {
-      if (userModel.getId == MyApp.currentUser!.getId) isSaved = true;
+      if (userModel.getId == currentUser!.getId) isSaved = true;
     }
     return isSaved;
   }
 
-  bool _isSharedBefor(List<UserModel> list) {
+  bool _isSharedBefore(List<UserModel> list) {
     bool isShared = false;
     for (var userModel in list) {
-      if (userModel.getId == MyApp.currentUser!.getId) isShared = true;
+      if (userModel.getId == currentUser!.getId) isShared = true;
     }
     return isShared;
   }
@@ -1198,7 +1221,7 @@ class PostBodyState extends State<PostBody> {
   bool _meIn(List<UserModel> list) {
     bool inn = false;
     for (var userModel in list) {
-      if (userModel.getId == MyApp.currentUser!.getId) inn = true;
+      if (userModel.getId == currentUser!.getId) inn = true;
     }
     return inn;
   }
@@ -1206,47 +1229,51 @@ class PostBodyState extends State<PostBody> {
   getButtomSheetShare() {
     showCupertinoModalPopup(
       context: context,
-      builder: (BuildContext context) => Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: CupertinoActionSheet(
-          title: widget.post.getParticipants.isEmpty
-              ? const Text(
-                  "No participants yet",
-                  style: TextStyle(
-                    letterSpacing: 3,
-                    color: Colors.purple,
-                    fontSize: 30,
-                    fontFamily: 'DancingScript',
-                    fontWeight: FontWeight.w600,
-                  ),
-                )
-              : const Text(
-                  "participants",
-                  style: TextStyle(
-                    letterSpacing: 2,
-                    color: Colors.purple,
-                    fontSize: 30,
-                    fontFamily: 'DancingScript',
-                    fontWeight: FontWeight.w600,
-                  ),
+      builder: (BuildContext context) =>
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: CupertinoActionSheet(
+              title: widget.post.getParticipants.isEmpty
+                  ? const Text(
+                "No participants yet",
+                style: TextStyle(
+                  letterSpacing: 3,
+                  color: Colors.purple,
+                  fontSize: 30,
+                  fontFamily: 'DancingScript',
+                  fontWeight: FontWeight.w600,
                 ),
-          actions: List.generate(
-            widget.post.getParticipants.length,
-            (index) {
-              return CupertinoActionSheetAction(
-                child: ShareBody(
-                    participantModel: widget.post.getParticipants[index]),
-                onPressed: () {},
-              );
-            },
+              )
+                  : const Text(
+                "participants",
+                style: TextStyle(
+                  letterSpacing: 2,
+                  color: Colors.purple,
+                  fontSize: 30,
+                  fontFamily: 'DancingScript',
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              actions: List.generate(
+                widget.post.getParticipants.length,
+                    (index) {
+                  return CupertinoActionSheetAction(
+                    child: ShareBody(
+                        participantModel: widget.post.getParticipants[index]),
+                    onPressed: () {},
+                  );
+                },
+              ),
+            ),
           ),
-        ),
-      ),
     );
   }
 
   Widget getBodyOfPost() {
-    double width = MediaQuery.of(context).size.width;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
     List<Widget> media = [];
     if (widget.post.getMedia != null) {
       for (int i = 0; i < widget.post.getMedia.length; i++) {
@@ -1255,15 +1282,17 @@ class PostBodyState extends State<PostBody> {
             SizedBox(
               width: width,
               child: Image(
-                image: Image.network(
-                  MyApp.mainURL +
+                image: Image
+                    .network(
+                  mainURL +
                       widget.post.getMedia[i].getImage
                           .toString()
                           .replaceAll("\\", "/"),
                   // headers: {
-                  //   "Authorization": "Bearer " + MyApp.currentUser!.getToken
+                  //   "Authorization": "Bearer " + currentUser!.getToken
                   // },
-                ).image,
+                )
+                    .image,
                 fit: BoxFit.cover,
                 // width: double.infinity,
               ),
@@ -1280,7 +1309,7 @@ class PostBodyState extends State<PostBody> {
               color: Colors.purple[100],
               width: width,
               child: Center(
-                child: VideoPlayerWidget(MyApp.mainURL +
+                child: VideoPlayerWidget(mainURL +
                     widget.post.getMedia[i].getImage.replaceAll("\\", "/")),
               ),
             ),
@@ -1304,40 +1333,40 @@ class PostBodyState extends State<PostBody> {
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: widget.post.content != null
                 ? Align(
-                    alignment: Alignment.topLeft,
-                    child: ReadMoreText(
-                      widget.post.getContent,
-                      trimLines: 2,
-                      colorClickableText: Colors.black,
-                      style: const TextStyle(color: Colors.black, fontSize: 15),
-                      textAlign: TextAlign.left,
-                      trimMode: TrimMode.Line,
-                      trimCollapsedText: 'Show more',
-                      trimExpandedText: 'Show less',
-                      lessStyle: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.bold),
-                      moreStyle: const TextStyle(
-                          fontSize: 13, fontWeight: FontWeight.bold),
-                    ),
-                  )
+              alignment: Alignment.topLeft,
+              child: ReadMoreText(
+                widget.post.getContent,
+                trimLines: 2,
+                colorClickableText: Colors.black,
+                style: const TextStyle(color: Colors.black, fontSize: 15),
+                textAlign: TextAlign.left,
+                trimMode: TrimMode.Line,
+                trimCollapsedText: 'Show more',
+                trimExpandedText: 'Show less',
+                lessStyle: const TextStyle(
+                    fontSize: 13, fontWeight: FontWeight.bold),
+                moreStyle: const TextStyle(
+                    fontSize: 13, fontWeight: FontWeight.bold),
+              ),
+            )
                 : Container(),
           ),
           widget.post.content != null
               ? SizedBox(
-                  width: width,
-                  height: 10,
-                )
+            width: width,
+            height: 10,
+          )
               : SizedBox(
-                  width: width,
-                  height: 0,
-                ),
+            width: width,
+            height: 0,
+          ),
           SizedBox(
             height: widget.post.getMedia.isEmpty ? 0 : 250,
             child: widget.post.getMedia.isEmpty
                 ? SizedBox(
-                    width: width,
-                    height: 10,
-                  )
+              width: width,
+              height: 10,
+            )
                 : mediaWidget,
           )
         ],

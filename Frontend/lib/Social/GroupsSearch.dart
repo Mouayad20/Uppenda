@@ -49,7 +49,7 @@ class _GroupsSearchState extends State<GroupsSearch> {
                             child: CircularProgressIndicator());
                       } else {
                         return Group1(
-                          group_id: widget.groupModel.getId,
+                          groupId: widget.groupModel.getId,
                         );
                       }
                     },

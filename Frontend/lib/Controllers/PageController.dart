@@ -5,6 +5,7 @@ import 'package:frontend/Model/PageModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Global/Global.dart';
 import '../main.dart';
 import 'UploadController.dart';
 import 'UserController.dart';
@@ -12,12 +13,12 @@ import 'UserController.dart';
 class PageControler {
   PageModel? pageModel;
   UploadController uploadController = UploadController();
-  String currentUri = MyApp.mainURL + "/pages";
+  String currentUri = mainURL + "/pages";
 
   Future<List<PageModel>> search(String word) async {
     var response = await http.get(
       Uri.parse(currentUri + "/search/word=$word"),
-      // headers: {"Authorization": "Bearer " + MyApp.currentUser.getToken},
+      // headers: {"Authorization": "Bearer " + currentUser.getToken},
     );
     List<dynamic> sss = json.decode(response.body);
     List<PageModel> list = [];
@@ -33,7 +34,7 @@ class PageControler {
     int p = int.parse(id);
     final response = await http.get(
       Uri.parse(currentUri + '/getPageById/id=$p'),
-      // headers: {"Authorization": "Bearer " + MyApp.currentUser.getToken},
+      // headers: {"Authorization": "Bearer " + currentUser.getToken},
     );
     pageModel = PageModel.fromJson(json.decode(response.body));
     print("\n^^^^^^^^^^ggg^^^^^^^^^^^\n");
@@ -47,7 +48,7 @@ class PageControler {
         body: json.encode(pageModel.toJson()),
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": "Bearer " + MyApp.currentUser.getToken
+          // "Authorization": "Bearer " + currentUser.getToken
         });
 
     PageModel p = PageModel.fromJson(json.decode(response.body));
@@ -63,7 +64,7 @@ class PageControler {
         body: body,
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": "Bearer " + MyApp.currentUser.getToken
+          // "Authorization": "Bearer " + currentUser.getToken
         });
 
     this.pageModel = PageModel.fromJson(json.decode(response.body));
@@ -100,7 +101,7 @@ class PageControler {
     SharedPreferences cache = await SharedPreferences.getInstance();
     // print(cache.getString('id'));
     // print(pageModel.getAdmin().getFirstName);
-    return MyApp.currentUser!.getId == pageModel.getAdmin.getId;
+    return currentUser!.getId == pageModel.getAdmin.getId;
   }
 
   void unFollowToThisPage(String u_id, String page_id) async {

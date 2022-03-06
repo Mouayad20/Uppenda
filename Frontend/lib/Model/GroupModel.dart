@@ -2,6 +2,7 @@ import 'dart:core';
 import 'package:frontend/Model/UserModel.dart';
 import 'package:frontend/main.dart';
 
+import '../Global/Global.dart';
 import 'PostModel.dart';
 
 class GroupModel {
@@ -98,25 +99,25 @@ class GroupModel {
     GroupModel(
         id: "1",
         name: "drama news",
-        admin: MyApp.currentUser,
+        admin: currentUser,
         members: UserModel.users,
         imgPath: "images/photo1.jpg"),
     GroupModel(
         id: "2",
         name: "drama news",
-        admin: MyApp.currentUser,
+        admin: currentUser,
         members: UserModel.users,
         imgPath: "images/photo1.jpg"),
     GroupModel(
         id: "3",
         name: "drama news",
-        admin: MyApp.currentUser,
+        admin: currentUser,
         members: UserModel.users,
         imgPath: "images/photo1.jpg"),
     GroupModel(
         id: "4",
         name: "drama news",
-        admin: MyApp.currentUser,
+        admin: currentUser,
         members: UserModel.users,
         imgPath: "images/photo1.jpg"),
     GroupModel(
@@ -128,7 +129,7 @@ class GroupModel {
     GroupModel(
         id: "6",
         name: "drama news",
-        admin: MyApp.currentUser,
+        admin: currentUser,
         members: UserModel.users,
         imgPath: null),
     GroupModel(

@@ -6,15 +6,14 @@ import 'dart:convert';
 import 'package:frontend/Controllers/MessageController.dart';
 import 'package:frontend/Model/ChatModel.dart';
 import 'package:frontend/Model/MessageModel.dart';
-import 'package:frontend/Components/MessageList.dart';
 import 'package:flutter/material.dart';
 
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../Global/Global.dart';
 import '../main.dart';
 import 'MainPage.dart';
 
-//////////////////////Mouayad
 class ChatScreen extends StatefulWidget {
   final WebSocketChannel channel;
 
@@ -199,12 +198,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 print("\n\t   Onpressed   \n");
                 MessageModel sendedMessage = MessageModel(
                   content: messageText.text.trim(),
-                  sender: MyApp.currentUser,
+                  sender: currentUser,
                   chatModel: widget.chatModel,
                 );
                 print("\t\t\t" + messageText.text);
                 sendedMessage.setUnread = true;
-                // sendedMessage.setSender = MyApp.currentUser;
+                // sendedMessage.setSender = currentUser;
                 messageText.clear();
                 addMessageToListFront(sendedMessage.toJson());
                 widget.channel.sink.add(json.encode(sendedMessage.toJson()));

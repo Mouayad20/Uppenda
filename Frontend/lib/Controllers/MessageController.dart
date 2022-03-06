@@ -2,6 +2,7 @@ import 'package:frontend/Model/MessageModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../Global/Global.dart';
 import '../main.dart';
 
 class MessageController {
@@ -12,7 +13,7 @@ class MessageController {
   Future<List> getAllMessagesByCID(String id) async {
     int a = int.parse(id);
     final response = await http.get(
-      Uri.parse(MyApp.mainURL + '/message/getAllMessageFromChat/chat_id=$a'),
+      Uri.parse(mainURL + '/message/getAllMessageFromChat/chat_id=$a'),
       // headers: {"Authorization": "Bearer " + MyApp.currentUser.getToken},
     );
     // print("\n===>  getAllMessagesByCID : \n\t\t\t" + response.body);
@@ -24,7 +25,7 @@ class MessageController {
   Future<MessageModel> getLAstMessageByChatId(String chatId) async {
     int cId = int.parse(chatId);
     final response = await http.get(
-      Uri.parse(MyApp.mainURL + '/message/getLastMessage/chatId=$cId'),
+      Uri.parse(mainURL + '/message/getLastMessage/chatId=$cId'),
       // headers: {"Authorization": "Bearer " + MyApp.currentUser.getToken},
     );
     // print("\n===>  getLAstMessageByChatId \n");

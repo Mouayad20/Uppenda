@@ -1,6 +1,7 @@
 import 'package:frontend/Model/UserModel.dart';
 import 'package:frontend/main.dart';
 
+import '../Global/Global.dart';
 import 'PostModel.dart';
 
 class PageModel {
@@ -105,7 +106,7 @@ class PageModel {
     PageModel(
         id: "2",
         name: "drama news",
-        admin: MyApp.currentUser,
+        admin: currentUser,
         members: UserModel.users,
         imgPath: "images/photo.jpg"),
     PageModel(
@@ -123,7 +124,7 @@ class PageModel {
     PageModel(
         id: "5",
         name: "drama news",
-        admin: MyApp.currentUser,
+        admin: currentUser,
         members: UserModel.users,
         imgPath: "images/photo.jpg"),
     PageModel(

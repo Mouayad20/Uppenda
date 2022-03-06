@@ -1,8 +1,7 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, import_of_legacy_library_into_null_safe
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:frontend/Body/BodyGroupButton.dart';
 import 'package:frontend/Body/BodyPageButton.dart';
 import 'package:frontend/Body/PostBody.dart';
@@ -20,19 +19,19 @@ import 'package:frontend/Model/PageModel.dart';
 import 'package:frontend/Model/UserModel.dart';
 import 'package:frontend/Widgets/UserInfo.dart';
 
+import '../Global/Global.dart';
 import '../main.dart';
 import 'MainPage.dart';
 
 class Page1 extends StatefulWidget {
-  String page_id;
+  final String page_id;
 
-  Page1({Key? key, required this.page_id}) : super(key: key);
+  const Page1({Key? key, required this.page_id}) : super(key: key);
 
   @override
   _Page1State createState() => _Page1State();
 }
 
-/////////
 class _Page1State extends State<Page1> {
   final PageControler _pageController = PageControler();
   PageModel? _pageModel;
@@ -87,7 +86,8 @@ class _Page1State extends State<Page1> {
             );
           },
           icon: const Icon(
-            MdiIcons.homeSearchOutline,
+            Icons.cake_rounded,
+            // MdiIcons.homeSearchOutline,
             size: 30,
             color: Colors.purple,
           ),
@@ -120,7 +120,8 @@ class _Page1State extends State<Page1> {
                   );
                 },
                 icon: const Icon(
-                  MdiIcons.messageOutline,
+                  Icons.cake_rounded,
+                  // MdiIcons.messageOutline,
                   size: 28,
                   color: Colors.purple,
                 )),
@@ -164,13 +165,13 @@ class _Page1State extends State<Page1> {
                         image: _pageModel!.getImage == null
                             ? const AssetImage("images/download.jpg")
                             : Image.network(
-                                MyApp.mainURL +
+                                mainURL +
                                     _pageModel!.getImage
                                         .toString()
                                         .replaceAll("\\", "/"),
                                 // headers: {
                                 //   "Authorization":
-                                //       "Bearer " + MyApp.currentUser!.getToken
+                                //       "Bearer " + currentUser!.getToken
                                 // },
                               ).image,
                         fit: BoxFit.cover,
@@ -363,7 +364,9 @@ class _Page1State extends State<Page1> {
                                           children: [
                                             IconButton(
                                               icon: const Icon(
-                                                  MdiIcons.informationVariant),
+                                                Icons.cake_rounded,
+                                                // MdiIcons.informationVariant,
+                                              ),
                                               iconSize: 25,
                                               onPressed: () {
                                                 showInformation(
@@ -497,7 +500,9 @@ class _Page1State extends State<Page1> {
                               ), */
                                             IconButton(
                                               icon: const Icon(
-                                                  MdiIcons.informationVariant),
+                                                Icons.cake_rounded,
+                                                // MdiIcons.informationVariant,
+                                              ),
                                               iconSize: 25,
                                               onPressed: () {
                                                 showInformation(
@@ -608,7 +613,8 @@ class _Page1State extends State<Page1> {
                     );
                   },
                   icon: const Icon(
-                    MdiIcons.account,
+                    Icons.cake_rounded,
+                    // MdiIcons.account,
                     size: 30,
                     color: Colors.purple,
                   ),
@@ -688,7 +694,7 @@ class _Page1State extends State<Page1> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser!.getGroups.length == 0
+              title: currentUser!.getGroups.length == 0
                   ? const Text(
                       "No Groups",
                       style: TextStyle(
@@ -710,11 +716,11 @@ class _Page1State extends State<Page1> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser!.getGroups.length,
+                currentUser!.getGroups.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupModel: MyApp.currentUser!.getGroups[index]),
+                        groupModel: currentUser!.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -762,7 +768,7 @@ class _Page1State extends State<Page1> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser!.getPages.length == 0
+              title: currentUser!.getPages.length == 0
                   ? const Text(
                       "No Pages",
                       style: TextStyle(
@@ -784,11 +790,11 @@ class _Page1State extends State<Page1> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser!.getPages.length,
+                currentUser!.getPages.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyPageButton(
-                        pageModel: MyApp.currentUser!.getPages[index]),
+                        pageModel: currentUser!.getPages[index]),
                     onPressed: () {},
                   );
                 },
@@ -1021,7 +1027,7 @@ class _Page1State extends State<Page1> {
                             iconSize: 25,
                             onPressed: () {
                               pageController.followThisPage(
-                                  MyApp.currentUser!.getId, pageModel.getId);
+                                  currentUser!.getId, pageModel.getId);
                               SnackBar mySnackBar = const SnackBar(
                                   duration: Duration(seconds: 1),
                                   backgroundColor:
@@ -1089,7 +1095,7 @@ class _Page1State extends State<Page1> {
                             iconSize: 25,
                             onPressed: () {
                               pageController.unFollowToThisPage(
-                                  MyApp.currentUser!.getId, pageModel.getId);
+                                  currentUser!.getId, pageModel.getId);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

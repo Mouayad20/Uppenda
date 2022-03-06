@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/Model/UserModel.dart';
 import 'package:frontend/main.dart';
 
+import '../Global/Global.dart';
+
 class ShareBody extends StatefulWidget {
   UserModel participantModel;
 
@@ -38,7 +40,7 @@ class _ShareBodyState extends State<ShareBody> {
               child: CircleAvatar(
                 backgroundColor: const Color.fromRGBO(233, 207, 236, 1),
                 backgroundImage: Image.network(
-                  MyApp.mainURL +
+                  mainURL +
                       widget.participantModel.imagePath
                           .toString()
                           .replaceAll("\\", "/"),

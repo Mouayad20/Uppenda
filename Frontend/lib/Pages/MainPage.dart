@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:frontend/Controllers/ChatController.dart';
 import 'package:frontend/Components/ChatList.dart';
@@ -9,6 +7,7 @@ import 'package:frontend/Model/UserModel.dart';
 import 'package:frontend/Social/Social_Home.dart';
 import 'package:web_socket_channel/io.dart';
 
+import '../Global/Global.dart';
 import '../main.dart';
 import 'ChatScreen.dart';
 
@@ -28,19 +27,19 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void initState() {
-    chatController.getAllChatByUID(MyApp.currentUser!.id!).then((value) {
+    chatController.getAllChatByUID(currentUser!.id!).then((value) {
       setState(() {
         chatsList = value;
-        listUsers = MyApp.currentUser!.getFriends;
+        listUsers = currentUser!.getFriends;
         if (chatsList.isNotEmpty) {
-          for (var i = 0; i < MyApp.currentUser!.getFriends.length; i++) {
+          for (var i = 0; i < currentUser!.getFriends.length; i++) {
             for (var j = 0; j < chatsList.length; j++) {
               print("for");
-              if (MyApp.currentUser!.getFriends[i].getId ==
+              if (currentUser!.getFriends[i].getId ==
                   chatsList[j].getUser2.getId) {
                 print("iffffffffffff");
                 setState(() {
-                  listUsers.remove(MyApp.currentUser!.getFriends[i]);
+                  listUsers.remove(currentUser!.getFriends[i]);
                 });
               }
             }
@@ -166,14 +165,14 @@ class _ChatPageState extends State<ChatPage> {
                             backgroundColor:
                                 const Color.fromRGBO(233, 207, 236, 1),
                             backgroundImage: Image.network(
-                              MyApp.mainURL +
+                              mainURL +
                                   listUsers[index]
                                       .imagePath
                                       .toString()
                                       .replaceAll("\\", "/"),
                               // headers: {
                               //   "Authorization":
-                              //       "Bearer " + MyApp.currentUser!.getToken
+                              //       "Bearer " + currentUser!.getToken
                               // },
                             ).image,
                           ),
@@ -192,7 +191,7 @@ class _ChatPageState extends State<ChatPage> {
                         ),
                         onPressed: () {
                           List<UserModel> list = [];
-                          list.add(MyApp.currentUser!);
+                          list.add(currentUser!);
                           list.add(listUsers[index]);
                           ChatModel chatModel = ChatModel();
                           chatModel.setUser2 = listUsers[index];
@@ -210,7 +209,7 @@ class _ChatPageState extends State<ChatPage> {
                               builder: (_) => ChatScreen(
                                 chatModel: chatModel,
                                 channel: IOWebSocketChannel.connect(
-                                  "ws://" + MyApp.ip + "/chat",
+                                  "ws://" + serverIp + "/chat",
                                 ),
                               ),
                             ),

@@ -5,6 +5,8 @@ import 'package:frontend/Controllers/CommentController.dart';
 import 'package:frontend/main.dart';
 import 'package:readmore/readmore.dart';
 
+import '../Global/Global.dart';
+
 class CommentBody extends StatefulWidget {
   CommentModel commentModel;
 
@@ -89,7 +91,7 @@ class _CommentBodyState extends State<CommentBody> {
                                 backgroundColor:
                                     const Color.fromRGBO(233, 207, 236, 1),
                                 backgroundImage: Image.network(
-                                  MyApp.mainURL +
+                                  mainURL +
                                       widget.commentModel.getUserModel.imagePath
                                           .toString()
                                           .replaceAll("\\", "/"),
@@ -195,7 +197,7 @@ class _CommentBodyState extends State<CommentBody> {
                         const EdgeInsets.only(right: 40, left: 30, top: 10),
                     child: Image(
                       image: Image.network(
-                              MyApp.mainURL + widget.commentModel.imagePath!)
+                              mainURL + widget.commentModel.imagePath!)
                           .image,
                       fit: BoxFit.fill,
                     ),
@@ -232,13 +234,13 @@ class _CommentBodyState extends State<CommentBody> {
                             const EdgeInsets.only(right: 10, left: 10, top: 10),
                         child: Image(
                           image: Image.network(
-                            MyApp.mainURL +
+                            mainURL +
                                 widget.commentModel.imagePath
                                     .toString()
                                     .replaceAll("\\", "/"),
                             // headers: {
                             //   "Authorization":
-                            //       "Bearer " + MyApp.currentUser.getToken
+                            //       "Bearer " + currentUser.getToken
                             // },
                           ).image,
                           fit: BoxFit.fill,
@@ -255,7 +257,7 @@ class _CommentBodyState extends State<CommentBody> {
   }
 
   getList() {
-    if (MyApp.currentUser!.id == widget.commentModel.getUserModel.id) {
+    if (currentUser!.id == widget.commentModel.getUserModel.id) {
       return PopupMenuButton(
         itemBuilder: (context) => [
           PopupMenuItem(

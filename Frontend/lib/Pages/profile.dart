@@ -14,6 +14,9 @@ import 'package:frontend/main.dart';
 import 'package:frontend/Model/UserModel.dart';
 import 'package:frontend/Controllers/UserController.dart';
 
+import '../Global/Global.dart';
+import '../Global/Global.dart';
+
 class Profile extends StatefulWidget {
   final String user_id;
 
@@ -53,7 +56,7 @@ class _ProfileState extends State<Profile> {
         });
         userController.getUserById(idFromCash).then((value) {
           setState(() {
-            MyApp.currentUser = value;
+            currentUser = value;
           });
         });
         postController.getAllPostsForUser(widget.user_id).then((value) {
@@ -211,13 +214,13 @@ class _ProfileState extends State<Profile> {
                                                           color: Colors.grey,
                                                           onPressed: () {
                                                             getBottomSheetFriend(
-                                                              MyApp.currentUser!
+                                                              currentUser!
                                                                   .getFriends,
                                                             );
                                                           },
                                                         )
                                                       : _isMyFriend(
-                                                              MyApp.currentUser!
+                                                              currentUser!
                                                                   .getFriends,
                                                               userModel!.getId)
                                                           ? IconButton(
@@ -230,8 +233,7 @@ class _ProfileState extends State<Profile> {
                                                               onPressed: () {
                                                                 userController
                                                                     .unFriend(
-                                                                  MyApp
-                                                                      .currentUser!
+                                                                  currentUser!
                                                                       .getId,
                                                                   userModel!
                                                                       .getId,
@@ -245,8 +247,7 @@ class _ProfileState extends State<Profile> {
                                                                       .purple),
                                                               onPressed: () {
                                                                 userController.addFriend(
-                                                                    MyApp
-                                                                        .currentUser!
+                                                                    currentUser!
                                                                         .getId,
                                                                     userModel!
                                                                         .getId);
@@ -281,7 +282,7 @@ class _ProfileState extends State<Profile> {
                                                 )
                                               : CircleAvatar(
                                                   backgroundImage: NetworkImage(
-                                                    MyApp.mainURL +
+                                                    mainURL +
                                                         userModel!.getImage
                                                             .toString()
                                                             .replaceAll(
@@ -289,7 +290,7 @@ class _ProfileState extends State<Profile> {
                                                     // headers: {
                                                     //   "Authorization":
                                                     //       "Bearer " +
-                                                    //           MyApp.currentUser!
+                                                    //           currentUser!
                                                     //               .getToken
                                                     // },
                                                   ),

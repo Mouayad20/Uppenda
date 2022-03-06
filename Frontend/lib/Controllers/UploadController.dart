@@ -5,6 +5,7 @@ import 'package:frontend/Model/MediaModel.dart';
 import 'package:frontend/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Global/Global.dart';
 class UploadController {
   uploadFile(dynamic model, String type) async {
     print("__________________");
@@ -12,7 +13,7 @@ class UploadController {
     print("__________________");
     SharedPreferences cache = await SharedPreferences.getInstance();
     var request = http.MultipartRequest(
-        'POST', Uri.parse(MyApp.mainURL + "/upload/employee"));
+        'POST', Uri.parse(mainURL + "/upload/employee"));
     print("object");
     request.fields["type"] = type;
     request.headers.addAll({

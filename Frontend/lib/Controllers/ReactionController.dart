@@ -5,10 +5,12 @@ import 'package:frontend/Model/ReactionModel.dart';
 import 'package:http/http.dart' as http;
 import '../main.dart';
 
+import '../Global/Global.dart';
+
 class ReactionController {
   List<ReactionModel>? reactionModels;
   ReactionModel? reactionModel;
-  String currentUri = MyApp.mainURL + "/typeReaction";
+  String currentUri = mainURL + "/typeReaction";
 
   Future<ReactionModel?> reaction(String pId, String uId, String rId) async {
     int p = int.parse(pId);

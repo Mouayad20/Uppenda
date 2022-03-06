@@ -3,6 +3,8 @@ import 'package:frontend/Model/UserModel.dart';
 import 'package:frontend/Pages/profile.dart';
 import 'package:frontend/main.dart';
 
+import '../Global/Global.dart';
+
 class FriendsList extends StatefulWidget {
   UserModel friend;
   FriendsList({Key? key, required this.friend}) : super(key: key);
@@ -38,7 +40,7 @@ class _FriendsListState extends State<FriendsList> {
               child: CircleAvatar(
                 backgroundColor: const Color.fromRGBO(233, 207, 236, 1),
                 backgroundImage: Image.network(
-                  MyApp.mainURL +
+                  mainURL +
                       widget.friend.imagePath.toString().replaceAll("\\", "/"),
                   // headers: {
                   //   "Authorization": "Bearer " + MyApp.currentUser.getToken

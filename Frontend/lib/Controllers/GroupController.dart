@@ -4,18 +4,19 @@ import 'package:frontend/Model/GroupModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Global/Global.dart';
 import '../main.dart';
 import 'UploadController.dart';
 
 class GroupController {
   GroupModel? groupModel;
   UploadController uploadController = UploadController();
-  String currentUri = MyApp.mainURL + "/groups";
+  String currentUri = mainURL + "/groups";
 
   Future<List<GroupModel>> search(String word) async {
     var response = await http.get(
       Uri.parse(currentUri + "/search/word=$word"),
-      // headers: {"Authorization": "Bearer " + MyApp.currentUser.getToken},
+      // headers: {"Authorization": "Bearer " + currentUser.getToken},
     );
     List<dynamic> sss = json.decode(response.body);
     List<GroupModel> list = [];
@@ -35,7 +36,7 @@ class GroupController {
         body: body,
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": "Bearer " + MyApp.currentUser.getToken
+          // "Authorization": "Bearer " + currentUser.getToken
         });
 
     this.groupModel = GroupModel.fromJson(json.decode(response.body));
@@ -56,7 +57,7 @@ class GroupController {
         body: json.encode(groupModel.toJson()),
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": "Bearer " + MyApp.currentUser.getToken
+          // "Authorization": "Bearer " + currentUser.getToken
         });
     this.groupModel = GroupModel.fromJson(json.decode(response.body));
     return groupModel;
@@ -66,7 +67,7 @@ class GroupController {
     int g = int.parse(id);
     final response = await http.get(
       Uri.parse(currentUri + '/getGroup/Id=$g'),
-      // headers: {"Authorization": "Bearer " + MyApp.currentUser.getToken},
+      // headers: {"Authorization": "Bearer " + currentUser.getToken},
     );
     groupModel = GroupModel.fromJson(json.decode(response.body));
     print("\n^^^^^^^^^^getGroupId^^^^^^^^^^^\n");
@@ -96,7 +97,7 @@ class GroupController {
     SharedPreferences cache = await SharedPreferences.getInstance();
     print(groupModel.getName);
     print(cache.getString('id'));
-    return MyApp.currentUser!.getId == groupModel.getAdmin.getId;
+    return currentUser!.getId == groupModel.getAdmin.getId;
   }
 
   void leaveGroup(String u_id, String g_id) async {

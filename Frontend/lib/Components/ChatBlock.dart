@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_null_comparison
 
+import 'package:frontend/Global/Global.dart';
 import 'package:frontend/Model/ChatModel.dart';
 import 'package:frontend/Pages/ChatScreen.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class ChatBlocke extends StatelessWidget {
           MaterialPageRoute(
             builder: (_) => ChatScreen(
               chatModel: chatModel,
-              channel: IOWebSocketChannel.connect("ws://" + MyApp.ip + "/chat"),
+              channel: IOWebSocketChannel.connect("ws://" + serverIp + "/chat"),
             ),
           ),
         );
@@ -84,7 +85,7 @@ class ChatBlocke extends StatelessWidget {
                       radius: 30,
                       backgroundImage: chatModel.getGroupModel.name == null
                           ? Image.network(
-                              MyApp.mainURL +
+                              mainURL +
                                   chatModel.getUser2.getImage
                                       .toString()
                                       .replaceAll("\\", "/"),
@@ -94,7 +95,7 @@ class ChatBlocke extends StatelessWidget {
                               // },
                             ).image
                           : Image.network(
-                              MyApp.mainURL +
+                              mainURL +
                                   chatModel.getGroupModel.imgPath
                                       .toString()
                                       .replaceAll("\\", "/"),

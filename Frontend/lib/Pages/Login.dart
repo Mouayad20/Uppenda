@@ -6,6 +6,7 @@ import 'package:frontend/Social/Social_Home.dart';
 import 'package:frontend/Controllers/UserController.dart';
 import 'package:frontend/main.dart';
 
+import '../Global/Global.dart';
 import '../Widgets/Header.dart';
 import '../Widgets/Logo.dart';
 import '../Widgets/TextFieldCustom.dart';
@@ -75,7 +76,7 @@ class LogInPage extends StatelessWidget {
                     if (value['userModel'] == null) {
                       showAlertDialog(context, "invalid email or password");
                     } else {
-                      MyApp.currentUser =
+                      currentUser =
                           UserModel.fromJson(value['userModel']);
                       Navigator.push(
                         context,

@@ -9,6 +9,7 @@ import 'package:frontend/Pages/Login.dart';
 import 'package:frontend/Social/Social_Home.dart';
 import 'package:frontend/Controllers/UserController.dart';
 import 'package:frontend/main.dart';
+import '../Global/Global.dart';
 import '../Widgets/Header.dart';
 import '../Widgets/Logo.dart';
 import '../Widgets/TextFieldCustom.dart';
@@ -327,7 +328,7 @@ class _SignUpState extends State<SignUp> {
                       if (value['userModel'] != null) {
                         // print("  in singup");
                         setState(() {
-                          MyApp.currentUser =
+                          currentUser =
                               UserModel.fromJson(value["userModel"]);
                         });
                         Navigator.push(

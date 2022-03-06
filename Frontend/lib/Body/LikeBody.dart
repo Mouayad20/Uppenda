@@ -1,9 +1,7 @@
-// ignore_for_file: unnecessary_null_comparison
-
 import 'package:flutter/material.dart';
 import 'package:frontend/Model/ReactionModel.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import '../Global/Global.dart';
 import '../main.dart';
 
 class LikeBody extends StatefulWidget {
@@ -43,7 +41,7 @@ class LikeBodyState extends State<LikeBody> {
                 backgroundColor: const Color.fromRGBO(233, 207, 236, 1),
                 backgroundImage: Image
                     .network(
-                  MyApp.mainURL +
+                  mainURL +
                       widget.reactionModel.userModel!.imagePath
                           .toString()
                           .replaceAll("\\", "/"),
@@ -69,7 +67,8 @@ class LikeBodyState extends State<LikeBody> {
             ),
           ),
           Icon(
-            MdiIcons.heart,
+            Icons.cake_rounded,
+            // MdiIcons.heart,
             color: Color(
                 int.parse(widget.reactionModel.reactionTypeModel!.colorName!)),
           )

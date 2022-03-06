@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Model/UserModel.dart';
 
+import '../Global/Global.dart';
 import '../main.dart';
 
 class UserFriend extends StatefulWidget {
@@ -60,7 +61,7 @@ class UserFriendState extends State<UserFriend> {
                 child: CircleAvatar(
                   backgroundColor: const Color.fromRGBO(233, 207, 236, 1),
                   backgroundImage: Image.network(
-                    MyApp.mainURL +
+                    mainURL +
                         widget.friend.imagePath
                             .toString()
                             .replaceAll("\\", "/"),

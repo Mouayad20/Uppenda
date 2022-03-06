@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:frontend/Global/Global.dart';
 import 'package:frontend/Pages/Splash.dart';
+import 'Global/Global.dart';
 import 'Model/UserModel.dart';
 
 void main() {
@@ -7,9 +11,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  static String ip = '192.168.43.251:8080';
-  static var mainURL = "http://" + ip;
-  static UserModel? currentUser ;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

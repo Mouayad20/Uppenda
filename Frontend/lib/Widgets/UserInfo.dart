@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/Model/UserModel.dart';
 
+import '../Global/Global.dart';
 import '../main.dart';
 
 class UserInfo extends StatelessWidget {
@@ -21,7 +21,7 @@ class UserInfo extends StatelessWidget {
                 backgroundImage: userModel.getImage == null
                     ? const AssetImage("images/download.jpg")
                     : Image.network(
-                        MyApp.mainURL +
+                        mainURL +
                             userModel.getImage.toString().replaceAll("\\", "/"),
                         // headers: {
                         //   "Authorization":

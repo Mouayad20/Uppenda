@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class TopBar extends StatefulWidget implements PreferredSizeWidget {
   const TopBar({Key? key})
@@ -21,7 +20,8 @@ class _TopBarState extends State<TopBar> {
       centerTitle: true,
       elevation: 1.0,
       leading: const Icon(
-        MdiIcons.searchWeb,
+        Icons.cake_rounded,
+        // MdiIcons.searchWeb,
         size: 30,
         color: Colors.purple,
       ),
@@ -37,7 +37,8 @@ class _TopBarState extends State<TopBar> {
         Padding(
           padding: EdgeInsets.only(right: 13.0),
           child: Icon(
-            MdiIcons.messageBulleted,
+            Icons.cake_rounded,
+            // MdiIcons.messageBulleted,
             size: 28,
             color: Colors.purple,
           ),

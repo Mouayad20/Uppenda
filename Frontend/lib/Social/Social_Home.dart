@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:frontend/Body/BodyGroupButton.dart';
 import 'package:frontend/Body/BodyPageButton.dart';
 import 'package:frontend/Controllers/UserController.dart';
@@ -13,6 +12,7 @@ import 'package:frontend/Model/PostModel.dart';
 import 'package:frontend/Body/PostBody.dart';
 import 'package:frontend/Controllers/PostController.dart';
 import 'package:frontend/main.dart';
+import '../Global/Global.dart';
 import 'Search.dart';
 
 class SocialHome extends StatefulWidget {
@@ -28,7 +28,7 @@ class _SocialHomeState extends State<SocialHome> {
   @override
   void initState() {
     super.initState();
-    postController.getSummery(MyApp.currentUser!.getId).then((value) {
+    postController.getSummery(currentUser!.getId).then((value) {
       setState(() {
         postModels = value;
       });
@@ -52,7 +52,8 @@ class _SocialHomeState extends State<SocialHome> {
             );
           },
           icon: const Icon(
-            MdiIcons.homeSearchOutline,
+            Icons.cake_rounded,
+            // MdiIcons.homeSearchOutline,
             size: 30,
             color: Colors.purple,
           ),
@@ -85,7 +86,8 @@ class _SocialHomeState extends State<SocialHome> {
                   );
                 },
                 icon: const Icon(
-                  MdiIcons.messageOutline,
+                  Icons.cake_rounded,
+                  // MdiIcons.messageOutline,
                   size: 28,
                   color: Colors.purple,
                 )),
@@ -120,13 +122,14 @@ class _SocialHomeState extends State<SocialHome> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => Profile(
-                          user_id: MyApp.currentUser!.getId,
+                          user_id: currentUser!.getId,
                         ),
                       ),
                     );
                   },
                   icon: const Icon(
-                    MdiIcons.account,
+                    Icons.cake_rounded,
+                    // MdiIcons.account,
                     size: 30,
                     color: Colors.purple,
                   ),
@@ -195,7 +198,7 @@ class _SocialHomeState extends State<SocialHome> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser!.getGroups.length == 0
+              title: currentUser!.getGroups.length == 0
                   ? const Text(
                       "No Groups",
                       style: TextStyle(
@@ -217,11 +220,11 @@ class _SocialHomeState extends State<SocialHome> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser!.getGroups.length,
+                currentUser!.getGroups.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupModel: MyApp.currentUser!.getGroups[index]),
+                        groupModel: currentUser!.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -269,7 +272,7 @@ class _SocialHomeState extends State<SocialHome> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser!.getPages.length == 0
+              title: currentUser!.getPages.length == 0
                   ? const Text(
                       "No Pages",
                       style: TextStyle(
@@ -291,11 +294,11 @@ class _SocialHomeState extends State<SocialHome> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser!.getPages.length,
+                currentUser!.getPages.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyPageButton(
-                        pageModel: MyApp.currentUser!.getPages[index]),
+                        pageModel: currentUser!.getPages[index]),
                     onPressed: () {},
                   );
                 },

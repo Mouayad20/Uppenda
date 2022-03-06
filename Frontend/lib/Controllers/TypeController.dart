@@ -6,9 +6,10 @@ import 'package:frontend/Social/CreatePost.dart';
 
 import '../main.dart';
 
+import '../Global/Global.dart';
 class TypeController {
   List<TypeModel>? typeModels;
-  String currentUri = MyApp.mainURL + "/typePost";
+  String currentUri = mainURL + "/typePost";
 
   Future<List<TypeModel>> getAllPostType() async {
     var response = await http.get(

@@ -3,6 +3,8 @@ import 'package:frontend/Model/GroupModel.dart';
 import 'package:frontend/Pages/Group.dart';
 import 'package:frontend/main.dart';
 
+import '../Global/Global.dart';
+
 class BodyGroupButton extends StatefulWidget {
   GroupModel groupModel;
 
@@ -34,7 +36,7 @@ class _BodyGroupButtonState extends State<BodyGroupButton> {
                     child: CircleAvatar(
                       backgroundColor: const Color.fromRGBO(233, 207, 236, 1),
                       backgroundImage: Image.network(
-                        MyApp.mainURL +
+                        mainURL +
                             widget.groupModel.getImage
                                 .toString()
                                 .replaceAll("\\", "/"),
@@ -62,7 +64,7 @@ class _BodyGroupButtonState extends State<BodyGroupButton> {
                     ),
                   ),
                 ),
-              if (widget.groupModel.getAdmin.id == MyApp.currentUser!.id)
+              if (widget.groupModel.getAdmin.id == currentUser!.id)
                 Row(
                   children: [
                     TextButton(
@@ -87,7 +89,7 @@ class _BodyGroupButtonState extends State<BodyGroupButton> {
                             MaterialPageRoute(
                               builder: (context) {
                                 return Group1(
-                                  group_id: widget.groupModel.getId,
+                                  groupId: widget.groupModel.getId,
                                 );
                               },
                             ),
@@ -125,7 +127,7 @@ class _BodyGroupButtonState extends State<BodyGroupButton> {
                     ),
                   ],
                 ),
-              if (widget.groupModel.getAdmin.id != MyApp.currentUser!.id)
+              if (widget.groupModel.getAdmin.id != currentUser!.id)
                 Padding(
                   padding: const EdgeInsets.only(top: 0.0, left: 3.0),
                   child: Row(
@@ -152,7 +154,7 @@ class _BodyGroupButtonState extends State<BodyGroupButton> {
                             MaterialPageRoute(
                               builder: (context) {
                                 return Group1(
-                                  group_id: widget.groupModel.getId,
+                                  groupId: widget.groupModel.getId,
                                 );
                               },
                             ),

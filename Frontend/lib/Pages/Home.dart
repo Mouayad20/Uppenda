@@ -5,10 +5,10 @@ import 'package:frontend/Widgets/TopBar.dart';
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       appBar: TopBar(),
       bottomNavigationBar: BottomBar(),
-      body: const Center(
+      body: Center(
         child: Text("Home"),
       ),
     );

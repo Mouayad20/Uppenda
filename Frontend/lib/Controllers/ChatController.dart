@@ -3,8 +3,10 @@ import 'package:frontend/main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../Global/Global.dart';
+
 class ChatController {
-  String currentUri = MyApp.mainURL + "/chat";
+  String currentUri = mainURL + "/chat";
   ChatModel? chatModel;
   List? data;
 
@@ -24,7 +26,7 @@ class ChatController {
   Future<List<ChatModel>> getAllChatByUID(String id) async {
     int a = int.parse(id);
     final response = await http.get(
-      Uri.parse(MyApp.mainURL + '/chat/getAllChatByUserID/user_id=$a'),
+      Uri.parse(mainURL + '/chat/getAllChatByUserID/user_id=$a'),
       // headers: {"Authorization": "Bearer " + MyApp.currentUser.getToken},
     );
     List<dynamic> k = json.decode(response.body);

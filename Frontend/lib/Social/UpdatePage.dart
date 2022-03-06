@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:frontend/Body/BodyGroupButton.dart';
 import 'package:frontend/Body/BodyPageButton.dart';
 import 'package:frontend/Body/UserFriend.dart';
@@ -14,8 +13,8 @@ import 'package:frontend/Social/Search.dart';
 import 'package:frontend/Social/Social_Home.dart';
 import 'package:frontend/Controllers/PageController.dart';
 import 'package:frontend/main.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Global/Global.dart';
 import 'CreateGroup.dart';
 
 class UpdatePage extends StatefulWidget {
@@ -52,7 +51,7 @@ class _UpdatePageState extends State<UpdatePage> {
         profileId = idFromCash;
         userController.getUserById(idFromCash).then((value) {
           setState(() {
-            MyApp.currentUser = value;
+            currentUser = value;
           });
         });
       });
@@ -111,7 +110,8 @@ class _UpdatePageState extends State<UpdatePage> {
             );
           },
           icon: const Icon(
-            MdiIcons.homeSearchOutline,
+            Icons.cake_rounded,
+            // MdiIcons.homeSearchOutline,
             size: 30,
             color: Colors.purple,
           ),
@@ -120,7 +120,8 @@ class _UpdatePageState extends State<UpdatePage> {
           Padding(
             padding: EdgeInsets.only(right: 13.0),
             child: Icon(
-              MdiIcons.messageOutline,
+              Icons.cake_rounded,
+              // MdiIcons.messageOutline,
               size: 28,
               color: Colors.purple,
             ),
@@ -335,7 +336,8 @@ class _UpdatePageState extends State<UpdatePage> {
                     );
                   },
                   icon: const Icon(
-                    MdiIcons.account,
+                    Icons.cake_rounded,
+                    // MdiIcons.account,
                     size: 30,
                     color: Colors.purple,
                   ),
@@ -398,7 +400,7 @@ class _UpdatePageState extends State<UpdatePage> {
       builder: (BuildContext context) => Padding(
         padding: const EdgeInsets.all(8.0),
         child: CupertinoActionSheet(
-          title: MyApp.currentUser!.friends!.isEmpty
+          title: currentUser!.friends!.isEmpty
               ? const Text(
                   "No friends",
                   style: TextStyle(
@@ -420,10 +422,10 @@ class _UpdatePageState extends State<UpdatePage> {
                   ),
                 ),
           actions: List.generate(
-            MyApp.currentUser!.friends!.length,
+            currentUser!.friends!.length,
             (index) {
               return CupertinoActionSheetAction(
-                child: UserFriend(friend: MyApp.currentUser!.friends![index]),
+                child: UserFriend(friend: currentUser!.friends![index]),
                 onPressed: () {},
               );
             },
@@ -441,7 +443,7 @@ class _UpdatePageState extends State<UpdatePage> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser!.getGroups.length == 0
+              title: currentUser!.getGroups.length == 0
                   ? const Text(
                       "No Groups",
                       style: TextStyle(
@@ -463,11 +465,11 @@ class _UpdatePageState extends State<UpdatePage> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser!.getGroups.length,
+                currentUser!.getGroups.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyGroupButton(
-                        groupModel: MyApp.currentUser!.getGroups[index]),
+                        groupModel: currentUser!.getGroups[index]),
                     onPressed: () {},
                   );
                 },
@@ -515,7 +517,7 @@ class _UpdatePageState extends State<UpdatePage> {
         child: Stack(
           children: [
             CupertinoActionSheet(
-              title: MyApp.currentUser!.getPages.length == 0
+              title: currentUser!.getPages.length == 0
                   ? const Text(
                       "No Pages",
                       style: TextStyle(
@@ -537,11 +539,11 @@ class _UpdatePageState extends State<UpdatePage> {
                       ),
                     ),
               actions: List.generate(
-                MyApp.currentUser!.getPages.length,
+                currentUser!.getPages.length,
                 (index) {
                   return CupertinoActionSheetAction(
                     child: BodyPageButton(
-                        pageModel: MyApp.currentUser!.getPages[index]),
+                        pageModel: currentUser!.getPages[index]),
                     onPressed: () {},
                   );
                 },
