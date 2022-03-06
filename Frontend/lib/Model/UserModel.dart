@@ -1,4 +1,5 @@
 import 'dart:core';
+import 'dart:io';
 
 import 'package:frontend/Model/PostModel.dart';
 
@@ -275,6 +276,12 @@ class UserModel {
   get getIp => ip;
 
   set setIp(ip) => this.ip = ip;
+
+  setIpAddress() {
+    NetworkInterface.list().then((ipValue) {
+      this.ip = ipValue.first.addresses.first.address;
+    });
+  }
 
   get getCommentModel => commentModels;
 

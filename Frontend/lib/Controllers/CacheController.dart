@@ -2,38 +2,52 @@
 
 import 'dart:convert';
 
+import 'package:frontend/Global/Global.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/UserModel.dart';
 
 class CacheController {
-  UserModel? userModel;
-  SharedPreferences? cache;
-
-  ChatController() async {
-    cache = await SharedPreferences.getInstance();
-  }
+  ChatController() {}
 
   void addUserToCache(UserModel userModel) async {
-    cache!.remove("userModel");
-    cache!.setString("userModel", jsonEncode(userModel.toJson()));
+    SharedPreferences cache = await SharedPreferences.getInstance();
+    cache.setString("userModel", jsonEncode(userModel.toJson()));
   }
 
-  Future<UserModel?> getUserFromCache() async {
-    userModel = UserModel.fromJson(jsonDecode(cache!.getString("userModel")!));
-    return userModel;
+  Future<UserModel> getUserFromCache() async {
+    SharedPreferences cache = await SharedPreferences.getInstance();
+    return UserModel.fromJson(jsonDecode(cache.getString("userModel")!));
+  }
+
+  getUser() async {
+    currentUser = await getUserFromCache();
   }
 
   void addTokenToCache(String token) async {
-    cache!.remove("token");
-    cache!.setString("token", token);
+    SharedPreferences cache = await SharedPreferences.getInstance();
+    cache.setString("token", token);
   }
 
   Future<String?> getTokenFromCache() async {
-    return cache!.getString("token");
+    SharedPreferences cache = await SharedPreferences.getInstance();
+    if (cache.getString("token") != null) {
+      return cache.getString("token");
+    } else {
+      return null;
+    }
   }
 
-  void clearCache() {
-    cache!.clear();
+  getToken() async {
+    if (await getTokenFromCache() != null) {
+      token = (await getTokenFromCache())!;
+    } else {
+      token = "null";
+    }
+  }
+
+  void clear() async {
+    SharedPreferences cache = await SharedPreferences.getInstance();
+    cache.clear();
   }
 }

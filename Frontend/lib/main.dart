@@ -1,21 +1,20 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:frontend/Controllers/CacheController.dart';
 import 'package:frontend/Global/Global.dart';
-import 'package:frontend/Pages/Splash.dart';
-import 'Global/Global.dart';
-import 'Model/UserModel.dart';
+import 'package:frontend/Model/UserModel.dart';
+import 'package:frontend/View/Splash/splash.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: FirstScreen(),
+      home: Splash(),
     );
   }
 }
