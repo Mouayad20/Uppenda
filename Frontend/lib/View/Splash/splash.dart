@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 import 'package:frontend/Controllers/UserController.dart';
-import 'package:frontend/View/Loging/RegisterPage.dart';
+import 'package:frontend/View/Loging/SignInPage.dart';
 import '../../Controllers/CacheController.dart';
 import '../../Global/Global.dart';
 import '../../Pages/Login.dart';
@@ -31,7 +31,7 @@ class _SplashState extends State<Splash> {
           context,
           MaterialPageRoute(
             builder: (context) => Scaffold(
-              body: token == "null" ? const RegisterPage() : SocialHome(),
+              body: token == "null" ? LogInPage() : SocialHome(),
             ),
           ),
         );

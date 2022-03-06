@@ -1,9 +1,10 @@
-// ignore_for_file: use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
 import 'package:frontend/Global/Global.dart';
 
 class Logo extends StatelessWidget {
+  const Logo({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
