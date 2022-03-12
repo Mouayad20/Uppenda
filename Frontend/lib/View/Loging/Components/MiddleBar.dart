@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:frontend/View/Loging/SignInPage.dart';
+import 'package:get/get.dart';
 
 import '../SignUpPage.dart';
 
@@ -17,22 +18,19 @@ class MiddleBar extends StatelessWidget {
       child: Row(
         children: [
           FlatButton(
-              child: Text(
-                'SIGN IN',
-                style: TextStyle(
-                  fontFamily: 'Merienda',
-                  fontSize: 25,
-                  fontWeight: FontWeight.bold,
-                  color: index == 0 ? Colors.black : Colors.grey,
-                ),
+            child: Text(
+              'SIGN IN',
+              style: TextStyle(
+                fontFamily: 'Merienda',
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: index == 0 ? Colors.black : Colors.grey,
               ),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const SignInPage(),
-                  ),
-                );
-              }),
+            ),
+            onPressed: () {
+              Get.to(() => const SignInPage());
+            },
+          ),
           const Text(
             '/',
             style: TextStyle(
@@ -51,11 +49,9 @@ class MiddleBar extends StatelessWidget {
                 color: index == 1 ? Colors.black : Colors.grey,
               ),
             ),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => const SignUpPage(),
-              ),
-            ),
+            onPressed: () {
+              Get.to(() => const SignUpPage());
+            },
           ),
         ],
       ),

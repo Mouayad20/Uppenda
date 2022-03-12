@@ -16,14 +16,16 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Stack(
-          children: const [Header(), Logo()],
-        ),
-        MiddleBar(0),
-        const SizedBox(height: 20),
-      ],
+    return Scaffold(
+      body: Column(
+        children: [
+          Stack(
+            children: const [Header(), Logo()],
+          ),
+          MiddleBar(0),
+          // const SizedBox(height: 20),
+        ],
+      ),
     );
   }
 }

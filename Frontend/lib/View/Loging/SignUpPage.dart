@@ -14,14 +14,16 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Stack(
-          children: const [Header(), Logo()],
-        ),
-        MiddleBar(1),
-        const SizedBox(height: 20),
-      ],
+    return Scaffold(
+      body: Column(
+        children: [
+          Stack(
+            children: const [Header(), Logo()],
+          ),
+          MiddleBar(1),
+          // const SizedBox(height: 20),
+        ],
+      ),
     );
   }
 }

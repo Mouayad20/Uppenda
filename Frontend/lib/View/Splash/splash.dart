@@ -31,7 +31,7 @@ class _SplashState extends State<Splash> {
           context,
           MaterialPageRoute(
             builder: (context) => Scaffold(
-              body: token == "null" ? LogInPage() : SocialHome(),
+              body: token == "null" ? SignInPage() : SocialHome(),
             ),
           ),
         );
